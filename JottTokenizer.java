@@ -19,4 +19,34 @@ public class JottTokenizer {
     public static ArrayList<Token> tokenize(String filename){
 		return null;
 	}
+
+	private void tokenizeIdKeyword(String inputChars, ArrayList<Token> tokens) {
+		// initialize new token with first input char
+		// while input chars are letters or digits
+		// 		add each char to new token
+		// after breaking out of loop, add token to tokens
+	}
+
+	private boolean tokenizeNotEquals(String inputChars, ArrayList<Token> tokens) {
+		// if input char 0 == ! and input char 1 == =
+		// 		add != token to tokens
+		//		return true
+		// else
+		//		print to System.err
+		//		return false (tokenize() can check for false to return null)
+		return true;
+	}
+
+	private boolean tokenizeString(String inputChars, ArrayList<Token> tokens) {
+		// initialize new token with quotation mark
+		// while input chars are letters, digits, or spaces
+		// 		add each char to new token
+		// if next char is quotation mark
+		//		add string token to tokens
+		// 		return true
+		// else
+		//		print to System. err
+		//		return false (tokenize() can check for false to return null)
+		return true;
+	}
 }
