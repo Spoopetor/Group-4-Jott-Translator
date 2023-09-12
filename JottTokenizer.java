@@ -21,8 +21,8 @@ public class JottTokenizer {
      */
     public static ArrayList<Token> tokenize(String filename){
 
-		ArrayList<Token> tokens = new ArrayList<Token>();
-		ArrayList<String> charList = new ArrayList<String>(Arrays.asList(filename.split("")));
+		ArrayList<Token> tokens = new ArrayList<>();
+		ArrayList<String> charList = new ArrayList<>(Arrays.asList(filename.split("")));
 
 		boolean commentFlag = false;
 		while (charList.size() > 0) {
@@ -53,6 +53,6 @@ public class JottTokenizer {
 			charList.remove(0);
 		}
 
-		return null;
+		return tokens;
 	}
 }
