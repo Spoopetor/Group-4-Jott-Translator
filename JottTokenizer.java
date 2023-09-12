@@ -3,15 +3,15 @@ package provided;
 /**
  * This class is responsible for tokenizing Jott code.
  * 
- * @author 
+ * @author Andy Malak, Makenzie Dorsey, Tristan Lincoln, Mya Richardson, Uzo Ukekwe
  **/
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Scanner;
 
 public class JottTokenizer {
-
-	public static final String NEWLINE = System.getProperty("line.separator");
 
 	/**
      * Takes in a filename and tokenizes that file into Tokens
@@ -21,36 +21,60 @@ public class JottTokenizer {
      */
     public static ArrayList<Token> tokenize(String filename){
 
+		ArrayList<String> inputList = new ArrayList<>();
 		ArrayList<Token> tokens = new ArrayList<>();
-		ArrayList<String> charList = new ArrayList<>(Arrays.asList(filename.split("")));
 
-		boolean commentFlag = false;
-		while (charList.size() > 0) {
+		try {
+			File file = new File(filename);
+			Scanner scan = new Scanner(file);
 
-			String curr = charList.get(0);
-
-			if (commentFlag && !curr.equals(NEWLINE)) {
-				// throw out all characters within active comment
-				charList.remove(0);
-				continue;
+			while (scan.hasNextLine()) {
+				// get line and add to inputList, include \n
+				// char because .newLine() consumes it
+				String line = scan.nextLine() + "\n";
+				inputList.add(line);
 			}
+			scan.close();
 
-			if (curr.isBlank()) {
-				if (curr.equals(NEWLINE)) {
-					// upon new line, all potential line comments end
-					commentFlag = false;
+		} catch (FileNotFoundException e) {
+			System.err.println("File Not Found");
+			return null;
+		}
+
+		// parse lines in inputList
+		for (int i = 0; i < inputList.size(); i++) {
+
+			int j = 0;
+			boolean commentFlag = false;
+			while (j < inputList.get(i).length()) {
+				// current character of the string line
+				String curr = String.valueOf(inputList.get(i).charAt(j));
+
+				// if comment & not new line, continue
+				if (commentFlag && !curr.matches("\n")) {
+					j++;
+					continue;
 				}
-				// throw out any and all whitespace
-				charList.remove(0);
-				continue;
 
-			} else if (curr.equals("#")) {
-				// if #, line comment begins
-				commentFlag = true;
+				// if blank, continue
+				if (curr.isBlank()) {
+					// if new line, end comment
+					if (curr.matches("\n")) {
+						commentFlag = false;
+					}
+					j++;
+					continue;
+
+				// if #, begin comment and continue
+				} else if (curr.equals("#")) {
+					commentFlag = true;
+					j++;
+					continue;
+				}
+
+				// j++;
+
 			}
-
-			// remove character token from charList
-			charList.remove(0);
 		}
 
 		return tokens;
