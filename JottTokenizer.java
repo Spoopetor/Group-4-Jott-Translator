@@ -70,6 +70,53 @@ public class JottTokenizer {
 					commentFlag = true;
 					j++;
 					continue;
+
+				// if letter, tokenize id/keyword
+				} else if (curr.matches("^[a-zA-Z]+$")) {
+					StringBuilder tokenStr = new StringBuilder();
+					// add first letter to token
+					do {
+						tokenStr.append(curr);
+						j++;
+						curr = String.valueOf(inputList.get(i).charAt(j));
+					}
+					// add additional chars to token if they're letters or digits
+					while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9]+$"));
+					tokens.add(new Token(tokenStr.toString(), filename, i, TokenType.ID_KEYWORD));
+
+				// if !, tokenize notEquals
+				} else if (curr.equals("!")) {
+					// only success path is having an equal sign as the next char
+					if (j+1 < inputList.get(i).length() && inputList.get(i).charAt(j+1) == '=') {
+						tokens.add(new Token("!=", filename, i, TokenType.REL_OP));
+						j += 2;
+					}
+					else {
+						reportError(curr, filename, i);
+						return null;
+					}
+
+				// if ", tokenize string
+				} else if (curr.equals("\"")) {
+					StringBuilder tokenStr = new StringBuilder();
+					// add opening quotation mark to token
+					do {
+						tokenStr.append(curr);
+						j++;
+						curr = String.valueOf(inputList.get(i).charAt(j));
+					}
+					// add additional chars to token if they're letters, digits, or spaces
+					while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9 ]+$"));
+					// if the first non-letter/digit/space is the closing quote, create the token
+					if (curr.equals("\"")) {
+						tokenStr.append(curr);
+						tokens.add(new Token(tokenStr.toString(), filename, i, TokenType.STRING));
+						j++;
+					}
+					else {
+						reportError(curr, filename, i);
+						return null;
+					}
 				}
 
 				// j++;
@@ -80,33 +127,7 @@ public class JottTokenizer {
 		return tokens;
 	}
 
-	private void tokenizeIdKeyword(String inputChars, ArrayList<Token> tokens) {
-		// initialize new token with first input char
-		// while input chars are letters or digits
-		// 		add each char to new token
-		// after breaking out of loop, add token to tokens
-	}
-
-	private boolean tokenizeNotEquals(String inputChars, ArrayList<Token> tokens) {
-		// if input char 0 == ! and input char 1 == =
-		// 		add != token to tokens
-		//		return true
-		// else
-		//		print to System.err
-		//		return false (tokenize() can check for false to return null)
-		return true;
-	}
-
-	private boolean tokenizeString(String inputChars, ArrayList<Token> tokens) {
-		// initialize new token with quotation mark
-		// while input chars are letters, digits, or spaces
-		// 		add each char to new token
-		// if next char is quotation mark
-		//		add string token to tokens
-		// 		return true
-		// else
-		//		print to System. err
-		//		return false (tokenize() can check for false to return null)
-		return true;
+	private static void reportError(String invalidToken, String filename, int lineNumber) {
+		System.err.printf("Syntax Error\nInvalid token \"%s\"\n%s.jott:%d\n", invalidToken, filename, lineNumber);
 	}
 }
