@@ -128,6 +128,6 @@ public class JottTokenizer {
 	}
 
 	private static void reportError(String invalidToken, String filename, int lineNumber) {
-		System.err.printf("Syntax Error\nInvalid token \"%s\"\n%s.jott:%d\n", invalidToken, filename, lineNumber);
+		System.err.printf("Syntax Error\nInvalid token \"%s\"\n%s:%d\n", invalidToken, filename, lineNumber);
 	}
 }
