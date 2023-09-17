@@ -72,17 +72,43 @@ public class JottTokenizer {
 					continue;
 
 				// if letter, tokenize id/keyword
-				} else if (curr.matches("^[a-zA-Z]+$")) {
-					StringBuilder tokenStr = new StringBuilder();
-					// add first letter to token
-					do {
-						tokenStr.append(curr);
-						j++;
-						curr = String.valueOf(inputList.get(i).charAt(j));
-					}
-					// add additional chars to token if they're letters or digits
-					while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9]+$"));
-					tokens.add(new Token(tokenStr.toString(), filename, i, TokenType.ID_KEYWORD));
+				}
+
+				// if <, > or = -> relOp or Assign
+			} else if (curr.matches("[<>=]")) {
+				StringBuilder tokenStr = new StringBuilder(curr);
+				// single = is Assign
+				boolean relOpFlag = !curr.equals("=");
+
+				j++;
+				curr = String.valueOf(inputList.get(i).charAt(j));
+				// check if <=, >=, or ==
+				if (curr.equals("=")){
+					tokenStr.append(curr);
+					// <=, >=, == are all relOps
+					relOpFlag = true;
+					j++;
+				}
+
+				tokens.add(
+						new Token(
+								tokenStr.toString(),
+								filename,
+								i,
+								relOpFlag ? TokenType.REL_OP : TokenType.ASSIGN
+						)
+				);
+			} else if (curr.matches("^[a-zA-Z]+$")) {
+				StringBuilder tokenStr = new StringBuilder();
+				// add first letter to token
+				do {
+					tokenStr.append(curr);
+					j++;
+					curr = String.valueOf(inputList.get(i).charAt(j));
+				}
+				// add additional chars to token if they're letters or digits
+				while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9]+$"));
+				tokens.add(new Token(tokenStr.toString(), filename, i, TokenType.ID_KEYWORD));
 
 				// if !, tokenize notEquals
 				} else if (curr.equals("!")) {
@@ -117,7 +143,6 @@ public class JottTokenizer {
 						reportError(curr, filename, i);
 						return null;
 					}
-				}
 
 				// makes number token
 				if (curr.equals(".")){
