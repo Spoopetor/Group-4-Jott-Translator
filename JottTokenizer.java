@@ -71,131 +71,134 @@ public class JottTokenizer {
 					j++;
 					continue;
 
-				// if letter, tokenize id/keyword
-				}
+				
+				
 
 				// if <, > or = -> relOp or Assign
-			} else if (curr.matches("[<>=]")) {
-				StringBuilder tokenStr = new StringBuilder(curr);
-				// single = is Assign
-				boolean relOpFlag = !curr.equals("=");
+				} else if (curr.matches("[<>=]")) {
+					StringBuilder tokenStr = new StringBuilder(curr);
+					// single = is Assign
+					boolean relOpFlag = !curr.equals("=");
 
-				j++;
-				curr = String.valueOf(inputList.get(i).charAt(j));
-				// check if <=, >=, or ==
-				if (curr.equals("=")){
-					tokenStr.append(curr);
-					// <=, >=, == are all relOps
-					relOpFlag = true;
-					j++;
-				}
-
-				tokens.add(
-						new Token(
-								tokenStr.toString(),
-								filename,
-								i,
-								relOpFlag ? TokenType.REL_OP : TokenType.ASSIGN
-						)
-				);
-			} else if (curr.matches("^[a-zA-Z]+$")) {
-				StringBuilder tokenStr = new StringBuilder();
-				// add first letter to token
-				do {
-					tokenStr.append(curr);
 					j++;
 					curr = String.valueOf(inputList.get(i).charAt(j));
-				}
-				// add additional chars to token if they're letters or digits
-				while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9]+$"));
-				tokens.add(new Token(tokenStr.toString(), filename, i, TokenType.ID_KEYWORD));
-
-				// if !, tokenize notEquals
-				} else if (curr.equals("!")) {
-					// only success path is having an equal sign as the next char
-					if (j+1 < inputList.get(i).length() && inputList.get(i).charAt(j+1) == '=') {
-						tokens.add(new Token("!=", filename, i, TokenType.REL_OP));
-						j += 2;
-					}
-					else {
-						reportError(curr, filename, i);
-						return null;
+					// check if <=, >=, or ==
+					if (curr.equals("=")){
+						tokenStr.append(curr);
+						// <=, >=, == are all relOps
+						relOpFlag = true;
+						j++;
 					}
 
-				// if ", tokenize string
-				} else if (curr.equals("\"")) {
+					tokens.add(
+							new Token(
+									tokenStr.toString(),
+									filename,
+									i,
+									relOpFlag ? TokenType.REL_OP : TokenType.ASSIGN
+							)
+					);
+
+				// if letter, tokenize id/keyword
+				} else if (curr.matches("^[a-zA-Z]+$")) {
 					StringBuilder tokenStr = new StringBuilder();
-					// add opening quotation mark to token
+					// add first letter to token
 					do {
 						tokenStr.append(curr);
 						j++;
 						curr = String.valueOf(inputList.get(i).charAt(j));
 					}
-					// add additional chars to token if they're letters, digits, or spaces
-					while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9 ]+$"));
-					// if the first non-letter/digit/space is the closing quote, create the token
-					if (curr.equals("\"")) {
-						tokenStr.append(curr);
-						tokens.add(new Token(tokenStr.toString(), filename, i, TokenType.STRING));
+					// add additional chars to token if they're letters or digits
+					while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9]+$"));
+					tokens.add(new Token(tokenStr.toString(), filename, i, TokenType.ID_KEYWORD));
+
+					// if !, tokenize notEquals
+					} else if (curr.equals("!")) {
+						// only success path is having an equal sign as the next char
+						if (j+1 < inputList.get(i).length() && inputList.get(i).charAt(j+1) == '=') {
+							tokens.add(new Token("!=", filename, i, TokenType.REL_OP));
+							j += 2;
+						}
+						else {
+							reportError(curr, filename, i);
+							return null;
+						}
+
+					// if ", tokenize string
+					} else if (curr.equals("\"")) {
+						StringBuilder tokenStr = new StringBuilder();
+						// add opening quotation mark to token
+						do {
+							tokenStr.append(curr);
+							j++;
+							curr = String.valueOf(inputList.get(i).charAt(j));
+						}
+						// add additional chars to token if they're letters, digits, or spaces
+						while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9 ]+$"));
+						// if the first non-letter/digit/space is the closing quote, create the token
+						if (curr.equals("\"")) {
+							tokenStr.append(curr);
+							tokens.add(new Token(tokenStr.toString(), filename, i, TokenType.STRING));
+							j++;
+						}
+						else {
+							reportError(curr, filename, i);
+							return null;
+						}
+
+					// makes number token
+					if (curr.equals(".")){
+						StringBuilder num1 = new StringBuilder();
+						num1.append("0");
+						num1.append(curr);
 						j++;
-					}
-					else {
-						reportError(curr, filename, i);
-						return null;
-					}
 
-				// makes number token
-				if (curr.equals(".")){
-					StringBuilder num1 = new StringBuilder();
-					num1.append("0");
-					num1.append(curr);
-					j++;
-
-					boolean digitFlag = false;
-					while (true){
-						if (Character.isDigit(inputList.get(i).charAt(j))){
-							num1.append(curr);
-							j++;
-							digitFlag = true;
-						}
-						else{
-							if (!digitFlag){
-								System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
-								System.exit(0);
-							}
-							Token tok = new Token(num1.toString(), filename, i, TokenType.NUMBER);
-							tokens.add(tok);
-							j++;
-							break;
-						}
-					continue;
-
-				}
-
-				// makes number token
-				if (Character.isDigit(curr.charAt(0))) {
-					StringBuilder num = new StringBuilder();
-					num.append(curr);
-					j++;
-
-					boolean decimalFlag = false;
-					while (Character.isDigit(inputList.get(i).charAt(j)) || inputList.get(i).charAt(j) == '.') {
-						if (inputList.get(i).charAt(j) == '.'){
-							if (decimalFlag){
-								System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
-								System.exit(0);
+						boolean digitFlag = false;
+						while (true){
+							if (Character.isDigit(inputList.get(i).charAt(j))){
+								num1.append(curr);
+								j++;
+								digitFlag = true;
 							}
 							else{
-								decimalFlag = true;
+								if (!digitFlag){
+									System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
+									System.exit(0);
+								}
+								Token tok = new Token(num1.toString(), filename, i, TokenType.NUMBER);
+								tokens.add(tok);
+								j++;
+								break;
 							}
+						continue;
 						}
+
+					}
+
+					// makes number token
+					if (Character.isDigit(curr.charAt(0))) {
+						StringBuilder num = new StringBuilder();
 						num.append(curr);
 						j++;
 
-					}
-					Token tok = new Token(num.toString(), filename, i, TokenType.NUMBER);
-					tokens.add(tok);
-					j++;
+						boolean decimalFlag = false;
+						while (Character.isDigit(inputList.get(i).charAt(j)) || inputList.get(i).charAt(j) == '.') {
+							if (inputList.get(i).charAt(j) == '.'){
+								if (decimalFlag){
+									System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
+									System.exit(0);
+								}
+								else{
+									decimalFlag = true;
+								}
+							}
+							num.append(curr);
+							j++;
+
+						}
+						Token tok = new Token(num.toString(), filename, i, TokenType.NUMBER);
+						tokens.add(tok);
+						j++;
 
 						/*
 						if (Character.isDigit(inputList.get(i).charAt(j)) || inputList.get(i).charAt(j) == '.') {
@@ -213,7 +216,6 @@ public class JottTokenizer {
 						}
 						*/
 					}
-				}
 					// j++;
 			}
 		}
