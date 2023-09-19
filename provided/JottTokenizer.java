@@ -71,6 +71,7 @@ public class JottTokenizer {
 					j++;
 					continue;
 
+
 				// if <, > or = -> relOp or Assign
 				} else if (curr.matches("[<>=]")) {
 					StringBuilder tokenStr = new StringBuilder(curr);
@@ -142,6 +143,7 @@ public class JottTokenizer {
 							reportError(curr, filename, i);
 							return null;
 						}
+					}
 
 					// makes number token
 					if (curr.equals(".")){
