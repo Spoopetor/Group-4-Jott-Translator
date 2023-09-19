@@ -71,9 +71,6 @@ public class JottTokenizer {
 					j++;
 					continue;
 
-				
-				
-
 				// if <, > or = -> relOp or Assign
 				} else if (curr.matches("[<>=]")) {
 					StringBuilder tokenStr = new StringBuilder(curr);
