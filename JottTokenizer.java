@@ -72,8 +72,77 @@ public class JottTokenizer {
 					continue;
 				}
 
-				// j++;
+				// makes number token
+				if (curr.equals(".")){
+					StringBuilder num1 = new StringBuilder();
+					num1.append("0");
+					num1.append(curr);
+					j++;
 
+					boolean digitFlag = false;
+					while (true){
+						if (Character.isDigit(inputList.get(i).charAt(j))){
+							num1.append(curr);
+							j++;
+							digitFlag = true;
+						}
+						else{
+							if (!digitFlag){
+								System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
+								System.exit(0);
+							}
+							Token tok = new Token(num1.toString(), filename, i, TokenType.NUMBER);
+							tokens.add(tok);
+							j++;
+							break;
+						}
+					continue;
+
+				}
+
+				// makes number token
+				if (Character.isDigit(curr.charAt(0))) {
+					StringBuilder num = new StringBuilder();
+					num.append(curr);
+					j++;
+
+					boolean decimalFlag = false;
+					while (Character.isDigit(inputList.get(i).charAt(j)) || inputList.get(i).charAt(j) == '.') {
+						if (inputList.get(i).charAt(j) == '.'){
+							if (decimalFlag){
+								System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
+								System.exit(0);
+							}
+							else{
+								decimalFlag = true;
+							}
+						}
+						num.append(curr);
+						j++;
+
+					}
+					Token tok = new Token(num.toString(), filename, i, TokenType.NUMBER);
+					tokens.add(tok);
+					j++;
+
+						/*
+						if (Character.isDigit(inputList.get(i).charAt(j)) || inputList.get(i).charAt(j) == '.') {
+
+							num.append(curr);
+							j++;
+						} else if (curr.isBlank()) {
+							Token tok = new Token(num.toString(), filename, i, TokenType.NUMBER);
+							tokens.add(tok);
+							j++;
+							break;
+						} else {
+							System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
+							System.exit(0);
+						}
+						*/
+					}
+				}
+					// j++;
 			}
 		}
 
