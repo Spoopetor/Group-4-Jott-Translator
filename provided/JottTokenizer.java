@@ -262,6 +262,10 @@ public class JottTokenizer {
 	}
 
 	private static void reportError(String invalidToken, String filename, int lineNumber) {
-		System.err.printf("Syntax Error\nInvalid token \"%s\"\n%s:%d\n", invalidToken, filename, lineNumber);
+		if (invalidToken.equals("\n")) {
+			invalidToken = "\\n";
+		}
+		// Adds 1 to lineNumber since the outer loop in tokenize() which keeps track of lines begins at 0
+		System.err.printf("Syntax Error\nInvalid token \"%s\"\n%s:%d\n", invalidToken, filename, lineNumber+1);
 	}
 }
