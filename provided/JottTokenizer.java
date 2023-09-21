@@ -70,8 +70,47 @@ public class JottTokenizer {
 					commentFlag = true;
 					j++;
 					continue;
-
-
+				
+				// if [] {} , ;
+				}else if(curr.matches("[\\[\\]\\{\\},;]")) {
+					switch (curr) {
+						case "[": tokens.add(new Token(curr, filename, i, TokenType.L_BRACKET));
+							break;
+							
+						case "]": tokens.add(new Token(curr, filename, i, TokenType.R_BRACKET));
+							break;
+							
+						case "{": tokens.add(new Token(curr, filename, i, TokenType.L_BRACE));
+							break;
+							
+						case "}": tokens.add(new Token(curr, filename, i, TokenType.R_BRACE));
+							break;
+							
+						case ",": tokens.add(new Token(curr, filename, i, TokenType.COMMA));
+							break;
+							
+						case ";": tokens.add(new Token(curr, filename, i, TokenType.SEMICOLON));
+							break;
+						default:
+							break;
+					}
+					j++;
+				
+				// check mathOps
+				} else if(curr.matches("[+-*/]")) {
+					tokens.add(new Token(curr, filename, i, TokenType.MATH_OP));
+					j++;
+				
+				// check singular and double colon
+				} else if(curr.equals(":")) {
+					if(String.valueOf(inputList.get(i).charAt(j+1)).equals(":")) {
+						j++;
+						tokens.add(new Token("::", filename, i, TokenType.FC_HEADER));
+					} else {
+						tokens.add(new Token(":", filename, i, TokenType.COLON));
+					}
+					j++;
+					
 				// if <, > or = -> relOp or Assign
 				} else if (curr.matches("[<>=]")) {
 					StringBuilder tokenStr = new StringBuilder(curr);
