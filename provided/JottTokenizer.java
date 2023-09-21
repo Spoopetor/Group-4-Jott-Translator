@@ -98,7 +98,7 @@ public class JottTokenizer {
 					j++;
 				
 				// check mathOps
-				} else if(curr.matches("[+-\\*/]")) {
+				} else if("+-*/".contains(curr)) {
 					tokens.add(new Token(curr, filename, lineNumber, TokenType.MATH_OP));
 					j++;
 				
