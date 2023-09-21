@@ -70,10 +70,9 @@ public class JottTokenizer {
 				} else if (curr.equals("#")) {
 					commentFlag = true;
 					j++;
-					continue;
 				
 				// if [] {} , ;
-				}else if(curr.matches("[\\[\\]\\{\\},;]")) {
+				} else if(curr.matches("[\\[\\]\\{\\},;]")) {
 					switch (curr) {
 						case "[": tokens.add(new Token(curr, filename, lineNumber, TokenType.L_BRACKET));
 							break;
@@ -151,120 +150,103 @@ public class JottTokenizer {
 					tokens.add(new Token(tokenStr.toString(), filename, lineNumber, TokenType.ID_KEYWORD));
 
 					// if !, tokenize notEquals
-					} else if (curr.equals("!")) {
-						// only success path is having an equal sign as the next char
-						if (j+1 < inputList.get(i).length() && inputList.get(i).charAt(j+1) == '=') {
-							tokens.add(new Token("!=", filename, lineNumber, TokenType.REL_OP));
-							j += 2;
-						}
-						else {
-							reportError(curr, filename, i);
-							return null;
-						}
+				} else if (curr.equals("!")) {
+					// only success path is having an equal sign as the next char
+					if (j+1 < inputList.get(i).length() && inputList.get(i).charAt(j+1) == '=') {
+						tokens.add(new Token("!=", filename, lineNumber, TokenType.REL_OP));
+						j += 2;
+					}
+					else {
+						reportError(curr, filename, lineNumber);
+						return null;
+					}
 
-					// if ", tokenize string
-					} else if (curr.equals("\"")) {
-						StringBuilder tokenStr = new StringBuilder();
-						// add opening quotation mark to token
-						do {
-							tokenStr.append(curr);
+				// if ", tokenize string
+				} else if (curr.equals("\"")) {
+					StringBuilder tokenStr = new StringBuilder();
+					// add opening quotation mark to token
+					do {
+						tokenStr.append(curr);
+						j++;
+						curr = String.valueOf(inputList.get(i).charAt(j));
+					}
+					// add additional chars to token if they're letters, digits, or spaces
+					while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9 ]+$"));
+					// if the first non-letter/digit/space is the closing quote, create the token
+					if (curr.equals("\"")) {
+						tokenStr.append(curr);
+						tokens.add(new Token(tokenStr.toString(), filename, lineNumber, TokenType.STRING));
+						j++;
+					}
+					else {
+						reportError(tokenStr.toString(), filename, lineNumber);
+						return null;
+					}
+				}
+
+				// makes number token
+				else if (curr.equals(".")){
+					StringBuilder num1 = new StringBuilder();
+					num1.append(curr);
+					j++;
+
+					boolean digitFlag = false;
+					while (true){
+						char cur = inputList.get(i).charAt(j);
+						if (Character.isDigit(inputList.get(i).charAt(j))){
+							num1.append(cur);
 							j++;
-							curr = String.valueOf(inputList.get(i).charAt(j));
+							digitFlag = true;
 						}
-						// add additional chars to token if they're letters, digits, or spaces
-						while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9 ]+$"));
-						// if the first non-letter/digit/space is the closing quote, create the token
-						if (curr.equals("\"")) {
-							tokenStr.append(curr);
-							tokens.add(new Token(tokenStr.toString(), filename, lineNumber, TokenType.STRING));
-							j++;
-						}
-						else {
-							reportError(curr, filename, lineNumber);
-							return null;
+						else{
+							if (!digitFlag){
+								num1.append(cur);
+								reportError(num1.toString(), filename, lineNumber);
+								return null;
+							}
+							Token tok = new Token(num1.toString(), filename, lineNumber, TokenType.NUMBER);
+							tokens.add(tok);
+							break;
 						}
 					}
 
-					// makes number token
-					if (curr.equals(".")){
-						StringBuilder num1 = new StringBuilder();
-						num1.append(curr);
-						j++;
+				}
 
-						boolean digitFlag = false;
-						while (true){
-							char cur = inputList.get(i).charAt(j);
-							if (Character.isDigit(inputList.get(i).charAt(j))){
-								num1.append(cur);
-								j++;
-								digitFlag = true;
+				// makes number token
+				else if (Character.isDigit(curr.charAt(0))) {
+					StringBuilder num = new StringBuilder();
+					num.append(curr);
+					j++;
+
+					boolean decimalFlag = false;
+					while (Character.isDigit(inputList.get(i).charAt(j)) || inputList.get(i).charAt(j) == '.') {
+						char cur = inputList.get(i).charAt(j);
+						if (inputList.get(i).charAt(j) == '.'){
+							if (decimalFlag){
+								num.append(cur);
+								reportError(num.toString(), filename, lineNumber);
+								return null;
 							}
 							else{
-								if (!digitFlag){
-									num1.append(cur);
-									reportError(num1.toString(), filename, lineNumber);
-//									System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
-//									System.exit(0);
-								}
-								Token tok = new Token(num1.toString(), filename, lineNumber, TokenType.NUMBER);
-								tokens.add(tok);
-								j++;
-								break;
+								decimalFlag = true;
 							}
-						continue;
 						}
-
-					}
-
-					// makes number token
-					if (Character.isDigit(curr.charAt(0))) {
-						StringBuilder num = new StringBuilder();
-						num.append(curr);
+						num.append(cur);
 						j++;
 
-						boolean decimalFlag = false;
-						while (Character.isDigit(inputList.get(i).charAt(j)) || inputList.get(i).charAt(j) == '.') {
-							char cur = inputList.get(i).charAt(j);
-							if (inputList.get(i).charAt(j) == '.'){
-								if (decimalFlag){
-									num.append(cur);
-									reportError(num.toString(), filename, lineNumber);
-//									System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
-//									System.exit(0);
-								}
-								else{
-									decimalFlag = true;
-								}
-							}
-							num.append(cur);
-							j++;
-
-						}
-						Token tok = new Token(num.toString(), filename, lineNumber, TokenType.NUMBER);
-						tokens.add(tok);
-						j++;
-
-						/*
-						if (Character.isDigit(inputList.get(i).charAt(j)) || inputList.get(i).charAt(j) == '.') {
-
-							num.append(curr);
-							j++;
-						} else if (curr.isBlank()) {
-							Token tok = new Token(num.toString(), filename, i, TokenType.NUMBER);
-							tokens.add(tok);
-							j++;
-							break;
-						} else {
-							System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
-							System.exit(0);
-						}
-						*/
 					}
-					// j++;
+					Token tok = new Token(num.toString(), filename, lineNumber, TokenType.NUMBER);
+					tokens.add(tok);
+				}
+
+				// char found does not start any possible token
+				else {
+					reportError(curr, filename, lineNumber);
+					return null;
+				}
 			}
 			lineNumber++;
 		}
-
 		return tokens;
 	}
 
@@ -272,7 +254,6 @@ public class JottTokenizer {
 		if (invalidToken.equals("\n")) {
 			invalidToken = "\\n";
 		}
-		// Adds 1 to lineNumber since the outer loop in tokenize() which keeps track of lines begins at 0
 		System.err.printf("Syntax Error\nInvalid token \"%s\"\n%s:%d\n", invalidToken, filename, lineNumber);
 	}
 }
