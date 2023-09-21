@@ -42,6 +42,7 @@ public class JottTokenizer {
 		}
 
 		// parse lines in inputList
+		int lineNumber = 1;
 		for (int i = 0; i < inputList.size(); i++) {
 
 			int j = 0;
@@ -74,22 +75,22 @@ public class JottTokenizer {
 				// if [] {} , ;
 				}else if(curr.matches("[\\[\\]\\{\\},;]")) {
 					switch (curr) {
-						case "[": tokens.add(new Token(curr, filename, i, TokenType.L_BRACKET));
+						case "[": tokens.add(new Token(curr, filename, lineNumber, TokenType.L_BRACKET));
 							break;
 							
-						case "]": tokens.add(new Token(curr, filename, i, TokenType.R_BRACKET));
+						case "]": tokens.add(new Token(curr, filename, lineNumber, TokenType.R_BRACKET));
 							break;
 							
-						case "{": tokens.add(new Token(curr, filename, i, TokenType.L_BRACE));
+						case "{": tokens.add(new Token(curr, filename, lineNumber, TokenType.L_BRACE));
 							break;
 							
-						case "}": tokens.add(new Token(curr, filename, i, TokenType.R_BRACE));
+						case "}": tokens.add(new Token(curr, filename, lineNumber, TokenType.R_BRACE));
 							break;
 							
-						case ",": tokens.add(new Token(curr, filename, i, TokenType.COMMA));
+						case ",": tokens.add(new Token(curr, filename, lineNumber, TokenType.COMMA));
 							break;
 							
-						case ";": tokens.add(new Token(curr, filename, i, TokenType.SEMICOLON));
+						case ";": tokens.add(new Token(curr, filename, lineNumber, TokenType.SEMICOLON));
 							break;
 						default:
 							break;
@@ -98,16 +99,16 @@ public class JottTokenizer {
 				
 				// check mathOps
 				} else if(curr.matches("[+-*/]")) {
-					tokens.add(new Token(curr, filename, i, TokenType.MATH_OP));
+					tokens.add(new Token(curr, filename, lineNumber, TokenType.MATH_OP));
 					j++;
 				
 				// check singular and double colon
 				} else if(curr.equals(":")) {
 					if(String.valueOf(inputList.get(i).charAt(j+1)).equals(":")) {
 						j++;
-						tokens.add(new Token("::", filename, i, TokenType.FC_HEADER));
+						tokens.add(new Token("::", filename, lineNumber, TokenType.FC_HEADER));
 					} else {
-						tokens.add(new Token(":", filename, i, TokenType.COLON));
+						tokens.add(new Token(":", filename, lineNumber, TokenType.COLON));
 					}
 					j++;
 					
@@ -131,7 +132,7 @@ public class JottTokenizer {
 							new Token(
 									tokenStr.toString(),
 									filename,
-									i,
+									lineNumber,
 									relOpFlag ? TokenType.REL_OP : TokenType.ASSIGN
 							)
 					);
@@ -147,13 +148,13 @@ public class JottTokenizer {
 					}
 					// add additional chars to token if they're letters or digits
 					while (j < inputList.get(i).length() && curr.matches("^[a-zA-Z0-9]+$"));
-					tokens.add(new Token(tokenStr.toString(), filename, i, TokenType.ID_KEYWORD));
+					tokens.add(new Token(tokenStr.toString(), filename, lineNumber, TokenType.ID_KEYWORD));
 
 					// if !, tokenize notEquals
 					} else if (curr.equals("!")) {
 						// only success path is having an equal sign as the next char
 						if (j+1 < inputList.get(i).length() && inputList.get(i).charAt(j+1) == '=') {
-							tokens.add(new Token("!=", filename, i, TokenType.REL_OP));
+							tokens.add(new Token("!=", filename, lineNumber, TokenType.REL_OP));
 							j += 2;
 						}
 						else {
@@ -175,11 +176,11 @@ public class JottTokenizer {
 						// if the first non-letter/digit/space is the closing quote, create the token
 						if (curr.equals("\"")) {
 							tokenStr.append(curr);
-							tokens.add(new Token(tokenStr.toString(), filename, i, TokenType.STRING));
+							tokens.add(new Token(tokenStr.toString(), filename, lineNumber, TokenType.STRING));
 							j++;
 						}
 						else {
-							reportError(curr, filename, i);
+							reportError(curr, filename, lineNumber);
 							return null;
 						}
 					}
@@ -187,23 +188,25 @@ public class JottTokenizer {
 					// makes number token
 					if (curr.equals(".")){
 						StringBuilder num1 = new StringBuilder();
-						num1.append("0");
 						num1.append(curr);
 						j++;
 
 						boolean digitFlag = false;
 						while (true){
+							char cur = inputList.get(i).charAt(j);
 							if (Character.isDigit(inputList.get(i).charAt(j))){
-								num1.append(curr);
+								num1.append(cur);
 								j++;
 								digitFlag = true;
 							}
 							else{
 								if (!digitFlag){
-									System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
-									System.exit(0);
+									num1.append(cur);
+									reportError(num1.toString(), filename, lineNumber);
+//									System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
+//									System.exit(0);
 								}
-								Token tok = new Token(num1.toString(), filename, i, TokenType.NUMBER);
+								Token tok = new Token(num1.toString(), filename, lineNumber, TokenType.NUMBER);
 								tokens.add(tok);
 								j++;
 								break;
@@ -221,20 +224,23 @@ public class JottTokenizer {
 
 						boolean decimalFlag = false;
 						while (Character.isDigit(inputList.get(i).charAt(j)) || inputList.get(i).charAt(j) == '.') {
+							char cur = inputList.get(i).charAt(j);
 							if (inputList.get(i).charAt(j) == '.'){
 								if (decimalFlag){
-									System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
-									System.exit(0);
+									num.append(cur);
+									reportError(num.toString(), filename, lineNumber);
+//									System.out.println("Expecting a digit, got " + inputList.get(i).charAt(j));
+//									System.exit(0);
 								}
 								else{
 									decimalFlag = true;
 								}
 							}
-							num.append(curr);
+							num.append(cur);
 							j++;
 
 						}
-						Token tok = new Token(num.toString(), filename, i, TokenType.NUMBER);
+						Token tok = new Token(num.toString(), filename, lineNumber, TokenType.NUMBER);
 						tokens.add(tok);
 						j++;
 
@@ -256,6 +262,7 @@ public class JottTokenizer {
 					}
 					// j++;
 			}
+			lineNumber++;
 		}
 
 		return tokens;
@@ -266,6 +273,6 @@ public class JottTokenizer {
 			invalidToken = "\\n";
 		}
 		// Adds 1 to lineNumber since the outer loop in tokenize() which keeps track of lines begins at 0
-		System.err.printf("Syntax Error\nInvalid token \"%s\"\n%s:%d\n", invalidToken, filename, lineNumber+1);
+		System.err.printf("Syntax Error\nInvalid token \"%s\"\n%s:%d\n", invalidToken, filename, lineNumber);
 	}
 }
