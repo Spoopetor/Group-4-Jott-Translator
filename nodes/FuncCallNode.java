@@ -1,7 +1,9 @@
 package nodes;
 
+import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
+import provided.TokenType;
 
 import java.util.ArrayList;
 
@@ -13,12 +15,24 @@ public class FuncCallNode implements JottTree {
         this.funcName = fName;
         this.params = fp;
     }
-    public static FuncCallNode parseFuncCallNode(ArrayList<provided.Token> tokens) {
 
-        return null; // TODO
+    public static FuncCallNode parseFuncCallNode(ArrayList<provided.Token> tokens) {
+        if (tokens.get(0).getTokenType() != TokenType.FC_HEADER)
+            throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+        tokens.remove(0);
+        IdNode fName = IdNode.parseIdNode(tokens);
+        if (tokens.get(0).getTokenType() != TokenType.L_BRACE)
+            throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+        tokens.remove(0);
+        FuncParamsNode fp = FuncParamsNode.parseFuncParamsNode(tokens);
+        if (tokens.get(0).getTokenType() != TokenType.R_BRACE)
+            throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+        tokens.remove(0);
+        return new FuncCallNode(fName, fp);
     }
+
     @Override
-    public String convertToJott() {   // TODO continue here
+    public String convertToJott() {
         StringBuilder output = new StringBuilder();
         output.append("::");
         output.append(funcName.convertToJott());
