@@ -3,14 +3,13 @@ package nodes;
 import provided.JottTree;
 import provided.Token;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class ProgramNode implements JottTree {
+public class FuncDefNode implements JottTree {
 
     private ArrayList<JottTree> children;
 
-    public ProgramNode(ArrayList<JottTree> childList){
+    public FuncDefNode(ArrayList<JottTree> childList){
         try {
             children.addAll(childList);
         } catch (NullPointerException ignored) {
@@ -43,11 +42,7 @@ public class ProgramNode implements JottTree {
         return false;
     }
 
-    public static ProgramNode parseNode(ArrayList<Token> tokens){
-        ArrayList<JottTree> funcDefNodes = new ArrayList<>();
-        while (!tokens.isEmpty()){
-            funcDefNodes.add(FuncDefNode.parseNode(tokens));
-        }
-        return new ProgramNode(funcDefNodes);
+    public static FuncDefNode parseNode(ArrayList<Token> tokens) {
+        return null;
     }
 }
