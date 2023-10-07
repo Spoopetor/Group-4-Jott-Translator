@@ -2,10 +2,28 @@ package nodes;
 
 import provided.JottTree;
 
+import java.util.ArrayList;
+
 public class FuncParamsNode implements JottTree {
+    private ArrayList<ExpressionNode> paramNames;
+
+    public FuncParamsNode(ArrayList<ExpressionNode> pNames) {
+        this.paramNames = pNames;
+    }
+
     @Override
     public String convertToJott() {
-        return null;
+        if (paramNames.isEmpty())
+            return "";
+        else {
+            StringBuilder output = new StringBuilder();
+            output.append(paramNames.get(0).convertToJott());
+            for (int i = 1; i < paramNames.size(); i++) {  // FIXME make a real for-loop please
+                output.append(",");
+                output.append(paramNames.get(i).convertToJott());
+            }
+            return output.toString();
+        }
     }
 
     @Override
