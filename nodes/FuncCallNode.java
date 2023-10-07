@@ -8,15 +8,15 @@ import provided.TokenType;
 import java.util.ArrayList;
 
 public class FuncCallNode implements JottTree {
-    private IdNode funcName; // TODO pull in code for IdNode
-    private FuncParamsNode params;
+    private final IdNode funcName; // TODO pull in code for IdNode
+    private final FuncParamsNode params;
 
     public FuncCallNode (IdNode fName, FuncParamsNode fp) {
         this.funcName = fName;
         this.params = fp;
     }
 
-    public static FuncCallNode parseFuncCallNode(ArrayList<provided.Token> tokens) {
+    public static FuncCallNode parseFuncCallNode(ArrayList<Token> tokens) {
         if (tokens.get(0).getTokenType() != TokenType.FC_HEADER)
             throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         tokens.remove(0);
