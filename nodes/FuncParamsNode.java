@@ -3,11 +3,10 @@ package nodes;
 import provided.JottTree;
 import provided.TokenType;
 
-import java.beans.Expression;
 import java.util.ArrayList;
 
 public class FuncParamsNode implements JottTree {
-    private ArrayList<ExpressionNode> paramNames;
+    private final ArrayList<ExpressionNode> paramNames; // TODO pull in code for ExpressionNode
 
     public FuncParamsNode(ArrayList<ExpressionNode> pNames) {
         this.paramNames = pNames;
