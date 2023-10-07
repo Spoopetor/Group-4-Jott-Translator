@@ -1,7 +1,9 @@
 package nodes;
 
 import provided.JottTree;
+import provided.TokenType;
 
+import java.beans.Expression;
 import java.util.ArrayList;
 
 public class FuncParamsNode implements JottTree {
@@ -11,19 +13,29 @@ public class FuncParamsNode implements JottTree {
         this.paramNames = pNames;
     }
 
+    public static FuncParamsNode parseFuncParamsNode(ArrayList<provided.Token> tokens) {
+        if (tokens.get(0).getTokenType() == TokenType.R_BRACE)
+            return new FuncParamsNode(new ArrayList<ExpressionNode>());
+
+        ArrayList<ExpressionNode> pNames = new ArrayList<ExpressionNode>();
+        while (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+            pNames.add(ExpressionNode.parseExpressionNode(tokens));
+        }
+        return new FuncParamsNode(pNames);
+    }
+
     @Override
     public String convertToJott() {
         if (paramNames.isEmpty())
             return "";
-        else {
-            StringBuilder output = new StringBuilder();
-            output.append(paramNames.get(0).convertToJott());
-            for (int i = 1; i < paramNames.size(); i++) {
-                output.append(",");
-                output.append(paramNames.get(i).convertToJott());
-            }
-            return output.toString();
+
+        StringBuilder output = new StringBuilder();
+        output.append(paramNames.get(0).convertToJott());
+        for (int i = 1; i < paramNames.size(); i++) {
+            output.append(",");
+            output.append(paramNames.get(i).convertToJott());
         }
+        return output.toString();
     }
 
     @Override
