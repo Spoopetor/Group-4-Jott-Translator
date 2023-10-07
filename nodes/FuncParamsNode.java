@@ -18,7 +18,7 @@ public class FuncParamsNode implements JottTree {
         else {
             StringBuilder output = new StringBuilder();
             output.append(paramNames.get(0).convertToJott());
-            for (int i = 1; i < paramNames.size(); i++) {  // FIXME make a real for-loop please
+            for (int i = 1; i < paramNames.size(); i++) {
                 output.append(",");
                 output.append(paramNames.get(i).convertToJott());
             }
