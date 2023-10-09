@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 public class ProgramNode implements JottTree {
 
-    private ArrayList<JottTree> children;
+    private ArrayList<JottTree> children = new ArrayList<>();
 
     public ProgramNode(ArrayList<JottTree> childList){
         try {
-            children.addAll(childList);
+            this.children.addAll(childList);
         } catch (NullPointerException ignored) {
             ;
         }

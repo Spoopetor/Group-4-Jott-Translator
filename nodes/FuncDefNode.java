@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 public class FuncDefNode implements JottTree {
 
-    private ArrayList<JottTree> children;
+    private ArrayList<JottTree> children = new ArrayList<>();
 
     public FuncDefNode(ArrayList<JottTree> childList){
         try {
-            children.addAll(childList);
+            this.children.addAll(childList);
         } catch (NullPointerException ignored) {
             ;
         }
