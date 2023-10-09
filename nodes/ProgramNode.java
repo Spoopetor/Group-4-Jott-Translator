@@ -20,7 +20,11 @@ public class ProgramNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        for (JottTree node: children){
+            stringBuilder.append(node.convertToJott());
+        }
+        return stringBuilder.toString();
     }
 
     @Override

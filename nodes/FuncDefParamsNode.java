@@ -21,7 +21,7 @@ public class FuncDefParamsNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return null;
+        return children.get(0).convertToJott() + ":" + children.get(1).convertToJott();
     }
 
     @Override

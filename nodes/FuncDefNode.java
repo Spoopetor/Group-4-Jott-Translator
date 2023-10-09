@@ -21,7 +21,30 @@ public class FuncDefNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return null;
+        int i = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("def ");
+        stringBuilder.append(children.get(i).convertToJott());
+        i++;
+        stringBuilder.append("[");
+        while (children.get(i) instanceof FuncDefParamsNode){
+            stringBuilder.append(children.get(i).convertToJott());
+            i++;
+            if (children.get(i) instanceof FuncDefParamsNode){
+                stringBuilder.append(", ");
+            }
+            else {
+                break;
+            }
+        }
+        stringBuilder.append("]:");
+        stringBuilder.append(children.get(i).convertToJott());
+        i++;
+        stringBuilder.append(" {\n");
+        stringBuilder.append(children.get(i).convertToJott());
+        stringBuilder.append("}\n");
+
+        return stringBuilder.toString();
     }
 
     @Override
