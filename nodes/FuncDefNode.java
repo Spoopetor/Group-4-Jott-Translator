@@ -45,44 +45,37 @@ public class FuncDefNode implements JottTree {
     }
 
     public static FuncDefNode parseFuncDefNode(ArrayList<Token> tokens) {
-        ArrayList<JottTree> child_node_list = new ArrayList<>();
 
         // ArrayList.remove(0) essentially acts like pop.
         // Removes first element, shifts everything else up
+        ArrayList<JottTree> childNodeList = new ArrayList<>();
         Token currToken = tokens.remove(0);
 
         if (currToken.getToken().equals("def")) {
-            // This IdNode will be the function name
-            // NOTE: I'm not responsible for IdNode, so this class doesn't exist yet (on this branch)
-            // It's my assumption that it'll function like the other nodes
-            // REMOVE THIS NOTE FOR MERGE
-            child_node_list.add(IdNode.parseNode(tokens));
+            // The token after def will be the function name
+            childNodeList.add(IdNode.parseIdNode(tokens));
             currToken = tokens.remove(0);
 
-            // Next token after parsing the function id should be '['
+            // Next token after parsing the function id should be a left bracket
             if (currToken.getTokenType() == TokenType.L_BRACKET){
-                // Parse the function params present after the '['
-                child_node_list.addAll(FuncDefParamsNode.parseNode(tokens));
+                // Parse the function params present after the left bracket
+                childNodeList.addAll(FuncDefParamsNode.parseFuncDefParamsNode(tokens));
                 currToken = tokens.remove(0);
 
-                // Next token after parsing the function def params should be ']'
+                // Next token after parsing the function def params should be right bracket
                 if (currToken.getTokenType() == TokenType.R_BRACKET) {
                     currToken = tokens.remove(0);
 
-                    // Next token after ']' should be ':'
+                    // Next token after the right bracket should be a colon
                     if (currToken.getTokenType() == TokenType.COLON){
                         // Parse the function return type
-                        // NOTE: See note on IdNode above, same applies to TypeNode
-                        // REMOVE THIS NOTE FOR MERGE
-                        child_node_list.add(TypeNode.parseNode(tokens));
+                        childNodeList.add(TypeNode.parseTypeNode(tokens));
                         currToken = tokens.remove(0);
 
                         // Next token after parsing function return type should be '{'
                         if (currToken.getTokenType() == TokenType.L_BRACE){
                             // Parse the body of this function
-                            // NOTE: See note on IdNode above, same applies to BodyNode
-                            // REMOVE THIS NOTE FOR MERGE
-                            child_node_list.add(BodyNode.parseNode(tokens));
+                            childNodeList.add(BodyNode.parseBodyNode(tokens));
                             currToken = tokens.remove(0);
 
                             // Next token after parsing body should be '}'
@@ -110,7 +103,7 @@ public class FuncDefNode implements JottTree {
             FuncDefNode.throwParseEx(currToken);
         }
 
-        return new FuncDefNode(child_node_list);
+        return new FuncDefNode(childNodeList);
     }
 
     private static void throwParseEx(Token token){
