@@ -43,10 +43,10 @@ public class ProgramNode implements JottTree {
         return false;
     }
 
-    public static ProgramNode parseNode(ArrayList<Token> tokens){
+    public static ProgramNode parseProgramNode(ArrayList<Token> tokens){
         ArrayList<JottTree> funcDefNodes = new ArrayList<>();
         while (!tokens.isEmpty()){
-            funcDefNodes.add(FuncDefNode.parseNode(tokens));
+            funcDefNodes.add(FuncDefNode.parseFuncDefNode(tokens));
         }
         return new ProgramNode(funcDefNodes);
     }
