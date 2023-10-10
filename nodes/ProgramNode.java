@@ -1,6 +1,9 @@
 package nodes;
 
 import provided.JottTree;
+import provided.Token;
+
+import java.util.ArrayList;
 
 public class ProgramNode implements JottTree {
     @Override
@@ -27,4 +30,6 @@ public class ProgramNode implements JottTree {
     public boolean validateTree() {
         return false;
     }
+
+    public static JottTree parse(ArrayList<Token> tokens){return null;}
 }
