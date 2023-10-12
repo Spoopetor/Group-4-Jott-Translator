@@ -8,17 +8,17 @@ import java.util.ArrayList;
 
 public class ProgramNode implements JottTree {
 
-    private ArrayList<JottTree> children = new ArrayList<>();
+    private ArrayList<FuncDefNode> funcDefs = new ArrayList<>();
 
-    public ProgramNode(ArrayList<JottTree> childList){
-        this.children.addAll(childList);
+    public ProgramNode(ArrayList<FuncDefNode> childList){
+        this.funcDefs.addAll(childList);
     }
 
     @Override
     public String convertToJott() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (JottTree node: children){
-            stringBuilder.append(node.convertToJott());
+        for (FuncDefNode funcDef: funcDefs){
+            stringBuilder.append(funcDef.convertToJott());
         }
         return stringBuilder.toString();
     }
@@ -44,7 +44,7 @@ public class ProgramNode implements JottTree {
     }
 
     public static ProgramNode parseProgramNode(ArrayList<Token> tokens){
-        ArrayList<JottTree> funcDefNodes = new ArrayList<>();
+        ArrayList<FuncDefNode> funcDefNodes = new ArrayList<>();
         while (!tokens.isEmpty()){
             funcDefNodes.add(FuncDefNode.parseFuncDefNode(tokens));
         }

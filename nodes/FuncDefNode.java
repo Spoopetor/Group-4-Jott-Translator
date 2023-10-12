@@ -9,35 +9,32 @@ import java.util.ArrayList;
 
 public class FuncDefNode implements JottTree {
 
-    private ArrayList<JottTree> children = new ArrayList<>();
+    private IdNode funcName;
 
-    public FuncDefNode(ArrayList<JottTree> childList){
-        this.children.addAll(childList);
-    }
+    private ArrayList<FuncDefParamsNode> defParams;
+
+    private TypeNode functionReturn;
+
+    private BodyNode functionBody;
 
     @Override
     public String convertToJott() {
-        int i = 0;
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("def ");
-        stringBuilder.append(children.get(i).convertToJott());
-        i++;
+        stringBuilder.append(this.funcName.convertToJott());
         stringBuilder.append("[");
-        while (children.get(i) instanceof FuncDefParamsNode){
-            stringBuilder.append(children.get(i).convertToJott());
+        int i = 1;
+        for (FuncDefParamsNode defParam : this.defParams) {
+            stringBuilder.append(defParam.convertToJott());
             i++;
-            if (children.get(i) instanceof FuncDefParamsNode){
+            if (i <= this.defParams.size()){
                 stringBuilder.append(", ");
-            }
-            else {
-                break;
             }
         }
         stringBuilder.append("]:");
-        stringBuilder.append(children.get(i).convertToJott());
-        i++;
+        stringBuilder.append(functionReturn.convertToJott());
         stringBuilder.append(" {\n");
-        stringBuilder.append(children.get(i).convertToJott());
+        stringBuilder.append(functionBody.convertToJott());
         stringBuilder.append("}\n");
 
         return stringBuilder.toString();
@@ -67,18 +64,19 @@ public class FuncDefNode implements JottTree {
 
         // ArrayList.remove(0) essentially acts like pop.
         // Removes first element, shifts everything else up
-        ArrayList<JottTree> childNodeList = new ArrayList<>();
+        // ArrayList<JottTree> childNodeList = new ArrayList<>();
+        FuncDefNode funcDef = new FuncDefNode();
         Token currToken = tokens.remove(0);
 
         if (currToken.getToken().equals("def")) {
             // The token after def will be the function name
-            childNodeList.add(IdNode.parseIdNode(tokens));
+            funcDef.funcName = IdNode.parseIdNode(tokens);
             currToken = tokens.remove(0);
 
             // Next token after parsing the function id should be a left bracket
             if (currToken.getTokenType() == TokenType.L_BRACKET){
                 // Parse the function params present after the left bracket
-                childNodeList.addAll(FuncDefParamsNode.parseFuncDefParamsNode(tokens));
+                funcDef.defParams = FuncDefParamsNode.parseFuncDefParamsNode(tokens);
                 currToken = tokens.remove(0);
 
                 // Next token after parsing the function def params should be right bracket
@@ -88,13 +86,13 @@ public class FuncDefNode implements JottTree {
                     // Next token after the right bracket should be a colon
                     if (currToken.getTokenType() == TokenType.COLON){
                         // Parse the function return type
-                        childNodeList.add(TypeNode.parseTypeNode(tokens));
+                        funcDef.functionReturn = TypeNode.parseTypeNode(tokens);
                         currToken = tokens.remove(0);
 
                         // Next token after parsing function return type should be '{'
                         if (currToken.getTokenType() == TokenType.L_BRACE){
                             // Parse the body of this function
-                            childNodeList.add(BodyNode.parseBodyNode(tokens));
+                            funcDef.functionBody = BodyNode.parseBodyNode(tokens);
                             currToken = tokens.remove(0);
 
                             // Next token after parsing body should be '}'
@@ -122,7 +120,7 @@ public class FuncDefNode implements JottTree {
             FuncDefNode.throwParseEx(currToken);
         }
 
-        return new FuncDefNode(childNodeList);
+        return funcDef;
     }
 
     private static void throwParseEx(Token token){

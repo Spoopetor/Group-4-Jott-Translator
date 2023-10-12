@@ -9,15 +9,13 @@ import java.util.ArrayList;
 
 public class FuncDefParamsNode implements JottTree {
 
-    private ArrayList<JottTree> children = new ArrayList<>();
+    private IdNode defParamName;
 
-    public FuncDefParamsNode(ArrayList<JottTree> childList){
-        this.children.addAll(childList);
-    }
+    private TypeNode defParamType;
 
     @Override
     public String convertToJott() {
-        return children.get(0).convertToJott() + ":" + children.get(1).convertToJott();
+        return this.defParamName.convertToJott() + ":" + this.defParamType.convertToJott();
     }
 
     @Override
@@ -42,7 +40,6 @@ public class FuncDefParamsNode implements JottTree {
 
     public static ArrayList<FuncDefParamsNode> parseFuncDefParamsNode(ArrayList<Token> tokens) {
         ArrayList<FuncDefParamsNode> defParamsNodes = new ArrayList<>();
-        ArrayList<JottTree> childNodeList = new ArrayList<>();
 
         Token currToken = tokens.get(0);
         if (currToken.getTokenType() != TokenType.ID_KEYWORD){
@@ -51,14 +48,15 @@ public class FuncDefParamsNode implements JottTree {
             return defParamsNodes;
         }
         while (true) {
+            FuncDefParamsNode funcDefParam = new FuncDefParamsNode();
             // Parse the id
-            childNodeList.add(IdNode.parseIdNode(tokens));
+            funcDefParam.defParamName = IdNode.parseIdNode(tokens);
             currToken = tokens.remove(0);
 
             // After id is parsed, next token should be a colon
             if (currToken.getTokenType() == TokenType.COLON) {
-                childNodeList.add(TypeNode.parseTypeNode(tokens));
-                defParamsNodes.add(new FuncDefParamsNode(childNodeList));
+                funcDefParam.defParamType = TypeNode.parseTypeNode(tokens);
+                defParamsNodes.add(funcDefParam);
                 currToken = tokens.get(0);
 
                 // If the current token isn't a comma, then this is the end of the param list
