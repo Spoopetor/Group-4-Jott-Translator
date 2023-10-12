@@ -12,11 +12,7 @@ public class FuncDefParamsNode implements JottTree {
     private ArrayList<JottTree> children = new ArrayList<>();
 
     public FuncDefParamsNode(ArrayList<JottTree> childList){
-        try {
-            this.children.addAll(childList);
-        } catch (NullPointerException ignored) {
-            ;
-        }
+        this.children.addAll(childList);
     }
 
     @Override

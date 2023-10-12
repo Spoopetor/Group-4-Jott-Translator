@@ -12,11 +12,7 @@ public class FuncDefNode implements JottTree {
     private ArrayList<JottTree> children = new ArrayList<>();
 
     public FuncDefNode(ArrayList<JottTree> childList){
-        try {
-            this.children.addAll(childList);
-        } catch (NullPointerException ignored) {
-            ;
-        }
+        this.children.addAll(childList);
     }
 
     @Override
