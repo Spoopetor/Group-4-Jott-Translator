@@ -23,11 +23,9 @@ public class FuncDefNode implements JottTree {
         stringBuilder.append("def ");
         stringBuilder.append(this.funcName.convertToJott());
         stringBuilder.append("[");
-        int i = 1;
-        for (FuncDefParamsNode defParam : this.defParams) {
-            stringBuilder.append(defParam.convertToJott());
-            i++;
-            if (i <= this.defParams.size()){
+        for (int i = 0; i < this.defParams.size(); i++){
+            stringBuilder.append(this.defParams.get(i).convertToJott());
+            if (i+1 <= this.defParams.size()){
                 stringBuilder.append(", ");
             }
         }
