@@ -9,16 +9,23 @@ import java.util.ArrayList;
 
 public class WhileNode implements JottTree {
 
-    private BodyNode b;
-    private ExprNode e;
+    private ExpressionNode exprNode;
+    private BodyNode bodyNode;
 
-    public WhileNode(ExprNode e, BodyNode b) {
-        this.e = e;
-        this.b = b;
+    public WhileNode(ExpressionNode exprNode, BodyNode bodyNode) {
+        this.exprNode = exprNode;
+        this.bodyNode = bodyNode;
     }
+
     @Override
     public String convertToJott() {
-        return null;
+        StringBuilder str = new StringBuilder();
+        str.append("while[");
+        str.append(this.exprNode.convertToJott());
+        str.append("]{");
+        str.append(this.bodyNode.convertToJott());
+        str.append("}");
+        return str.toString();
     }
 
     @Override
@@ -57,7 +64,7 @@ public class WhileNode implements JottTree {
             tokens.remove(0);
 
             // remove next node and store in exprNode
-            ExprNode expNode = parseExprNode(tokens.remove(0));
+            ExpressionNode exprNode = parseExpNode(tokens.remove(0));
 
             // if no right bracket ], throw exception
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
@@ -86,7 +93,7 @@ public class WhileNode implements JottTree {
             // remove right brace
             tokens.remove(0);
 
-            return new WhileNode(expNode, bodyNode);
+            return new WhileNode(exprNode, bodyNode);
 
         } else {
             throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());

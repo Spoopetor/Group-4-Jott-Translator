@@ -9,17 +9,22 @@ import java.util.ArrayList;
 
 public class ElseNode implements JottTree {
 
-    private BodyNode b;
+    private BodyNode bodyNode;
 
-    public ElseNode (BodyNode b) {
-        this.b = b;
+    public ElseNode (BodyNode bodyNode) {
+        this.bodyNode = bodyNode;
     }
+
     @Override
     public String convertToJott() {
-        if (this.b == null) {
+        if (this.bodyNode == null) {
             return "";
         } else {
-            return "else{" + this.b.convertToJott() + "}";
+            StringBuilder str = new StringBuilder();
+            str.append("else{");
+            str.append(this.bodyNode.convertToJott());
+            str.append("}");
+            return str.toString();
         }
     }
 
@@ -60,7 +65,7 @@ public class ElseNode implements JottTree {
 
             // if no immediate right brace {, expect body
             BodyNode bodyNode = null;
-            if (tokens.get(0) != TokenType.R_BRACE) {
+            if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
                 // remove next token and store in bodyNode
                 bodyNode = parseBodyNode(tokens.remove(0));
             }
