@@ -33,7 +33,10 @@ public class BinaryExpressionNode extends ExpressionNode{
 
     @Override
     public String convertToJott() {
-        return null;
+        String output = left.convertToJott();
+        output += op.getToken();
+        output += right.convertToJott();
+        return output;
     }
 
     @Override
