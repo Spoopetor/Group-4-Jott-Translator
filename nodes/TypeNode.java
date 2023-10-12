@@ -7,7 +7,7 @@ import provided.TokenType;
 
 import java.util.ArrayList;
 
-public class TypeNode implements JottTree {
+public class  TypeNode implements JottTree {
     public static final String DOUBLE = "Double";
     public static final String INTEGER = "Integer";
     public static final String STRING = "String";
