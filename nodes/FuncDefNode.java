@@ -5,7 +5,9 @@ import provided.Token;
 import exceptions.*;
 import provided.TokenType;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FuncDefNode implements JottTree {
 
@@ -13,7 +15,9 @@ public class FuncDefNode implements JottTree {
 
     private ArrayList<FuncDefParamsNode> defParams;
 
-    private FuncReturnNode functionReturn;
+    private Token functionReturn;
+    private static final ArrayList<String> returnTypes =
+            new ArrayList<>(Arrays.asList("DOUBLE", "INTEGER", "STRING", "BOOLEAN", "VOID"));
 
     private BodyNode functionBody;
 
@@ -30,7 +34,7 @@ public class FuncDefNode implements JottTree {
             }
         }
         stringBuilder.append("]:");
-        stringBuilder.append(functionReturn.convertToJott());
+        stringBuilder.append(functionReturn.getToken());
         stringBuilder.append(" {\n");
         stringBuilder.append(functionBody.convertToJott());
         stringBuilder.append("}\n");
@@ -84,7 +88,13 @@ public class FuncDefNode implements JottTree {
                     // Next token after the right bracket should be a colon
                     if (currToken.getTokenType() == TokenType.COLON){
                         // Parse the function return type
-                        funcDef.functionReturn = FuncReturnNode.parseTypeNode(tokens);
+                        currToken = tokens.remove(0);
+                        if (returnTypes.contains(currToken.getToken().toUpperCase())) {
+                            funcDef.functionReturn = currToken;
+                        }
+                        else {
+                            FuncDefNode.throwParseEx(currToken);
+                        }
                         currToken = tokens.remove(0);
 
                         // Next token after parsing function return type should be '{'
