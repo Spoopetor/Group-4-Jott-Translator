@@ -12,11 +12,15 @@ public class ElseNode implements JottTree {
     private BodyNode b;
 
     public ElseNode (BodyNode b) {
-        this.bodyNode = b;
+        this.b = b;
     }
     @Override
     public String convertToJott() {
-        return null;
+        if (this.b == null) {
+            return "";
+        } else {
+            return "else{" + this.b.convertToJott() + "}";
+        }
     }
 
     @Override
