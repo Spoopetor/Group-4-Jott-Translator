@@ -13,7 +13,7 @@ public class FuncDefNode implements JottTree {
 
     private ArrayList<FuncDefParamsNode> defParams;
 
-    private TypeNode functionReturn;
+    private FuncReturnNode functionReturn;
 
     private BodyNode functionBody;
 
@@ -86,7 +86,7 @@ public class FuncDefNode implements JottTree {
                     // Next token after the right bracket should be a colon
                     if (currToken.getTokenType() == TokenType.COLON){
                         // Parse the function return type
-                        funcDef.functionReturn = TypeNode.parseTypeNode(tokens);
+                        funcDef.functionReturn = FuncReturnNode.parseTypeNode(tokens);
                         currToken = tokens.remove(0);
 
                         // Next token after parsing function return type should be '{'
