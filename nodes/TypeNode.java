@@ -49,7 +49,7 @@ public class TypeNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return typeName;
+        return this.typeName;
     }
 
     @Override
