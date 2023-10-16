@@ -64,7 +64,7 @@ public class ElseNode implements JottTree {
             tokens.remove(0);
 
             // if no immediate right brace {, expect body
-            BodyNode bodyNode = parseBodyNode(tokens.remove(0));
+            BodyNode bodyNode = parseBodyNode(tokens);
 
             // if no right brace {, throw exception
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {

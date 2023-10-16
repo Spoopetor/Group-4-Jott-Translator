@@ -64,7 +64,7 @@ public class WhileNode implements JottTree {
             tokens.remove(0);
 
             // remove next node and store in exprNode
-            ExpressionNode exprNode = parseExpNode(tokens.remove(0));
+            ExpressionNode exprNode = parseExpNode(tokens);
 
             // if no right bracket ], throw exception
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
@@ -83,7 +83,7 @@ public class WhileNode implements JottTree {
             tokens.remove(0);
 
             // store body in bodyNode
-            BodyNode bodyNode = parseBodyNode(tokens.remove(0));
+            BodyNode bodyNode = parseBodyNode(tokens);
 
             // if no right brace }, throw exception
             if (tokens.get(0).getTokenType() == TokenType.R_BRACE) {
