@@ -50,8 +50,8 @@ public class ElseNode implements JottTree {
 
     static public ElseNode parseElseNode(ArrayList<Token> tokens) {
 
-        // if token == ID_KEYWORD && is token == "ELSE"
-        if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && tokens.get(0).getToken().equalsIgnoreCase("else")) {
+        // if token == "ELSE"
+        if (tokens.get(0).getToken().equals("else")) {
             // remove else
             tokens.remove(0);
 
@@ -64,11 +64,7 @@ public class ElseNode implements JottTree {
             tokens.remove(0);
 
             // if no immediate right brace {, expect body
-            BodyNode bodyNode = null;
-            if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
-                // remove next token and store in bodyNode
-                bodyNode = parseBodyNode(tokens.remove(0));
-            }
+            BodyNode bodyNode = parseBodyNode(tokens.remove(0));
 
             // if no right brace {, throw exception
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
@@ -82,7 +78,7 @@ public class ElseNode implements JottTree {
 
         } else {
             // no else for this if statement
-            return new ElseNode(null);
+            return null;
         }
 
     }

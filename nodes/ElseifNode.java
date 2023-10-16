@@ -1,4 +1,3 @@
-package nodes;
 
 import exceptions.SyntaxException;
 import provided.JottTree;
@@ -50,8 +49,8 @@ public class ElseifNode implements JottTree {
 
     static public ElseifNode parseElseifNode(ArrayList<Token> tokens) {
 
-        // if token == ID_KEYWORD && is token == "ELSEIF"
-        if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && tokens.get(0).getToken().equalsIgnoreCase("elseif")) {
+        // token == "elseif"
+        if (tokens.get(0).getToken().equals("elseif")) {
             // remove elseif
             tokens.remove(0);
 

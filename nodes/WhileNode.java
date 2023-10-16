@@ -50,8 +50,8 @@ public class WhileNode implements JottTree {
 
     static public WhileNode parseWhileNode(ArrayList<Token> tokens) {
 
-        // if token == ID_KEYWORD && is token == "WHILE"
-        if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && tokens.get(0).getToken().equalsIgnoreCase("while")) {
+        // if token == "while"
+        if (tokens.get(0).getToken().equals("while")) {
             // remove while
             tokens.remove(0);
 
