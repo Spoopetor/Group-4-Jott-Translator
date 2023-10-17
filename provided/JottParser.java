@@ -1,4 +1,5 @@
 package provided;
+import nodes.*;
 
 /**
  * This class is responsible for paring Jott Tokens
@@ -18,6 +19,6 @@ public class JottParser {
      *         or null upon an error in parsing.
      */
     public static JottTree parse(ArrayList<Token> tokens){
-		return null;
+        return ProgramNode.parseProgramNode(tokens);
     }
 }
