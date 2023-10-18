@@ -1,6 +1,7 @@
 package nodes;
 
 import exceptions.SyntaxException;
+import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
 
@@ -8,12 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 // change to extend body statement
-public class AssignmentNode {
+public class AssignmentNode implements JottTree {
 
     static ArrayList<String> type_keywords = new ArrayList<>(
             Arrays.asList("Double", "Integer", "String", "Boolean"));
 
-    private TypeNode type;
+    private TypeNode type = null;
     private IdNode id;
     private ExpressionNode value;
 
@@ -72,4 +73,36 @@ public class AssignmentNode {
         return new AssignmentNode(id, v);
     }
 
+
+    @Override
+    public String convertToJott() {
+        String output = "";
+        if (type != null)
+            output += type.convertToJott();
+        output += id.convertToJott();
+        output += "=";
+        output += value.convertToJott();
+        output += ";";
+        return output;
+    }
+
+    @Override
+    public String convertToJava(String className) {
+        return null;
+    }
+
+    @Override
+    public String convertToC() {
+        return null;
+    }
+
+    @Override
+    public String convertToPython() {
+        return null;
+    }
+
+    @Override
+    public boolean validateTree() {
+        return false;
+    }
 }
