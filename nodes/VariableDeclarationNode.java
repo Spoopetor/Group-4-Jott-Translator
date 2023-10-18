@@ -21,14 +21,18 @@ public class VariableDeclarationNode implements JottTree {
     }
 
     static public VariableDeclarationNode parseVariableDeclarationNode(ArrayList<Token> tokens){
-        if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD &&
-                tokens.get(1).getTokenType() != TokenType.ID_KEYWORD &&
+        if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD ||
+                tokens.get(1).getTokenType() != TokenType.ID_KEYWORD ||
                 tokens.get(2).getTokenType() != TokenType.SEMICOLON){
             Token tok = tokens.remove(0);
             throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         TypeNode t = TypeNode.parseTypeNode(tokens);
         IdNode i = IdNode.parseIdNode(tokens);
+
+        //pop semicolon
+        tokens.remove(0);
+
         return new VariableDeclarationNode(t,i);
     }
 
