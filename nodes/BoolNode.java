@@ -5,6 +5,7 @@ import provided.Token;
 import provided.TokenType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BoolNode extends ExpressionNode{
 

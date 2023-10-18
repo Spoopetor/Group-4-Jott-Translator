@@ -18,8 +18,8 @@ public class BinaryExpressionNode extends ExpressionNode{
         this.op = op;
     }
 
-    public static BinaryExpressionNode parseBiExpNode(ArrayList<Token> tokens){
-        ExpressionNode l = ExpressionNode.parseExpNode(tokens);
+    public static BinaryExpressionNode parseBinaryExpressionNode(ArrayList<Token> tokens){
+        ExpressionNode l = ExpressionNode.parseExpressionNode(tokens);
 
         if (tokens.get(0).getTokenType() != TokenType.MATH_OP || tokens.get(0).getTokenType() != TokenType.REL_OP) {
             Token tok = tokens.remove(0);
@@ -27,7 +27,7 @@ public class BinaryExpressionNode extends ExpressionNode{
         }
         Token op = tokens.remove(0);
 
-        ExpressionNode r = ExpressionNode.parseExpNode(tokens);
+        ExpressionNode r = ExpressionNode.parseExpressionNode(tokens);
         return new BinaryExpressionNode(l, op, r);
     }
 
