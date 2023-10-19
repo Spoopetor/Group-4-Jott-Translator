@@ -1,5 +1,6 @@
 package nodes;
 
+import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
@@ -43,6 +44,6 @@ abstract class ExpressionNode extends BodyStmtNode implements JottTree {
             return StringNode.parseStringNode(tokens);
         }
 
-        return null;
+        throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
     }
 }
