@@ -63,7 +63,7 @@ public class ElseifNode implements JottTree {
             tokens.remove(0);
 
             // remove next node and store in exprNode
-            ExpressionNode exprNode = parseExpNode(tokens);
+            ExpressionNode exprNode = ExpressionNode.parseExpressionNode(tokens);
 
             // if no right bracket ], throw exception
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
