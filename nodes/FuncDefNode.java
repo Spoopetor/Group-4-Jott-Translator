@@ -29,7 +29,7 @@ public class FuncDefNode implements JottTree {
         stringBuilder.append("[");
         for (int i = 0; i < this.defParams.size(); i++){
             stringBuilder.append(this.defParams.get(i).convertToJott());
-            if (i+1 <= this.defParams.size()){
+            if (i+1 < this.defParams.size()){
                 stringBuilder.append(", ");
             }
         }

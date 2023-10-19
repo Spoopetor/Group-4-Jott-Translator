@@ -67,7 +67,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
             ExpressionNode exprNode = ExpressionNode.parseExpressionNode(tokens);
 
             // if no right bracket ], throw exception
-            if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+            if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
                 throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
@@ -86,7 +86,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
             BodyNode bodyNode = BodyNode.parseBodyNode(tokens);
 
             // if no right brace }, throw exception
-            if (tokens.get(0).getTokenType() == TokenType.R_BRACE) {
+            if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
                 throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 

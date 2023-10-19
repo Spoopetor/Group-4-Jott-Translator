@@ -24,7 +24,7 @@ public class BinaryExpressionNode extends ExpressionNode{
         if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
             l = IdNode.parseIdNode(tokens);
         }
-        if (tokens.get(0).getTokenType() == TokenType.NUMBER) {
+        else if (tokens.get(0).getTokenType() == TokenType.NUMBER) {
             l = NumberNode.parseNumberNode(tokens);
         }
         else{
@@ -32,7 +32,7 @@ public class BinaryExpressionNode extends ExpressionNode{
         }
 
 
-        if (tokens.get(0).getTokenType() != TokenType.MATH_OP || tokens.get(0).getTokenType() != TokenType.REL_OP) {
+        if (tokens.get(0).getTokenType() != TokenType.MATH_OP && tokens.get(0).getTokenType() != TokenType.REL_OP) {
             Token tok = tokens.remove(0);
             throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }

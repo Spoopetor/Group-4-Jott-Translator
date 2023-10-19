@@ -23,6 +23,7 @@ public class ReturnStmtNode implements JottTree {
         if(this.returns){
             out.append("return ");
             out.append(this.expr.convertToJott());
+            out.append(";");
         }
         return out.toString();
     }
@@ -51,6 +52,7 @@ public class ReturnStmtNode implements JottTree {
         if(tokens.get(0).getToken().equals("return")){ //Check for "return"
             tokens.remove(0);
             ExpressionNode e = ExpressionNode.parseExpressionNode(tokens);
+            tokens.remove(0); // removing the semicolon
             return new ReturnStmtNode(e, true);
 
         }

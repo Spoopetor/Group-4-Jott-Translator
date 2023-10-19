@@ -79,6 +79,7 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
         String output = "";
         if (type != null)
             output += type.convertToJott();
+        output += " ";
         output += id.convertToJott();
         output += "=";
         output += value.convertToJott();
