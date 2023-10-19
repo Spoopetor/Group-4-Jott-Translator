@@ -70,6 +70,8 @@ public class FuncDefNode implements JottTree {
         FuncDefNode funcDef = new FuncDefNode();
         Token currToken = tokens.remove(0);
 
+        Token last = tokens.get(tokens.size()-1);
+
         if (currToken.getToken().equals("def")) {
             // The token after def will be the function name
             funcDef.funcName = IdNode.parseIdNode(tokens);
@@ -101,9 +103,14 @@ public class FuncDefNode implements JottTree {
                         if (currToken.getTokenType() == TokenType.L_BRACE){
                             // Parse the body of this function
                             funcDef.functionBody = BodyNode.parseBodyNode(tokens);
+
+                            if (tokens.isEmpty())
+                                FuncDefNode.throwParseEx(last);
+
                             currToken = tokens.remove(0);
 
                             // Next token after parsing body should be '}'
+
                             if (currToken.getTokenType() != TokenType.R_BRACE) {
                                 FuncDefNode.throwParseEx(currToken);
                             }

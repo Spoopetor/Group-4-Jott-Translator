@@ -50,10 +50,17 @@ public class BodyNode implements JottTree {
     }
     public static BodyNode parseBodyNode(ArrayList<Token> tokens){
         ArrayList<BodyStmtNode> bodies = new ArrayList<>();
-        while(!((tokens.get(0).getToken().equals("return") || tokens.get(0).getTokenType() == TokenType.R_BRACE))){
+        while(!tokens.isEmpty()){
+            if (tokens.get(0).getToken().equals("return") || tokens.get(0).getTokenType() == TokenType.R_BRACE)
+                break;
+        //while(!((tokens.get(0).getToken().equals("return") || tokens.get(0).getTokenType() == TokenType.R_BRACE))){
             bodies.add(BodyStmtNode.parseBodyStmtNode(tokens));
         }
-        ReturnStmtNode re = ReturnStmtNode.parseReturnStmtNode(tokens);
-        return new BodyNode(bodies, re);
+        ReturnStmtNode re;
+        if (!tokens.isEmpty()) {
+            re = ReturnStmtNode.parseReturnStmtNode(tokens);
+            return new BodyNode(bodies, re);
+        }
+        return null;
     }
 }
