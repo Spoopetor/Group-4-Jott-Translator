@@ -7,7 +7,7 @@ import provided.TokenType;
 
 import java.util.ArrayList;
 
-public class WhileNode implements JottTree {
+public class WhileNode extends BodyStmtNode implements JottTree {
 
     private ExpressionNode exprNode;
     private BodyNode bodyNode;
@@ -83,7 +83,7 @@ public class WhileNode implements JottTree {
             tokens.remove(0);
 
             // store body in bodyNode
-            BodyNode bodyNode = parseBodyNode(tokens);
+            BodyNode bodyNode = BodyNode.parseBodyNode(tokens);
 
             // if no right brace }, throw exception
             if (tokens.get(0).getTokenType() == TokenType.R_BRACE) {

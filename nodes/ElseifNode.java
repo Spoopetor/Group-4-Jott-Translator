@@ -1,4 +1,4 @@
-
+package nodes;
 import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
@@ -82,7 +82,7 @@ public class ElseifNode implements JottTree {
             tokens.remove(0);
 
             // store body in bodyNode
-            BodyNode bodyNode = parseBodyNode(tokens);
+            BodyNode bodyNode = BodyNode.parseBodyNode(tokens);
 
             // if no right brace, throw exception
             if (tokens.get(0).getTokenType() == TokenType.R_BRACE) {
