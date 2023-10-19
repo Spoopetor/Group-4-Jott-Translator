@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 // change to extend body statement
-public class AssignmentNode implements JottTree {
+public class AssignmentNode extends BodyStmtNode implements JottTree {
 
     static ArrayList<String> type_keywords = new ArrayList<>(
             Arrays.asList("Double", "Integer", "String", "Boolean"));

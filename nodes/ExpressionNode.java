@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 //extend body class
-abstract class ExpressionNode implements JottTree {
+abstract class ExpressionNode extends BodyStmtNode implements JottTree {
 
     static ArrayList<String> bool_keywords = new ArrayList<>(
             Arrays.asList("True", "False"));

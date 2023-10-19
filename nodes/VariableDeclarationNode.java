@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 // change to extend body statement
-public class VariableDeclarationNode implements JottTree {
+public class VariableDeclarationNode extends BodyStmtNode implements JottTree {
 
     private TypeNode type;
     private IdNode id;

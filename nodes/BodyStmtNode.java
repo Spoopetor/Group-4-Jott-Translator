@@ -35,16 +35,23 @@ public abstract class BodyStmtNode implements JottTree {
     }
 
     public static BodyStmtNode parseBodyStmtNode(ArrayList<Token> tokens){
-        String bodyType = tokens.get(0).getToken();
+        String bodyName = tokens.get(0).getToken();
+        TokenType bodyType = tokens.get(0).getTokenType();
+        TokenType third = tokens.get(2).getTokenType();
 
-        switch (bodyType) {
-            case "if" : return IfNode.parseIfNode(tokens);
-            case "while" : return WhileNode.parseWhileNode(tokens);
-            // todo Assigment Case
-            // todo Variable Declaration Case
-            // todo Function Call (make Expression Node extend BodyStmtNode)
-            default : throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+        if(bodyName.equals("if")){return IfNode.parseIfNode(tokens);}
+        if(bodyName.equals("while")){return WhileNode.parseWhileNode(tokens);}
+        if(bodyType == TokenType.FC_HEADER){return FuncCallNode.parseFuncCallNode(tokens);}
+        if(bodyType == TokenType.ID_KEYWORD && tokens.get(1).getTokenType() == TokenType.ID_KEYWORD){
+            if(third == TokenType.SEMICOLON){
+                return VariableDeclarationNode.parseVariableDeclarationNode(tokens);
+            }
+            if(third == TokenType.ASSIGN){
+                return AssignmentNode.parseAssignmentNode(tokens);
+            }
         }
+        throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+
 
     }
 }
