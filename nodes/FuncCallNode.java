@@ -7,7 +7,7 @@ import provided.TokenType;
 
 import java.util.ArrayList;
 
-public class FuncCallNode extends ExpressionNode implements JottTree {
+public class FuncCallNode extends ExpressionNode {
     private final IdNode funcName; // TODO pull in code for IdNode
     private final FuncParamsNode params;
 
