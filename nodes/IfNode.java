@@ -26,7 +26,7 @@ public class IfNode extends BodyStmtNode implements JottTree {
     public String convertToJott() {
         StringBuilder out = new StringBuilder();
         out.append("if[");
-        out.append(this.expr.converToJott());
+        out.append(this.expr.convertToJott());
         out.append("]{\n");
         out.append(this.body.convertToJott());
         out.append("}");
@@ -64,28 +64,26 @@ public class IfNode extends BodyStmtNode implements JottTree {
             if (tokens.get(0).getTokenType() == TokenType.L_BRACKET){ //check for "["
                 tokens.remove(0); // pop "["
 
-                if (tokens.get(0).getToken().equals("if")){ //check for
-                    ExpressionNode exprNode = ExpressionNode.parseExpNode(tokens);
+                ExpressionNode exprNode = ExpressionNode.parseExpressionNode(tokens);
 
-                    if (tokens.get(0).getTokenType() == TokenType.R_BRACKET) { //check for "]"
-                        tokens.remove(0); // pop "]"
+                if (tokens.get(0).getTokenType() == TokenType.R_BRACKET) { //check for "]"
+                    tokens.remove(0); // pop "]"
 
-                        if (tokens.get(0).getTokenType() == TokenType.L_BRACE) { //check for "{"
-                            tokens.remove(0); // pop "{"
+                    if (tokens.get(0).getTokenType() == TokenType.L_BRACE) { //check for "{"
+                        tokens.remove(0); // pop "{"
 
-                            BodyNode bodyNode = BodyNode.parseBodyNode(tokens);
+                        BodyNode bodyNode = BodyNode.parseBodyNode(tokens);
 
-                            if (tokens.get(0).getTokenType() == TokenType.R_BRACE) { //check for "}"
-                                tokens.remove(0); // pop "}"
+                        if (tokens.get(0).getTokenType() == TokenType.R_BRACE) { //check for "}"
+                            tokens.remove(0); // pop "}"
 
-                                ArrayList<ElseifNode> elifs = new ArrayList<ElseifNode>();
-                                while (tokens.get(0).getToken().equals("elseif")) {//get all elseif nodes
-                                    elifs.add(ElseifNode.parseElseifNode(tokens));
-                                }
-                                ElseNode el = ElseNode.parseElseNode(tokens);
-
-                                return new IfNode(exprNode, bodyNode, elifs, el);
+                            ArrayList<ElseifNode> elifs = new ArrayList<ElseifNode>();
+                            while (tokens.get(0).getToken().equals("elseif")) {//get all elseif nodes
+                                elifs.add(ElseifNode.parseElseifNode(tokens));
                             }
+                            ElseNode el = ElseNode.parseElseNode(tokens);
+
+                            return new IfNode(exprNode, bodyNode, elifs, el);
                         }
                     }
                 }
