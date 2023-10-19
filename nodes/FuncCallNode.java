@@ -8,7 +8,7 @@ import provided.TokenType;
 import java.util.ArrayList;
 
 public class FuncCallNode extends ExpressionNode {
-    private final IdNode funcName; // TODO pull in code for IdNode
+    private final IdNode funcName;
     private final FuncParamsNode params;
 
     public FuncCallNode (IdNode fName, FuncParamsNode fp) {
