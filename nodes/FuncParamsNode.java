@@ -13,11 +13,11 @@ public class FuncParamsNode implements JottTree {
     }
 
     public static FuncParamsNode parseFuncParamsNode(ArrayList<provided.Token> tokens) {
-        if (tokens.get(0).getTokenType() == TokenType.R_BRACE)
+        if (tokens.get(0).getTokenType() == TokenType.R_BRACKET)
             return new FuncParamsNode(new ArrayList<ExpressionNode>());
 
         ArrayList<ExpressionNode> pNames = new ArrayList<ExpressionNode>();
-        while (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+        while (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
             pNames.add(ExpressionNode.parseExpressionNode(tokens));
         }
         return new FuncParamsNode(pNames);

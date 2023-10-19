@@ -21,11 +21,11 @@ public class FuncCallNode extends ExpressionNode {
             throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         tokens.remove(0);
         IdNode fName = IdNode.parseIdNode(tokens);
-        if (tokens.get(0).getTokenType() != TokenType.L_BRACE)
+        if (tokens.get(0).getTokenType() != TokenType.L_BRACKET)
             throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         tokens.remove(0);
         FuncParamsNode fp = FuncParamsNode.parseFuncParamsNode(tokens);
-        if (tokens.get(0).getTokenType() != TokenType.R_BRACE)
+        if (tokens.get(0).getTokenType() != TokenType.R_BRACKET)
             throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         tokens.remove(0);
         return new FuncCallNode(fName, fp);
