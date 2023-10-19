@@ -6,7 +6,7 @@ import provided.TokenType;
 import java.util.ArrayList;
 
 public class FuncParamsNode implements JottTree {
-    private final ArrayList<ExpressionNode> paramNames; // TODO pull in code for ExpressionNode
+    private final ArrayList<ExpressionNode> paramNames;
 
     public FuncParamsNode(ArrayList<ExpressionNode> pNames) {
         this.paramNames = pNames;
