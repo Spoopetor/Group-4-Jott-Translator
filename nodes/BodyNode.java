@@ -21,6 +21,9 @@ public class BodyNode implements JottTree {
         StringBuilder out = new StringBuilder();
         for(BodyStmtNode b : bodyStatements){
             out.append(b.convertToJott());
+            if(b instanceof FuncCallNode){
+                out.append(";");
+            }
         }
         out.append(returnNode.convertToJott());
         return out.toString();
@@ -47,7 +50,7 @@ public class BodyNode implements JottTree {
     }
     public static BodyNode parseBodyNode(ArrayList<Token> tokens){
         ArrayList<BodyStmtNode> bodies = new ArrayList<>();
-        while(!(tokens.get(0).getToken().equals("return"))){
+        while(!((tokens.get(0).getToken().equals("return") || tokens.get(0).getTokenType() == TokenType.R_BRACE))){
             bodies.add(BodyStmtNode.parseBodyStmtNode(tokens));
         }
         ReturnStmtNode re = ReturnStmtNode.parseReturnStmtNode(tokens);

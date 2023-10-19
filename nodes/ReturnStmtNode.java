@@ -9,17 +9,21 @@ import java.util.ArrayList;
 
 public class ReturnStmtNode implements JottTree {
 
+    private boolean returns;
     private ExpressionNode expr;
 
-    private ReturnStmtNode(ExpressionNode e){
+    private ReturnStmtNode(ExpressionNode e, Boolean r){
         this.expr = e;
+        this.returns = r;
     }
 
     @Override
     public String convertToJott() {
         StringBuilder out = new StringBuilder();
-        out.append("return ");
-        out.append(this.expr.convertToJott());
+        if(this.returns){
+            out.append("return ");
+            out.append(this.expr.convertToJott());
+        }
         return out.toString();
     }
 
@@ -44,11 +48,14 @@ public class ReturnStmtNode implements JottTree {
     }
 
     public static ReturnStmtNode parseReturnStmtNode(ArrayList<Token> tokens){
-        if(tokens.get(0).getToken().equals("elseif")){ //Check for "return"
+        if(tokens.get(0).getToken().equals("return")){ //Check for "return"
             tokens.remove(0);
             ExpressionNode e = ExpressionNode.parseExpressionNode(tokens);
-            return new ReturnStmtNode(e);
+            return new ReturnStmtNode(e, true);
 
+        }
+        if(tokens.get(0).getTokenType() == TokenType.R_BRACE){
+            return new ReturnStmtNode(null, false);
         }
         throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
     }
