@@ -34,10 +34,11 @@ abstract class ExpressionNode extends BodyStmtNode implements JottTree {
         }
 
         if (tokens.get(0).getTokenType() == TokenType.FC_HEADER) {
-            if (tokens.get(1).getTokenType() == TokenType.REL_OP || tokens.get(1).getTokenType() == TokenType.MATH_OP)
-                return BinaryExpressionNode.parseBinaryExpressionNode(tokens);
+            FuncCallNode f = FuncCallNode.parseFuncCallNode(tokens);
+            if (tokens.get(0).getTokenType() == TokenType.REL_OP || tokens.get(0).getTokenType() == TokenType.MATH_OP)
+                return BinaryExpressionNode.parseBinaryExpressionNode(tokens, f);
             else
-                return FuncCallNode.parseFuncCallNode(tokens);
+                return f;
         }
 
         if (tokens.get(0).getTokenType() == TokenType.STRING){
