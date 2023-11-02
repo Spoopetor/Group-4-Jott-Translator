@@ -39,11 +39,11 @@ public class  TypeNode implements JottTree {
                     yield new TypeNode(BOOLEAN);
                 }
                 default ->
-                        throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                        throw new SyntaxException("Invalid type \"" + tokens.get(0).getToken() + "\"", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             };
         }
         else {
-            throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            throw new SyntaxException("Invalid type \"" + tokens.get(0).getToken() + "\"", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         }
     }
 

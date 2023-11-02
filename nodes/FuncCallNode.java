@@ -18,15 +18,15 @@ public class FuncCallNode extends ExpressionNode {
 
     public static FuncCallNode parseFuncCallNode(ArrayList<Token> tokens) {
         if (tokens.get(0).getTokenType() != TokenType.FC_HEADER)
-            throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            throw new SyntaxException("Function call missing function header", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         tokens.remove(0);
         IdNode fName = IdNode.parseIdNode(tokens);
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET)
-            throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            throw new SyntaxException("Function call missing left bracket", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         tokens.remove(0);
         FuncParamsNode fp = FuncParamsNode.parseFuncParamsNode(tokens);
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET)
-            throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            throw new SyntaxException("Function call missing right bracket", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         tokens.remove(0);
         return new FuncCallNode(fName, fp);
     }
