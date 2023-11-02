@@ -57,7 +57,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
 
             // if no left bracket [, throw exception
             if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
-                throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                throw new SyntaxException("While statement missing left bracket", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
             // remove left bracket
@@ -68,7 +68,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
 
             // if no right bracket ], throw exception
             if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
-                throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                throw new SyntaxException("While statement missing right bracket", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
             // remove right bracket ]
@@ -76,7 +76,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
 
             // if no left brace {, throw exception
             if (tokens.get(0).getTokenType() != TokenType.L_BRACE) {
-                throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                throw new SyntaxException("While statement missing left brace", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
             // remove left brace {
@@ -87,7 +87,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
 
             // if no right brace }, throw exception
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
-                throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                throw new SyntaxException("While statement missing right brace", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
             // remove right brace
@@ -96,7 +96,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
             return new WhileNode(exprNode, bodyNode);
 
         } else {
-            throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            throw new SyntaxException("Missing while token", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         }
 
     }
