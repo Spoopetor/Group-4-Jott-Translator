@@ -2,6 +2,7 @@ package nodes;
 
 import exceptions.SyntaxException;
 import provided.JottTree;
+import provided.SymbolTable;
 import provided.Token;
 
 import java.io.SyncFailedException;
@@ -51,9 +52,15 @@ public class ProgramNode implements JottTree {
             while (!tokens.isEmpty()) {
                 funcDefNodes.add(FuncDefNode.parseFuncDefNode(tokens));
             }
+            if (!SymbolTable.checkForMain()) {
+                throw new Exception();
+            }
             return new ProgramNode(funcDefNodes);
         } catch (SyntaxException s) {
             System.err.println(s.getMessage());
+            return null;
+        } catch (Exception e){
+            // TODO -- add semantic ex?
             return null;
         }
     }
