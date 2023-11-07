@@ -15,6 +15,10 @@ public class  TypeNode implements JottTree {
 
     private final String typeName;
 
+    public String getTypeName() {
+        return typeName;
+    }
+
     public TypeNode(String tName) {
         this.typeName = tName;
     }
