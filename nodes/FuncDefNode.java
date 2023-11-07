@@ -1,6 +1,7 @@
 package nodes;
 
 import provided.JottTree;
+import provided.SymbolTable;
 import provided.Token;
 import exceptions.*;
 import provided.TokenType;
@@ -14,6 +15,12 @@ public class FuncDefNode implements JottTree {
     private IdNode funcName;
 
     private ArrayList<FuncDefParamsNode> defParams;
+
+    private static String currentScope;
+
+    public static String getCurrentScope() {
+        return currentScope;
+    }
 
     private Token functionReturn;
     private static final ArrayList<String> returnTypes =
@@ -75,6 +82,8 @@ public class FuncDefNode implements JottTree {
         if (currToken.getToken().equals("def")) {
             // The token after def will be the function name
             funcDef.funcName = IdNode.parseIdNode(tokens);
+            SymbolTable.createScope(funcDef.funcName.getTokenName());
+            currentScope = funcDef.funcName.getTokenName();
             currToken = tokens.remove(0);
 
             // Next token after parsing the function id should be a left bracket
@@ -114,6 +123,9 @@ public class FuncDefNode implements JottTree {
                             if (currToken.getTokenType() != TokenType.R_BRACE) {
                                 FuncDefNode.throwParseEx(currToken);
                             }
+
+                            // SymbolTable.destroyScope(funcDef.funcName.getTokenName());
+                            currentScope = null;
                         }
                         else {
                             FuncDefNode.throwParseEx(currToken);
