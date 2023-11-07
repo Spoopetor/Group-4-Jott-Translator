@@ -16,12 +16,6 @@ public class FuncDefNode implements JottTree {
 
     private ArrayList<FuncDefParamsNode> defParams;
 
-    private static String currentScope;
-
-    public static String getCurrentScope() {
-        return currentScope;
-    }
-
     private Token functionReturn;
     private static final ArrayList<String> returnTypes =
             new ArrayList<>(Arrays.asList("DOUBLE", "INTEGER", "STRING", "BOOLEAN", "VOID"));
@@ -83,7 +77,7 @@ public class FuncDefNode implements JottTree {
             // The token after def will be the function name
             funcDef.funcName = IdNode.parseIdNode(tokens);
             SymbolTable.createScope(funcDef.funcName.getTokenName());
-            currentScope = funcDef.funcName.getTokenName();
+            SymbolTable.setCurrentScope(funcDef.funcName.getTokenName());
             currToken = tokens.remove(0);
 
             // Next token after parsing the function id should be a left bracket
@@ -125,7 +119,7 @@ public class FuncDefNode implements JottTree {
                             }
 
                             // SymbolTable.destroyScope(funcDef.funcName.getTokenName());
-                            currentScope = null;
+                            SymbolTable.setCurrentScope(null);
                         }
                         else {
                             FuncDefNode.throwParseEx(currToken);

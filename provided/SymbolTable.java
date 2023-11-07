@@ -8,6 +8,16 @@ public class SymbolTable {
     /** Hashmap where key is the name of the scope, and the value is the list of symbols in the scope */
     public static HashMap<String, ArrayList<Symbol>> scopeMap = new HashMap<>();
 
+    private static String currentScope;
+
+    public static String getCurrentScope() {
+        return currentScope;
+    }
+
+    public static void setCurrentScope(String currentScope) {
+        SymbolTable.currentScope = currentScope;
+    }
+
     /**
      * adds a new symbol to a given scope
      * @param scopeName the name of the scope to add to
@@ -26,11 +36,12 @@ public class SymbolTable {
     }
 
     /**
-     * adds a new symbol to a given scope
+     * adds a new symbol to a given scope, with indicator of if this symbol is a param
      * @param scopeName the name of the scope to add to
      * @param name the name of the symbol
      * @param type the type of the symbol (Integer, Double, String, Boolean)
      * @param value the value of the symbol
+     * @param param true if param, false otherwise
      */
     public static void addToScope(String scopeName, String name, Types type, String value, boolean param){
         Symbol newSymbol = new Symbol(name, type, value, param);
@@ -40,6 +51,16 @@ public class SymbolTable {
         }
         scopeVars.add(newSymbol);
         scopeMap.put(scopeName, scopeVars);
+    }
+
+    public static void addToScope(String name, Types type, String value, boolean param){
+        Symbol newSymbol = new Symbol(name, type, value, param);
+        ArrayList<Symbol> scopeVars = scopeMap.get(currentScope);
+        if (scopeVars == null){
+            scopeVars = new ArrayList<>();
+        }
+        scopeVars.add(newSymbol);
+        scopeMap.put(currentScope, scopeVars);
     }
 
     /**
