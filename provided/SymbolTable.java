@@ -56,4 +56,12 @@ public class SymbolTable {
         }
         return false;
     }
+
+    /**
+     * Check for main func
+     * @return true if theres a main, false otherwise
+     */
+    public static boolean checkForMain(){
+        return scopeMap.containsKey("main");
+    }
 }
