@@ -46,7 +46,14 @@ public class BodyNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+
+        for(BodyStmtNode b : bodyStatements){
+            if(!b.validateTree()){
+                return false;
+            }
+        }
+
+        return returnNode.validateTree();
     }
     public static BodyNode parseBodyNode(ArrayList<Token> tokens){
         ArrayList<BodyStmtNode> bodies = new ArrayList<>();

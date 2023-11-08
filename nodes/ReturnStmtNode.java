@@ -45,7 +45,7 @@ public class ReturnStmtNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return expr.validateTree();
     }
 
     public static ReturnStmtNode parseReturnStmtNode(ArrayList<Token> tokens){
