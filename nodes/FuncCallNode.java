@@ -136,21 +136,20 @@ public class FuncCallNode extends ExpressionNode {
                         filename, lineNumber);
             }
 
-            // For each param:
-            // if param is id/keyword, it must be in scope
-            // look in symbol table for param
-            // if param not in symbol table for current scope, semantic error
-            // if param is id/keyword, use symbol table to get type, otherwise use node type
-            // if param type doesn't match arg type for funcName in symbol table, semantic error
+            // Check that types match for all params
             for (int i = 0; i < paramNames.size(); i++) {
                 ExpressionNode param = paramNames.get(i);
                 Types paramType = null;
+                // if param is id/keyword, check that it's in scope
                 if (param instanceof IdNode) {
+                    // look in symbol table for param
+                    // if param not in symbol table for current scope, semantic error
                     String paramName = ((IdNode) param).getTokenName();
                     if (!SymbolTable.checkInScope(FuncDefNode.getCurrentScope(), paramName)) {
                         throw new SemanticException("Param " + paramName + " not defined in scope " + FuncDefNode.getCurrentScope(),
                                 filename, lineNumber);
                     }
+                    // if param is id/keyword, use symbol table to get type
                     for (Symbol symbol : SymbolTable.scopeMap.get(FuncDefNode.getCurrentScope())) {
                         if (symbol.getName().equals(paramName)) {
                             paramType = symbol.getType();
@@ -159,6 +158,7 @@ public class FuncCallNode extends ExpressionNode {
                     }
                 }
                 else {
+                    // if param not id/keyword, use node class to get type
                     if (param instanceof StringNode) {
                         paramType = Types.STRING;
                     } else if (param instanceof BoolNode) {
@@ -167,6 +167,7 @@ public class FuncCallNode extends ExpressionNode {
                         paramType = ((NumberNode) param).getNumType();
                     }
                 }
+                // if param type doesn't match arg type for funcName in symbol table, semantic error
                 Types argType = funcArgs.get(i).getType();
                 if (!argType.equals(paramType)) {
                     throw new SemanticException("Incorrect param type passed to " + funcName + " (expected " + argType + ", " +
