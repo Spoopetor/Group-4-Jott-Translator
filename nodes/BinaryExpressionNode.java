@@ -3,6 +3,7 @@ package nodes;
 import exceptions.SyntaxException;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,12 @@ public class BinaryExpressionNode extends ExpressionNode{
         return new BinaryExpressionNode(l, op, r);
     }
 
+    public Types getType(){
+        if (left.getType() == right.getType())
+            return left.getType();
+        return null;
+    }
+
     @Override
     public String convertToJott() {
         String output = left.convertToJott();
@@ -82,6 +89,8 @@ public class BinaryExpressionNode extends ExpressionNode{
 
     @Override
     public boolean validateTree() {
+        if (left.validateTree() && right.validateTree() && left.getType() == right.getType())
+            return true;
         return false;
     }
 }

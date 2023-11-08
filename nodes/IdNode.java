@@ -3,12 +3,15 @@ package nodes;
 import exceptions.SyntaxException;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
+import provided.Symbol;
 
 import java.util.ArrayList;
 
 public class IdNode extends ExpressionNode{
 
     private Token token;
+    private Types type; // look up type from sym table
 
     public IdNode(Token t){
         this.token = t;
@@ -25,6 +28,7 @@ public class IdNode extends ExpressionNode{
     public String getTokenName() {
         return token.getToken();
     }
+    public Types getType(){return type;}
 
     @Override
     public String convertToJott() {
@@ -47,6 +51,7 @@ public class IdNode extends ExpressionNode{
 
     @Override
     public boolean validateTree() {
+        // if defined in sym table return true
         return false;
     }
 }
