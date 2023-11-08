@@ -3,6 +3,7 @@ package nodes;
 import exceptions.SyntaxException;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 
@@ -46,5 +47,10 @@ public class NumberNode extends ExpressionNode{
     @Override
     public boolean validateTree() {
         return false;
+    }
+
+    public Types getNumType() {
+        if (token.getToken().contains(".")) { return Types.DOUBLE; }
+        else { return Types.STRING; }
     }
 }

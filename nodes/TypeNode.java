@@ -73,6 +73,6 @@ public class  TypeNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return true;
     }
 }
