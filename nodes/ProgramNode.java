@@ -1,5 +1,6 @@
 package nodes;
 
+import exceptions.SemanticException;
 import exceptions.SyntaxException;
 import provided.*;
 
@@ -58,7 +59,23 @@ public class ProgramNode implements JottTree {
         SymbolTable.returnMap.put("length", Types.INTEGER);
         // TODO add same functionality to FuncDefNode when it encounters returnTypes
 
-        return false;
+        try {
+            if (!SymbolTable.checkForMain()) {
+                throw new SemanticException(
+                        "No main function in file",
+                        funcDefs.get(0).getFuncName().getTokenFilename(),
+                        1);
+            }
+            for (FuncDefNode defNode : this.funcDefs) {
+                if (!defNode.validateTree()) {
+                    return false;
+                }
+            }
+        } catch (SemanticException s) {
+            System.err.println(s.getMessage());
+            return false;
+        }
+        return true;
     }
 
     public static ProgramNode parseProgramNode(ArrayList<Token> tokens){
@@ -67,15 +84,9 @@ public class ProgramNode implements JottTree {
             while (!tokens.isEmpty()) {
                 funcDefNodes.add(FuncDefNode.parseFuncDefNode(tokens));
             }
-            if (!SymbolTable.checkForMain()) {
-                throw new Exception();
-            }
             return new ProgramNode(funcDefNodes);
         } catch (SyntaxException s) {
             System.err.println(s.getMessage());
-            return null;
-        } catch (Exception e){
-            // TODO -- add semantic ex?
             return null;
         }
     }

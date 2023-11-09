@@ -9,6 +9,10 @@ import java.util.Arrays;
 
 public class FuncDefNode implements JottTree {
 
+    public IdNode getFuncName() {
+        return funcName;
+    }
+
     private IdNode funcName;
 
     private ArrayList<FuncDefParamsNode> defParams;
@@ -55,7 +59,23 @@ public class FuncDefNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        if (this.functionBody.getReturnType() != this.functionReturn){
+            throw new SemanticException(
+                    "Return does not match return expected type",
+                    this.funcName.getTokenFilename(),
+                    this.funcName.getTokenLine());
+        }
+        else {
+            if (!this.funcName.validateTree()) {
+                return false;
+            }
+            for (FuncDefParamsNode defParams: this.defParams){
+                if (!defParams.validateTree()){
+                    return false;
+                }
+            }
+            return this.functionBody.validateTree();
+        }
     }
 
     public static FuncDefNode parseFuncDefNode(ArrayList<Token> tokens) {
@@ -116,9 +136,6 @@ public class FuncDefNode implements JottTree {
                         if (currToken.getTokenType() == TokenType.L_BRACE){
                             // Parse the body of this function
                             funcDef.functionBody = BodyNode.parseBodyNode(tokens);
-                            if (funcDef.functionBody.getReturnType() != funcDef.functionReturn){
-                                throw new Exception; //TODO - Better exception!
-                            }
 
                             if (tokens.isEmpty())
                                 FuncDefNode.throwParseEx(last);
