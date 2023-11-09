@@ -60,7 +60,10 @@ public class FuncDefNode implements JottTree {
     @Override
     public boolean validateTree() {
         if (this.functionBody.getReturnType() != this.functionReturn){
-            throw new Exception; //TODO - Better exception!
+            throw new SemanticException(
+                    "Return does not match return expected type",
+                    this.funcName.getTokenFilename(),
+                    this.funcName.getTokenLine());
         }
         else {
             if (!this.funcName.validateTree()) {
