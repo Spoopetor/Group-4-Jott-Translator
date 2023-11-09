@@ -26,7 +26,7 @@ public class IdNode extends ExpressionNode{
         return token.getToken();
     }
 
-    public String getTokenFilename() { return token.getTokenFilename(); }
+    public String getTokenFilename() { return token.getFilename(); }
 
     @Override
     public String convertToJott() {
