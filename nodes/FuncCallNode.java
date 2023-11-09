@@ -133,7 +133,7 @@ public class FuncCallNode extends ExpressionNode {
             else if (param instanceof FuncCallNode) {
                 String funcCallName = ((FuncCallNode) param).funcName.getTokenName();
                 // throw error for undefined function
-                if (!SymbolTable.returnMap.containsKey(funcCallName)) {
+                if (!SymbolTable.scopeMap.containsKey(funcCallName) || !SymbolTable.returnMap.containsKey(funcCallName)) {
                     throw new SemanticException("Function " + funcCallName + " used as param before being defined",
                             filename, lineNumber);
                 }
