@@ -3,6 +3,7 @@ import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 
@@ -10,10 +11,32 @@ public class ElseifNode implements JottTree {
 
     private ExpressionNode exprNode;
     private BodyNode bodyNode;
+    private Boolean hasIfParent;
 
-    public ElseifNode(ExpressionNode exprNode, BodyNode bodyNode) {
+    private Token fileInfo;
+
+    public ElseifNode(ExpressionNode exprNode, BodyNode bodyNode, Token fileInfo) {
         this.exprNode = exprNode;
         this.bodyNode = bodyNode;
+        this.fileInfo = fileInfo;
+    }
+
+    /**
+     * Returns true if this elseif node has an
+     * if statement as its parent
+     * @return hasIfParent
+     */
+    public Boolean getHasIfParent() {
+        return hasIfParent;
+    }
+
+    /**
+     * Sets hasIfParent to true if an if statement
+     * precedes this elseif node
+     * @param hasIfParent
+     */
+    public void setHasIfParent(Boolean hasIfParent) {
+        this.hasIfParent = hasIfParent;
     }
 
     @Override
@@ -45,18 +68,24 @@ public class ElseifNode implements JottTree {
     @Override
     public boolean validateTree() {
 
-        // if exprNode is not boolean condition, error
-        if (exprNode.getType() != Types.BOOLEAN) {
-            throw new SemanticException();
+        // validate if elseif node is preceded by an if
+        if (!getHasIfParent()) {
+            throw new SemanticException("'elseif' without 'if'", fileInfo.getFilename(), fileInfo.getLineNum());
             return false;
         }
+
+        // if exprNode is not boolean condition, error
+        if (!(exprNode instanceof BoolNode)) {
+            throw new SemanticException("'elseif' without a boolean condition", fileInfo.getFilename(), fileInfo.getLineNum());
+            return false;
+        }
+
         // if bodyNode is !validated, return false
         if (!bodyNode.validateTree()) {
             return false;
         }
 
-        return false;
-
+        return true;
     }
 
     static public ElseifNode parseElseifNode(ArrayList<Token> tokens) {
@@ -73,6 +102,11 @@ public class ElseifNode implements JottTree {
 
             // remove left bracket
             tokens.remove(0);
+
+            Token fileInfo = null;
+            if (!(tokens.isEmpty())) {
+                fileInfo = tokens.get(0);
+            }
 
             // remove next node and store in exprNode
             ExpressionNode exprNode = ExpressionNode.parseExpressionNode(tokens);
@@ -104,7 +138,7 @@ public class ElseifNode implements JottTree {
             // remove right brace
             tokens.remove(0);
 
-            return new ElseifNode(exprNode, bodyNode);
+            return new ElseifNode(exprNode, bodyNode, fileInfo);
 
         } else {
             throw new SyntaxException("Missing elseif token", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());

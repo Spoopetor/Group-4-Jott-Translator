@@ -5,6 +5,7 @@ import exceptions.SemanticException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 
@@ -13,9 +14,12 @@ public class WhileNode extends BodyStmtNode implements JottTree {
     private ExpressionNode exprNode;
     private BodyNode bodyNode;
 
-    public WhileNode(ExpressionNode exprNode, BodyNode bodyNode) {
+    private Token fileInfo;
+
+    public WhileNode(ExpressionNode exprNode, BodyNode bodyNode, Token fileInfo) {
         this.exprNode = exprNode;
         this.bodyNode = bodyNode;
+        this.fileInfo = fileInfo;
     }
 
     @Override
@@ -48,16 +52,17 @@ public class WhileNode extends BodyStmtNode implements JottTree {
     public boolean validateTree() {
 
         // if exprNode is not boolean condition, error
-        if (exprNode.getType() != Types.BOOLEAN) {
-            throw new SemanticException();
+        if (!(exprNode instanceof BoolNode)) {
+            throw new SemanticException("'while' without a condition", fileInfo.getFilename(), fileInfo.getLineNum());
             return false;
         }
+
         // if bodyNode is !validated, return false
         if (!bodyNode.validateTree()) {
             return false;
         }
 
-        return false;
+        return true;
     }
 
     static public WhileNode parseWhileNode(ArrayList<Token> tokens) {
@@ -74,6 +79,11 @@ public class WhileNode extends BodyStmtNode implements JottTree {
 
             // remove left bracket
             tokens.remove(0);
+
+            Token fileInfo = null;
+            if (!(tokens.isEmpty())) {
+                fileInfo = tokens.get(0);
+            }
 
             // remove next node and store in exprNode
             ExpressionNode exprNode = ExpressionNode.parseExpressionNode(tokens);
@@ -105,7 +115,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
             // remove right brace
             tokens.remove(0);
 
-            return new WhileNode(exprNode, bodyNode);
+            return new WhileNode(exprNode, bodyNode, fileInfo);
 
         } else {
             throw new SyntaxException("Missing while token", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
