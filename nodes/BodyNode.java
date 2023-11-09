@@ -1,9 +1,9 @@
 package nodes;
 
-import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 
@@ -42,6 +42,10 @@ public class BodyNode implements JottTree {
     @Override
     public String convertToPython() {
         return null;
+    }
+
+    public Types getReturnType(){
+        return returnNode.getType();
     }
 
     @Override
