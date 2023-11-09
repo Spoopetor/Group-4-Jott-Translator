@@ -31,6 +31,10 @@ public class IdNode extends ExpressionNode{
     }
     public Types getType(){return type;}
 
+    public String getTokenFilename() { return token.getFilename(); }
+
+    public int getTokenLine() { return token.getLineNum(); }
+
     @Override
     public String convertToJott() {
         return this.token.getToken();
