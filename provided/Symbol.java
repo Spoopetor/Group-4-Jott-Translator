@@ -36,6 +36,8 @@ public class Symbol {
         return param;
     }
 
+    protected void setParam(boolean param) { this.param = param; }
+
     public void setType(Types type) {
         this.type = type;
     }

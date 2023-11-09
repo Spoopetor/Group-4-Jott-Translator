@@ -36,15 +36,15 @@ public class SymbolTable {
     }
 
     /**
-     * adds a new symbol to a given scope, with indicator of if this symbol is a param
+     * adds a new symbol to a given scope, with indicator of this symbol being a param
      * @param scopeName the name of the scope to add to
      * @param name the name of the symbol
      * @param type the type of the symbol (Integer, Double, String, Boolean)
      * @param value the value of the symbol
-     * @param param true if param, false otherwise
      */
-    public static void addToScope(String scopeName, String name, Types type, String value, boolean param){
-        Symbol newSymbol = new Symbol(name, type, value, param);
+    public static void addParamToScope(String scopeName, String name, Types type, String value){
+        Symbol newSymbol = new Symbol(name, type, value);
+        newSymbol.setParam(true);
         ArrayList<Symbol> scopeVars = scopeMap.get(scopeName);
         if (scopeVars == null){
             scopeVars = new ArrayList<>();
@@ -53,8 +53,15 @@ public class SymbolTable {
         scopeMap.put(scopeName, scopeVars);
     }
 
-    public static void addToScope(String name, Types type, String value, boolean param){
-        Symbol newSymbol = new Symbol(name, type, value, param);
+    /**
+     * adds a new symbol to the currentScope, with indicator of this symbol being a param
+     * @param name the name of the symbol
+     * @param type the type of the symbol (Integer, Double, String, Boolean)
+     * @param value the value of the symbol
+     */
+    public static void addParamToScope(String name, Types type, String value){
+        Symbol newSymbol = new Symbol(name, type, value);
+        newSymbol.setParam(true);
         ArrayList<Symbol> scopeVars = scopeMap.get(currentScope);
         if (scopeVars == null){
             scopeVars = new ArrayList<>();
