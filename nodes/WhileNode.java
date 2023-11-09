@@ -5,7 +5,6 @@ import exceptions.SemanticException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
-import provided.Types;
 
 import java.util.ArrayList;
 

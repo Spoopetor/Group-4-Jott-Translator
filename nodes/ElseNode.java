@@ -1,5 +1,6 @@
 package nodes;
 
+import exceptions.SemanticException;
 import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
