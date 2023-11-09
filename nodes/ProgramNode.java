@@ -13,6 +13,8 @@ public class ProgramNode implements JottTree {
 
     private ArrayList<FuncDefNode> funcDefs = new ArrayList<>();
 
+    public static ArrayList<String> builtInFuncs = new ArrayList<>(Arrays.asList("print", "concat", "length"));
+
     public ProgramNode(ArrayList<FuncDefNode> childList){
         this.funcDefs.addAll(childList);
     }
@@ -54,10 +56,10 @@ public class ProgramNode implements JottTree {
         SymbolTable.scopeMap.put("length", new ArrayList<>(Arrays.asList(
                 new Symbol("string1", Types.STRING, null, true))));
         // Automatically add built-in functions to return map
+        // FuncDefNode handles this for user-defined functions
         SymbolTable.returnMap.put("string", Types.VOID);
         SymbolTable.returnMap.put("concat", Types.STRING);
         SymbolTable.returnMap.put("length", Types.INTEGER);
-        // TODO add same functionality to FuncDefNode when it encounters returnTypes
 
         try {
             if (!SymbolTable.checkForMain()) {

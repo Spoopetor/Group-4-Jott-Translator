@@ -6,6 +6,7 @@ import exceptions.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Properties;
 
 public class FuncDefNode implements JottTree {
 
@@ -59,6 +60,10 @@ public class FuncDefNode implements JottTree {
 
     @Override
     public boolean validateTree() {
+        if (!ProgramNode.builtInFuncs.contains(funcName.getTokenName())) {
+            SymbolTable.returnMap.put(funcName.getTokenName(), functionReturn);
+        }
+
         if (this.functionBody.getReturnType() != this.functionReturn){
             throw new SemanticException(
                     "Return does not match return expected type",
