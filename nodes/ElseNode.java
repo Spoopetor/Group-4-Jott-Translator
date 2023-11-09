@@ -2,9 +2,7 @@ package nodes;
 
 import exceptions.SemanticException;
 import exceptions.SyntaxException;
-import provided.JottTree;
-import provided.Token;
-import provided.TokenType;
+import provided.*;
 
 import java.util.ArrayList;
 
