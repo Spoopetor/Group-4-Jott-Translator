@@ -72,9 +72,6 @@ public class ProgramNode implements JottTree {
         } catch (SyntaxException s) {
             System.err.println(s.getMessage());
             return null;
-        } catch (Exception e){
-            // TODO -- add semantic ex?
-            return null;
         }
     }
 }
