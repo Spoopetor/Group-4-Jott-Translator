@@ -2,6 +2,7 @@ package nodes;
 
 import exceptions.SyntaxException;
 import provided.JottTree;
+import provided.SymbolTable;
 import provided.Token;
 
 import java.io.SyncFailedException;
@@ -42,7 +43,23 @@ public class ProgramNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        try {
+            if (!SymbolTable.checkForMain()) {
+                throw new SemanticException(
+                        "No main function in file",
+                        funcDefs.get(0).getFuncName().getTokenFilename(),
+                        1);
+            }
+            for (FuncDefNode defNode : this.funcDefs) {
+                if (!defNode.validateTree()) {
+                    return false;
+                }
+            }
+        } catch (SematicException s) {
+            System.err.println(s.getMessage());
+            return false;
+        }
+        return true;
     }
 
     public static ProgramNode parseProgramNode(ArrayList<Token> tokens){

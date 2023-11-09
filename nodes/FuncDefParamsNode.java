@@ -2,6 +2,7 @@ package nodes;
 
 import exceptions.SyntaxException;
 import provided.JottTree;
+import provided.SymbolTable;
 import provided.Token;
 import provided.TokenType;
 
@@ -35,7 +36,10 @@ public class FuncDefParamsNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        if (!this.defParamName.validateTree()){
+            return false;
+        }
+        return this.defParamType.validateTree();
     }
 
     public static ArrayList<FuncDefParamsNode> parseFuncDefParamsNode(ArrayList<Token> tokens) {
@@ -57,6 +61,10 @@ public class FuncDefParamsNode implements JottTree {
             if (currToken.getTokenType() == TokenType.COLON) {
                 funcDefParam.defParamType = TypeNode.parseTypeNode(tokens);
                 defParamsNodes.add(funcDefParam);
+                SymbolTable.addParamToScope(
+                        funcDefParam.defParamName.getTokenName(),
+                        funcDefParam.defParamType.getTypeName(),
+                        null);
                 currToken = tokens.get(0);
 
                 // If the current token isn't a comma, then this is the end of the param list
