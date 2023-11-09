@@ -1,13 +1,12 @@
 package nodes;
 
 import exceptions.SyntaxException;
-import provided.JottTree;
-import provided.SymbolTable;
-import provided.Token;
+import provided.*;
 
 import java.io.SyncFailedException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ProgramNode implements JottTree {
 
@@ -43,6 +42,22 @@ public class ProgramNode implements JottTree {
 
     @Override
     public boolean validateTree() {
+        // TODO this could be moved elsewhere if needed
+        // Automatically add built-in functions to scope map
+        // Note: print accepts more than just string args; FuncCallNode will ensure that arg is simply non-Void
+        SymbolTable.scopeMap.put("string", new ArrayList<>(Arrays.asList(
+                new Symbol("nonVoid1", Types.STRING, "", true))));
+        SymbolTable.scopeMap.put("concat", new ArrayList<>(Arrays.asList(
+                new Symbol("string1", Types.STRING, "", true),
+                new Symbol("string2", Types.STRING, "", true))));
+        SymbolTable.scopeMap.put("length", new ArrayList<>(Arrays.asList(
+                new Symbol("string1", Types.STRING, "", true))));
+        // Automatically add built-in functions to return map
+        SymbolTable.returnMap.put("string", Types.VOID);
+        SymbolTable.returnMap.put("concat", Types.STRING);
+        SymbolTable.returnMap.put("length", Types.INTEGER);
+        // TODO add same functionality to FuncDefNode when it encounters returnTypes
+
         return false;
     }
 

@@ -89,90 +89,77 @@ public class FuncCallNode extends ExpressionNode {
         }
 
         ArrayList<ExpressionNode> paramNames = params.getParamNames();
-        // Built-in functions
-        if (funcName.getTokenName().equals("print")) {
-            if (params.getParamsLength() != 1) {
-                throw new SemanticException("Built-in function print must be called with 1 param",
-                        filename, lineNumber);
-            }
-        }
-        else if (funcName.getTokenName().equals("concat")) {
-            if (params.getParamsLength() != 2) {
-                throw new SemanticException("Built-in function concat must be called with 2 params",
-                        filename, lineNumber);
-            }
-            if (!(paramNames.get(0) instanceof StringNode && paramNames.get(1) instanceof StringNode)) {
-                throw new SemanticException("Built-in function concat must be called with String params",
-                        filename, lineNumber);
-            }
-        }
-        else if (funcName.getTokenName().equals("length")) {
-            if (params.getParamsLength() != 1) {
-                throw new SemanticException("Built-in function length must be called with 1 param",
-                        filename, lineNumber);
-            }
-            if (!(paramNames.get(0) instanceof StringNode)) {
-                throw new SemanticException("Built-in function length must be called with String param",
-                        filename, lineNumber);
-            }
-        }
-        // Non-built-in functions
-        else {
-            // If funcName not in symbol table, semantic error
-            if (!SymbolTable.scopeMap.containsKey(funcName.getTokenName())) {
-                throw new SemanticException("Function " + funcName.getTokenName() + " called before being defined",
-                        filename, lineNumber);
-            }
 
-            // If number of params != number of args for funcName in symbol table, semantic error
-            ArrayList<Symbol> funcArgs = new ArrayList<>();
-            for (Symbol symbol : SymbolTable.scopeMap.get(funcName.getTokenName())) {
-                if (symbol.isParam()) {
-                    funcArgs.add(symbol);
-                }
-            }
-            if (funcArgs.size() != params.getParamsLength()) {
-                throw new SemanticException("Function " + funcName.getTokenName() + " called with incorrect number of params",
-                        filename, lineNumber);
-            }
+        // If funcName not in symbol table, semantic error
+        if (!SymbolTable.scopeMap.containsKey(funcName.getTokenName())) {
+            throw new SemanticException("Function " + funcName.getTokenName() + " called before being defined",
+                    filename, lineNumber);
+        }
 
-            // Check that types match for all params
-            for (int i = 0; i < paramNames.size(); i++) {
-                ExpressionNode param = paramNames.get(i);
-                Types paramType = null;
-                // if param is id/keyword, check that it's in scope
-                if (param instanceof IdNode) {
-                    // look in symbol table for param
-                    // if param not in symbol table for current scope, semantic error
-                    String paramName = ((IdNode) param).getTokenName();
-                    if (!SymbolTable.checkInScope(FuncDefNode.getCurrentScope(), paramName)) {
-                        throw new SemanticException("Param " + paramName + " not defined in scope " + FuncDefNode.getCurrentScope(),
-                                filename, lineNumber);
-                    }
-                    // if param is id/keyword, use symbol table to get type
-                    for (Symbol symbol : SymbolTable.scopeMap.get(FuncDefNode.getCurrentScope())) {
-                        if (symbol.getName().equals(paramName)) {
-                            paramType = symbol.getType();
-                            break;
-                        }
+        // If number of params != number of args for funcName in symbol table, semantic error
+        ArrayList<Symbol> funcArgs = new ArrayList<>();
+        for (Symbol symbol : SymbolTable.scopeMap.get(funcName.getTokenName())) {
+            if (symbol.isParam()) {
+                funcArgs.add(symbol);
+            }
+        }
+        if (funcArgs.size() != params.getParamsLength()) {
+            throw new SemanticException("Function " + funcName.getTokenName() + " called with incorrect number of params",
+                    filename, lineNumber);
+        }
+
+        // Check that types match for all params
+        for (int i = 0; i < paramNames.size(); i++) {
+            ExpressionNode param = paramNames.get(i);
+            Types paramType = null;
+            // if param is id/keyword, check that it's in scope
+            if (param instanceof IdNode) {
+                // look in symbol table for param
+                // if param not in symbol table for current scope, semantic error
+                String paramName = ((IdNode) param).getTokenName();
+                if (!SymbolTable.checkInScope(FuncDefNode.getCurrentScope(), paramName)) {
+                    throw new SemanticException("Param " + paramName + " not defined in scope " + FuncDefNode.getCurrentScope(),
+                            filename, lineNumber);
+                }
+                // if param is id/keyword, use symbol table to get type
+                for (Symbol symbol : SymbolTable.scopeMap.get(FuncDefNode.getCurrentScope())) {
+                    if (symbol.getName().equals(paramName)) {
+                        paramType = symbol.getType();
+                        break;
                     }
                 }
-                else {
-                    // if param not id/keyword, use node class to get type
-                    if (param instanceof StringNode) {
-                        paramType = Types.STRING;
-                    } else if (param instanceof BoolNode) {
-                        paramType = Types.BOOLEAN;
-                    } else if (param instanceof NumberNode) {
-                        paramType = ((NumberNode) param).getNumType();
-                    }
+            }
+            // if param is func call, check return type
+            else if (param instanceof FuncCallNode) {
+                String funcCallName = ((FuncCallNode) param).funcName.getTokenName();
+                // throw error for undefined function
+                if (!SymbolTable.returnMap.containsKey(funcCallName)) {
+                    throw new SemanticException("Function " + funcCallName + " used as param before being defined",
+                            filename, lineNumber);
                 }
-                // if param type doesn't match arg type for funcName in symbol table, semantic error
-                Types argType = funcArgs.get(i).getType();
-                if (!argType.equals(paramType)) {
-                    throw new SemanticException("Incorrect param type passed to " + funcName + " (expected " + argType + ", " +
-                            "got " + paramType + ")", filename, lineNumber);
+                paramType = SymbolTable.returnMap.get(funcCallName);
+            }
+            else {
+                // if param not id/keyword or func call, use node class to get type
+                if (param instanceof StringNode) {
+                    paramType = Types.STRING;
+                } else if (param instanceof BoolNode) {
+                    paramType = Types.BOOLEAN;
+                } else if (param instanceof NumberNode) {
+                    paramType = ((NumberNode) param).getNumType();
                 }
+            }
+            // if param type doesn't match arg type for funcName in symbol table, semantic error
+            // (note: print() params can be any type but void)
+            Types argType = funcArgs.get(i).getType();
+            if (funcName.getTokenName().equals("print")) {
+                if (Types.VOID.equals(paramType)) {
+                    throw new SemanticException("VOID param type passed to print function", filename, lineNumber);
+                }
+            }
+            else if (!argType.equals(paramType)) {
+                throw new SemanticException("Incorrect param type passed to " + funcName + "function (expected "
+                        + argType + ", " + "got " + paramType + ")", filename, lineNumber);
             }
         }
 

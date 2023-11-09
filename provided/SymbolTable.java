@@ -8,6 +8,9 @@ public class SymbolTable {
     /** Hashmap where key is the name of the scope, and the value is the list of symbols in the scope */
     public static HashMap<String, ArrayList<Symbol>> scopeMap = new HashMap<>();
 
+    /** Hashmap where key is the name of the function, and the value is the return type of the function */
+    public static HashMap<String, Types> returnMap = new HashMap<>();
+
     /**
      * adds a new symbol to a given scope
      * @param scopeName the name of the scope to add to
