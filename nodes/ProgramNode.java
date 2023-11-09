@@ -43,7 +43,23 @@ public class ProgramNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        try {
+            if (!SymbolTable.checkForMain()) {
+                throw new SemanticException(
+                        "No main function in file",
+                        funcDefs.get(0).getFuncName().getTokenFilename(),
+                        1);
+            }
+            for (FuncDefNode defNode : this.funcDefs) {
+                if (!defNode.validateTree()) {
+                    return false;
+                }
+            }
+        } catch (SematicException s) {
+            System.err.println(s.getMessage());
+            return false;
+        }
+        return true;
     }
 
     public static ProgramNode parseProgramNode(ArrayList<Token> tokens){
@@ -51,9 +67,6 @@ public class ProgramNode implements JottTree {
             ArrayList<FuncDefNode> funcDefNodes = new ArrayList<>();
             while (!tokens.isEmpty()) {
                 funcDefNodes.add(FuncDefNode.parseFuncDefNode(tokens));
-            }
-            if (!SymbolTable.checkForMain()) {
-                throw new Exception();
             }
             return new ProgramNode(funcDefNodes);
         } catch (SyntaxException s) {

@@ -9,6 +9,10 @@ import java.util.Arrays;
 
 public class FuncDefNode implements JottTree {
 
+    public IdNode getFuncName() {
+        return funcName;
+    }
+
     private IdNode funcName;
 
     private ArrayList<FuncDefParamsNode> defParams;
