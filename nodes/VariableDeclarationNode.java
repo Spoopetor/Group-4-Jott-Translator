@@ -1,9 +1,7 @@
 package nodes;
 
 import exceptions.SyntaxException;
-import provided.JottTree;
-import provided.Token;
-import provided.TokenType;
+import provided.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,8 +33,15 @@ public class VariableDeclarationNode extends BodyStmtNode implements JottTree {
             throw new SyntaxException("Expecting ';', got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
 
+        //String scope = SymbolTable.getCurrentScope();
+        String scope = ""; // take this out when pull from main
+        if (SymbolTable.checkInScope(scope, i.getTokenName())) {
+            Token tok = tokens.remove(0);
+            //throw SemanticException("Variable " + id.getTokenName() + " is already defined in this scope", tok.getFilename(), tok.getLineNum());
+        }
+        SymbolTable.addToScope(scope, i.getTokenName(), t.typeName, "");
         //pop semicolon
-        tokens.remove(0);
+//        tokens.remove(0);
 
         return new VariableDeclarationNode(t,i);
     }
