@@ -22,7 +22,8 @@ public class BinaryExpressionNode extends ExpressionNode{
     public static BinaryExpressionNode parseBinaryExpressionNode(ArrayList<Token> tokens, ExpressionNode l){
         if (tokens.get(0).getTokenType() != TokenType.MATH_OP && tokens.get(0).getTokenType() != TokenType.REL_OP) {
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting operand, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         Token op = tokens.remove(0);
 
@@ -48,7 +49,8 @@ public class BinaryExpressionNode extends ExpressionNode{
 
         if (tokens.get(0).getTokenType() != TokenType.MATH_OP && tokens.get(0).getTokenType() != TokenType.REL_OP) {
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting operand, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         Token op = tokens.remove(0);
 

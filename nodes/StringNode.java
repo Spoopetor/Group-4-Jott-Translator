@@ -21,7 +21,8 @@ public class StringNode extends ExpressionNode {
     static public StringNode parseStringNode(ArrayList<Token> tokens){
         if (tokens.get(0).getTokenType() != TokenType.STRING) {
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting string literal, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         return new StringNode(tokens.remove(0), Types.STRING);
     }

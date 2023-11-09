@@ -20,7 +20,8 @@ public class NumberNode extends ExpressionNode{
     static public NumberNode parseNumberNode(ArrayList<Token> tokens){
         if (tokens.get(0).getTokenType() != TokenType.NUMBER) {
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting number, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         Types t;
         if (tokens.get(0).getToken().contains(".")){

@@ -20,7 +20,8 @@ public class IdNode extends ExpressionNode{
     static public IdNode parseIdNode(ArrayList<Token> tokens){
         if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) {
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting ID name, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         return new IdNode(tokens.remove(0));
     }

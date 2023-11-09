@@ -48,6 +48,7 @@ abstract class ExpressionNode extends BodyStmtNode implements JottTree {
             return StringNode.parseStringNode(tokens);
         }
 
-        throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+        return null;
+        //throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
     }
 }

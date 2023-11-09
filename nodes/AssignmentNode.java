@@ -36,7 +36,8 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
         // validate type or id node type
         if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD ){
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting type or ID name, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         TypeNode t = null;
         // case 1 where assignment has var_dec
@@ -45,7 +46,8 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
             // validate if next is id node type
             if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD ){
                 Token tok = tokens.remove(0);
-                throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+                throw new SyntaxException("Expecting ID name, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+                //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
             }
         }
         // case 2 when no var_dec / remainder of case 1
@@ -54,7 +56,8 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
         // check if next is '=' (assign token type)
         if (tokens.get(0).getTokenType() != TokenType.ASSIGN){
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting '=', got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         tokens.remove(0);
 
@@ -64,7 +67,8 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
         // check if next is semicolon
         if (tokens.get(0).getTokenType() != TokenType.SEMICOLON){
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting ';', got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         tokens.remove(0);
 

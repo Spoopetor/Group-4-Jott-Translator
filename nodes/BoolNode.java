@@ -20,7 +20,8 @@ public class BoolNode extends ExpressionNode{
     static public BoolNode parseBoolNode(ArrayList<Token> tokens){
         if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) {
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting keyword, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         return new BoolNode(tokens.remove(0), Types.BOOLEAN);
     }
