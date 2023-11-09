@@ -4,6 +4,7 @@ import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 
@@ -13,13 +14,9 @@ public class  TypeNode implements JottTree {
     public static final String STRING = "String";
     public static final String BOOLEAN = "Boolean";
 
-    private final String typeName;
+    private final Types typeName;
 
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public TypeNode(String tName) {
+    public TypeNode(Types tName) {
         this.typeName = tName;
     }
 
@@ -28,19 +25,19 @@ public class  TypeNode implements JottTree {
             return switch (tokens.get(0).getToken()) {
                 case DOUBLE -> {
                     tokens.remove(0);
-                    yield new TypeNode(DOUBLE);
+                    yield new TypeNode(Types.DOUBLE);
                 }
                 case INTEGER -> {
                     tokens.remove(0);
-                    yield new TypeNode(INTEGER);
+                    yield new TypeNode(Types.INTEGER);
                 }
                 case STRING -> {
                     tokens.remove(0);
-                    yield new TypeNode(STRING);
+                    yield new TypeNode(Types.STRING);
                 }
                 case BOOLEAN -> {
                     tokens.remove(0);
-                    yield new TypeNode(BOOLEAN);
+                    yield new TypeNode(Types.BOOLEAN);
                 }
                 default ->
                         throw new SyntaxException("Invalid type \"" + tokens.get(0).getToken() + "\"", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -53,7 +50,10 @@ public class  TypeNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return this.typeName;
+        if (typeName.equals(Types.DOUBLE)) return DOUBLE;
+        else if (typeName.equals(Types.INTEGER)) return INTEGER;
+        else if (typeName.equals(Types.STRING)) return STRING;
+        else return BOOLEAN;
     }
 
     @Override
@@ -74,5 +74,9 @@ public class  TypeNode implements JottTree {
     @Override
     public boolean validateTree() {
         return true;
+    }
+
+    public Types getTypeName() {
+        return typeName;
     }
 }
