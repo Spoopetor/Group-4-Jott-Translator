@@ -4,6 +4,7 @@ import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 
@@ -45,7 +46,11 @@ public class ReturnStmtNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return expr.validateTree();
+    }
+
+    public Types getType() {
+        return expr.getType();
     }
 
     public static ReturnStmtNode parseReturnStmtNode(ArrayList<Token> tokens){

@@ -1,9 +1,9 @@
 package nodes;
 
-import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 
@@ -44,9 +44,20 @@ public class BodyNode implements JottTree {
         return null;
     }
 
+    public Types getReturnType(){
+        return returnNode.getType();
+    }
+
     @Override
     public boolean validateTree() {
-        return false;
+
+        for(BodyStmtNode b : bodyStatements){
+            if(!b.validateTree()){
+                return false;
+            }
+        }
+
+        return returnNode.validateTree();
     }
     public static BodyNode parseBodyNode(ArrayList<Token> tokens){
         ArrayList<BodyStmtNode> bodies = new ArrayList<>();

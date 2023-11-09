@@ -4,6 +4,7 @@ import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 
@@ -54,7 +55,23 @@ public class IfNode extends BodyStmtNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+
+        if(expr.getType() != Types.BOOLEAN){
+            throw(new Exception()); //TODO Semantic Exception
+            return false;
+        }
+        if(!body.validateTree()){
+            return false;
+        }
+
+        for(ElseifNode e : elifLst) {
+            e.setHasIfParent(true);
+            if (!e.validateTree()) {
+                return false;
+            }
+        }
+        elseCase.setHasIfParent(true);
+        return elseCase.validateTree();
     }
 
     public static IfNode parseIfNode(ArrayList<Token> tokens){
