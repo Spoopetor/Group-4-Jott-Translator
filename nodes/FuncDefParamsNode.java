@@ -36,7 +36,10 @@ public class FuncDefParamsNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        if (!this.defParamName.validateTree()){
+            return false;
+        }
+        return this.defParamType.validateTree();
     }
 
     public static ArrayList<FuncDefParamsNode> parseFuncDefParamsNode(ArrayList<Token> tokens) {
