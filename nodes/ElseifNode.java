@@ -44,7 +44,19 @@ public class ElseifNode implements JottTree {
 
     @Override
     public boolean validateTree() {
+
+        // if exprNode is not boolean condition, error
+        if (exprNode.getType() != Types.BOOLEAN) {
+            throw new SemanticException();
+            return false;
+        }
+        // if bodyNode is !validated, return false
+        if (!bodyNode.validateTree()) {
+            return false;
+        }
+
         return false;
+
     }
 
     static public ElseifNode parseElseifNode(ArrayList<Token> tokens) {

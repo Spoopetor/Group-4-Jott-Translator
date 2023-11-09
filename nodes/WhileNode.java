@@ -1,6 +1,7 @@
 package nodes;
 
 import exceptions.SyntaxException;
+import exceptions.SemanticException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
@@ -45,6 +46,17 @@ public class WhileNode extends BodyStmtNode implements JottTree {
 
     @Override
     public boolean validateTree() {
+
+        // if exprNode is not boolean condition, error
+        if (exprNode.getType() != Types.BOOLEAN) {
+            throw new SemanticException();
+            return false;
+        }
+        // if bodyNode is !validated, return false
+        if (!bodyNode.validateTree()) {
+            return false;
+        }
+
         return false;
     }
 

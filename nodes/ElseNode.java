@@ -45,7 +45,11 @@ public class ElseNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        // validate body node
+        if (!bodyNode.validateTree()) {
+            return false;
+        }
+        return true;
     }
 
     static public ElseNode parseElseNode(ArrayList<Token> tokens) {
