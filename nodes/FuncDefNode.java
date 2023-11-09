@@ -1,9 +1,7 @@
 package nodes;
 
-import provided.JottTree;
-import provided.Token;
+import provided.*;
 import exceptions.*;
-import provided.TokenType;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -11,13 +9,15 @@ import java.util.Arrays;
 
 public class FuncDefNode implements JottTree {
 
+    public IdNode getFuncName() {
+        return funcName;
+    }
+
     private IdNode funcName;
 
     private ArrayList<FuncDefParamsNode> defParams;
 
-    private Token functionReturn;
-    private static final ArrayList<String> returnTypes =
-            new ArrayList<>(Arrays.asList("DOUBLE", "INTEGER", "STRING", "BOOLEAN", "VOID"));
+    private Types functionReturn;
 
     private BodyNode functionBody;
 
@@ -34,7 +34,7 @@ public class FuncDefNode implements JottTree {
             }
         }
         stringBuilder.append("]:");
-        stringBuilder.append(functionReturn.getToken());
+        stringBuilder.append(functionReturn.toString());
         stringBuilder.append(" {\n");
         stringBuilder.append(functionBody.convertToJott());
         stringBuilder.append("}\n");
@@ -59,7 +59,23 @@ public class FuncDefNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        if (this.functionBody.getReturnType() != this.functionReturn){
+            throw new SemanticException(
+                    "Return does not match return expected type",
+                    this.funcName.getTokenFilename(),
+                    this.funcName.getTokenLine());
+        }
+        else {
+            if (!this.funcName.validateTree()) {
+                return false;
+            }
+            for (FuncDefParamsNode defParams: this.defParams){
+                if (!defParams.validateTree()){
+                    return false;
+                }
+            }
+            return this.functionBody.validateTree();
+        }
     }
 
     public static FuncDefNode parseFuncDefNode(ArrayList<Token> tokens) {
@@ -75,6 +91,8 @@ public class FuncDefNode implements JottTree {
         if (currToken.getToken().equals("def")) {
             // The token after def will be the function name
             funcDef.funcName = IdNode.parseIdNode(tokens);
+            SymbolTable.createScope(funcDef.funcName.getTokenName());
+            SymbolTable.setCurrentScope(funcDef.funcName.getTokenName());
             currToken = tokens.remove(0);
 
             // Next token after parsing the function id should be a left bracket
@@ -91,12 +109,27 @@ public class FuncDefNode implements JottTree {
                     if (currToken.getTokenType() == TokenType.COLON){
                         // Parse the function return type
                         currToken = tokens.remove(0);
-                        if (returnTypes.contains(currToken.getToken().toUpperCase())) {
-                            funcDef.functionReturn = currToken;
+                        switch (currToken.getToken().toUpperCase()){
+                            case "VOID":
+                                funcDef.functionReturn = Types.VOID;
+                                break;
+                            case "INTEGER":
+                                funcDef.functionReturn = Types.INTEGER;
+                                break;
+                            case "DOUBLE":
+                                funcDef.functionReturn = Types.DOUBLE;
+                                break;
+                            case "STRING":
+                                funcDef.functionReturn = Types.STRING;
+                                break;
+                            case "BOOLEAN":
+                                funcDef.functionReturn = Types.BOOLEAN;
+                                break;
+                            default:
+                                FuncDefNode.throwParseEx(currToken);
                         }
-                        else {
-                            FuncDefNode.throwParseEx(currToken);
-                        }
+
+
                         currToken = tokens.remove(0);
 
                         // Next token after parsing function return type should be '{'
@@ -114,6 +147,9 @@ public class FuncDefNode implements JottTree {
                             if (currToken.getTokenType() != TokenType.R_BRACE) {
                                 FuncDefNode.throwParseEx(currToken);
                             }
+
+                            // SymbolTable.destroyScope(funcDef.funcName.getTokenName());
+                            SymbolTable.setCurrentScope(null);
                         }
                         else {
                             FuncDefNode.throwParseEx(currToken);
