@@ -1,10 +1,7 @@
 package nodes;
 
-import provided.JottTree;
-import provided.SymbolTable;
-import provided.Token;
+import provided.*;
 import exceptions.*;
-import provided.TokenType;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -16,9 +13,7 @@ public class FuncDefNode implements JottTree {
 
     private ArrayList<FuncDefParamsNode> defParams;
 
-    private Token functionReturn;
-    private static final ArrayList<String> returnTypes =
-            new ArrayList<>(Arrays.asList("DOUBLE", "INTEGER", "STRING", "BOOLEAN", "VOID"));
+    private Types functionReturn;
 
     private BodyNode functionBody;
 
@@ -35,7 +30,7 @@ public class FuncDefNode implements JottTree {
             }
         }
         stringBuilder.append("]:");
-        stringBuilder.append(functionReturn.getToken());
+        stringBuilder.append(functionReturn.toString());
         stringBuilder.append(" {\n");
         stringBuilder.append(functionBody.convertToJott());
         stringBuilder.append("}\n");
@@ -94,18 +89,36 @@ public class FuncDefNode implements JottTree {
                     if (currToken.getTokenType() == TokenType.COLON){
                         // Parse the function return type
                         currToken = tokens.remove(0);
-                        if (returnTypes.contains(currToken.getToken().toUpperCase())) {
-                            funcDef.functionReturn = currToken;
+                        switch (currToken.getToken().toUpperCase()){
+                            case "VOID":
+                                funcDef.functionReturn = Types.VOID;
+                                break;
+                            case "INTEGER":
+                                funcDef.functionReturn = Types.INTEGER;
+                                break;
+                            case "DOUBLE":
+                                funcDef.functionReturn = Types.DOUBLE;
+                                break;
+                            case "STRING":
+                                funcDef.functionReturn = Types.STRING;
+                                break;
+                            case "BOOLEAN":
+                                funcDef.functionReturn = Types.BOOLEAN;
+                                break;
+                            default:
+                                FuncDefNode.throwParseEx(currToken);
                         }
-                        else {
-                            FuncDefNode.throwParseEx(currToken);
-                        }
+
+
                         currToken = tokens.remove(0);
 
                         // Next token after parsing function return type should be '{'
                         if (currToken.getTokenType() == TokenType.L_BRACE){
                             // Parse the body of this function
                             funcDef.functionBody = BodyNode.parseBodyNode(tokens);
+                            if (funcDef.functionBody.getReturnType() != funcDef.functionReturn){
+                                throw new Exception; //TODO - Better exception!
+                            }
 
                             if (tokens.isEmpty())
                                 FuncDefNode.throwParseEx(last);
