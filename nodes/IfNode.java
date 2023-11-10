@@ -1,6 +1,6 @@
 package nodes;
 
-import exceptions.SyntaxException;
+import exceptions.*;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
@@ -15,12 +15,18 @@ public class IfNode extends BodyStmtNode implements JottTree {
     private ArrayList<ElseifNode> elifLst;
     private ElseNode elseCase;
 
+    private String filename;
 
-    private IfNode(ExpressionNode e, BodyNode b, ArrayList<ElseifNode> elif, ElseNode el){
+    private int linenum;
+
+
+    private IfNode(ExpressionNode e, BodyNode b, ArrayList<ElseifNode> elif, ElseNode el, String f, int l){
         this.expr = e;
         this.body = b;
         this.elifLst = elif;
         this.elseCase = el;
+        this.filename = f;
+        this.linenum = l;
     }
 
     @Override
@@ -57,7 +63,7 @@ public class IfNode extends BodyStmtNode implements JottTree {
     public boolean validateTree() {
 
         if(expr.getType() != Types.BOOLEAN){
-            throw(new Exception()); //TODO Semantic Exception
+            throw(new SemanticException("If condition not boolean", filename, linenum));
             return false;
         }
         if(!body.validateTree()){
@@ -76,7 +82,9 @@ public class IfNode extends BodyStmtNode implements JottTree {
 
     public static IfNode parseIfNode(ArrayList<Token> tokens){
         if (tokens.get(0).getToken().equals("if")){ //check for "if"
-            tokens.remove(0); // pop "if"
+            Token iftoken = tokens.remove(0); // pop "if"
+
+
 
             if (tokens.get(0).getTokenType() == TokenType.L_BRACKET){ //check for "["
                 tokens.remove(0); // pop "["
@@ -100,12 +108,22 @@ public class IfNode extends BodyStmtNode implements JottTree {
                             }
                             ElseNode el = ElseNode.parseElseNode(tokens);
 
-                            return new IfNode(exprNode, bodyNode, elifs, el);
+                            return new IfNode(exprNode, bodyNode, elifs, el, iftoken.getFilename(), iftoken.getLineNum());
+                        } else {
+                            throw new SyntaxException("Missing closing }", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                         }
+                    } else {
+                        throw new SyntaxException("Expected { after []", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                     }
+                } else{
+                    throw new SyntaxException("Missing closing ]", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 }
+            } else{
+                throw new SyntaxException("Expected [ after if", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
+        } else{
+            throw new SyntaxException("Expected if statement", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         }
-        throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+
     }
 }

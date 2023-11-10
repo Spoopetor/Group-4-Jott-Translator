@@ -59,7 +59,7 @@ public abstract class BodyStmtNode implements JottTree {
                 return AssignmentNode.parseAssignmentNode(tokens);
             }
         }
-        throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+        throw new SyntaxException("Invalid body statement", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
 
 
     }

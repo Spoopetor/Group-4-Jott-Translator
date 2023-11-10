@@ -64,6 +64,6 @@ public class ReturnStmtNode implements JottTree {
         if(tokens.get(0).getTokenType() == TokenType.R_BRACE){
             return new ReturnStmtNode(null, false);
         }
-        throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+        throw new SyntaxException("Missing or invalid return statement", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
     }
 }
