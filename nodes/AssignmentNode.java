@@ -73,19 +73,19 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
             //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
 
-        //String scope = SymbolTable.getCurrentScope();
+        String scope = SymbolTable.getCurrentScope();
         if (var_dec) {
-            String scope = ""; // take this out when pull from main
             if (SymbolTable.checkInScope(scope, id.getTokenName())) {
                 Token tok = tokens.remove(0);
-                //throw SemanticException("Variable " + id.getTokenName() + " is already defined in this scope", tok.getFilename(), tok.getLineNum());
+                throw SemanticException("Variable " + id.getTokenName() + " is already defined in this scope", tok.getFilename(), tok.getLineNum());
             }
+            SymbolTable.addToScope(scope, id.getTokenName(), t.typeName, "");
             return new AssignmentNode(t, id, v);
         }
-        String scope = ""; // take this out when pull from main
+
         if (!SymbolTable.checkInScope(scope, id.getTokenName())) {
             Token tok = tokens.remove(0);
-            //throw SemanticException("Variable " + id.getTokenName() + " is not defined in this scope", tok.getFilename(), tok.getLineNum());
+            throw SemanticException("Variable " + id.getTokenName() + " is not defined in this scope", tok.getFilename(), tok.getLineNum());
         }
         tokens.remove(0);
         return new AssignmentNode(id, v);
@@ -122,8 +122,8 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        if (this.type == this.value.getType()){
-            return true;
+        if (this.type != this.value.getType()){
+
         }
         //
         return false;

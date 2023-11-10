@@ -4,14 +4,14 @@ import exceptions.SyntaxException;
 import provided.Token;
 import provided.TokenType;
 import provided.Types;
-import provided.Symbol;
+import provided.SymbolTable;
 
 import java.util.ArrayList;
 
 public class IdNode extends ExpressionNode{
 
     private Token token;
-    private Types type; // look up type from sym table
+    //private Types type; // look up type from sym table
 
     public IdNode(Token t){
         this.token = t;
@@ -57,6 +57,10 @@ public class IdNode extends ExpressionNode{
     @Override
     public boolean validateTree() {
         // if defined in sym table return true
-        return false;
+        String scope = SymbolTable.getCurrentScope();
+        if (!SymbolTable.checkInScope(scope, token.getToken())) {
+            throw SemanticException("Variable " + id.getTokenName() + " is not defined in this scope", this.token.getFilename(), this.token.getLineNum());
+        }
+        return true;
     }
 }
