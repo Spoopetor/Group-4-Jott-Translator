@@ -64,6 +64,6 @@ public class NumberNode extends ExpressionNode{
 
     public Types getNumType() {
         if (token.getToken().contains(".")) { return Types.DOUBLE; }
-        else { return Types.STRING; }
+        else { return Types.INTEGER; }
     }
 }

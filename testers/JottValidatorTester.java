@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class JottValidatorTester {
     ArrayList<TestCase> testCases;
@@ -64,6 +65,11 @@ public class JottValidatorTester {
             }
             System.out.println(tokenListString(tokens));
             ArrayList<Token> cpyTokens = new ArrayList<>(tokens);
+
+            // manually reset static vars before each test case
+            SymbolTable.scopeMap = new HashMap<>();
+            SymbolTable.returnMap = new HashMap<>();
+
             JottTree root = JottParser.parse(tokens);
 
             if (!test.error && root == null) {

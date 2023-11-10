@@ -152,8 +152,8 @@ public class FuncCallNode extends ExpressionNode {
                 }
             }
             else if (!argType.equals(paramType)) {
-                throw new SemanticException("Incorrect param type passed to " + funcName + "function (expected "
-                        + argType + ", " + "got " + paramType + ")", filename, lineNumber);
+                throw new SemanticException("Incorrect param type passed to " + funcName.getTokenName()
+                        + " function (expected " + argType + ", " + "got " + paramType + ")", filename, lineNumber);
             }
         }
 
