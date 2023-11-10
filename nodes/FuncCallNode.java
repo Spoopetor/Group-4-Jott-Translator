@@ -84,7 +84,7 @@ public class FuncCallNode extends ExpressionNode {
 
     @Override
     public boolean validateTree() {
-        if (!SymbolTable.scopeMap.containsKey(funcName.getTokenName()) || !params.validateTree()) {
+        if (!params.validateTree()) {
             return false;
         }
 
