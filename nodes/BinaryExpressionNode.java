@@ -1,5 +1,6 @@
 package nodes;
 
+import exceptions.SemanticException;
 import exceptions.SyntaxException;
 import provided.Token;
 import provided.TokenType;
@@ -61,9 +62,15 @@ public class BinaryExpressionNode extends ExpressionNode{
     }
 
     public Types getType(){
-        if (left.getType() == right.getType())
-            return left.getType();
-        return null;
+        if (left.getType() == right.getType()) {
+            if (op.getTokenType() == TokenType.REL_OP){
+                return Types.BOOLEAN;
+            }
+            else if (op.getTokenType() == TokenType.MATH_OP){
+                return left.getType();
+            }
+        }
+        throw new SemanticException("Type mismatch", op.getFilename(), op.getLineNum());
     }
 
     @Override

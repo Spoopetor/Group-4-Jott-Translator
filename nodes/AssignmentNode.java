@@ -124,10 +124,11 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        if (!this.type.getTypeName().equals(this.value.getType())){
-            return false;
+        if (this.type.getTypeName().equals(this.value.getType())){
+            if (this.id.validateTree() && this.value.validateTree()) {
+                return true;
+            }
         }
-        //
-        return true;
+        return false;
     }
 }
