@@ -70,13 +70,11 @@ public class ElseifNode implements JottTree {
         // validate if elseif node is preceded by an if
         if (!getHasIfParent()) {
             throw new SemanticException("'elseif' without 'if'", fileInfo.getFilename(), fileInfo.getLineNum());
-            return false;
         }
 
         // if exprNode is not boolean condition, error
         if (!(exprNode instanceof BoolNode)) {
             throw new SemanticException("'elseif' without a boolean condition", fileInfo.getFilename(), fileInfo.getLineNum());
-            return false;
         }
 
         // if bodyNode is !validated, return false
@@ -96,7 +94,7 @@ public class ElseifNode implements JottTree {
 
             // if no left bracket [, throw exception
             if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
-                throw new SyntaxException("Elseif statement missing left bracket", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                throw new SyntaxException("Elseif statement missing left bracket", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
             // remove left bracket
@@ -112,7 +110,7 @@ public class ElseifNode implements JottTree {
 
             // if no right bracket ], throw exception
             if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
-                throw new SyntaxException("Elseif statement missing right bracket", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                throw new SyntaxException("Elseif statement missing right bracket", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
             // remove right bracket ]
@@ -120,7 +118,7 @@ public class ElseifNode implements JottTree {
 
             // if no left brace {, throw exception
             if (tokens.get(0).getTokenType() != TokenType.L_BRACE) {
-                throw new SyntaxException("Elseif statement missing left brace", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                throw new SyntaxException("Elseif statement missing left brace", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
             // remove left brace {
@@ -131,7 +129,7 @@ public class ElseifNode implements JottTree {
 
             // if no right brace, throw exception
             if (tokens.get(0).getTokenType() == TokenType.R_BRACE) {
-                throw new SyntaxException("Elseif statement missing right brace", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                throw new SyntaxException("Elseif statement missing right brace", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
             // remove right brace
@@ -140,7 +138,7 @@ public class ElseifNode implements JottTree {
             return new ElseifNode(exprNode, bodyNode, fileInfo);
 
         } else {
-            throw new SyntaxException("Missing elseif token", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            throw new SyntaxException("Missing elseif token", tokens.get(0).getToken(), tokens.get(0).getLineNum());
         }
 
     }

@@ -71,7 +71,6 @@ public class ElseNode implements JottTree {
         // validate if else node is preceded by an if
         if (!this.getHasIfParent()) {
             throw new SemanticException("'else' without 'if'", fileInfo.getFilename(), fileInfo.getLineNum());
-            return false;
         }
 
         // if bodyNode is !validated, return false
@@ -91,7 +90,7 @@ public class ElseNode implements JottTree {
 
             // if no left brace {, throw exception
             if (tokens.get(0).getTokenType() != TokenType.L_BRACE) {
-                throw new SyntaxException("Else statement missing left brace", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                throw new SyntaxException("Else statement missing left brace", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
             // remove left brace {
@@ -107,7 +106,7 @@ public class ElseNode implements JottTree {
 
             // if no right brace {, throw exception
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
-                throw new SyntaxException("Else statement missing right brace", tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                throw new SyntaxException("Else statement missing right brace", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             }
 
             // remove right brace {
