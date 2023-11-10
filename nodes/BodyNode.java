@@ -1,6 +1,5 @@
 package nodes;
 
-import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
@@ -67,10 +66,6 @@ public class BodyNode implements JottTree {
                 break;
         //while(!((tokens.get(0).getToken().equals("return") || tokens.get(0).getTokenType() == TokenType.R_BRACE))){
             bodies.add(BodyStmtNode.parseBodyStmtNode(tokens));
-            if(tokens.get(0).getTokenType() != TokenType.SEMICOLON){
-                throw new SyntaxException("Body Statement missing ; ", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
-            }
-            tokens.remove(0);
         }
         ReturnStmtNode re;
         if (!tokens.isEmpty()) {
