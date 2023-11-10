@@ -64,7 +64,6 @@ public class IfNode extends BodyStmtNode implements JottTree {
 
         if(expr.getType() != Types.BOOLEAN){
             throw(new SemanticException("If condition not boolean", filename, linenum));
-            return false;
         }
         if(!body.validateTree()){
             return false;

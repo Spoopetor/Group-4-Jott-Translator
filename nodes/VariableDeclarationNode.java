@@ -1,5 +1,6 @@
 package nodes;
 
+import exceptions.SemanticException;
 import exceptions.SyntaxException;
 import provided.*;
 
@@ -37,9 +38,9 @@ public class VariableDeclarationNode extends BodyStmtNode implements JottTree {
 
         if (SymbolTable.checkInScope(scope, i.getTokenName())) {
             Token tok = tokens.remove(0);
-            throw SemanticException("Variable " + id.getTokenName() + " is already defined in this scope", tok.getFilename(), tok.getLineNum());
+            throw new SemanticException("Variable " + i.getTokenName() + " is already defined in this scope", tok.getFilename(), tok.getLineNum());
         }
-        SymbolTable.addToScope(scope, i.getTokenName(), t.typeName, "");
+        SymbolTable.addToScope(scope, i.getTokenName(), t.getTypeName(), "");
         //pop semicolon
 //        tokens.remove(0);
 
