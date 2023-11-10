@@ -1,17 +1,14 @@
 package nodes;
 
+import exceptions.SemanticException;
 import exceptions.SyntaxException;
-import provided.Token;
-import provided.TokenType;
-import provided.Types;
-import provided.SymbolTable;
+import provided.*;
 
 import java.util.ArrayList;
 
 public class IdNode extends ExpressionNode{
 
     private Token token;
-    //private Types type; // look up type from sym table
 
     public IdNode(Token t){
         this.token = t;
@@ -29,7 +26,19 @@ public class IdNode extends ExpressionNode{
     public String getTokenName() {
         return token.getToken();
     }
-    public Types getType(){return type;}
+    public Types getType(){
+        if (!SymbolTable.checkInScope(SymbolTable.getCurrentScope(), token.getToken())) {
+            throw new SemanticException("Cannot find type for " + token.getToken() + " in current scope",
+                    token.getFilename(), token.getLineNum());
+        }
+        for (Symbol symbol : SymbolTable.scopeMap.get(SymbolTable.getCurrentScope())) {
+            if (symbol.getName().equals(token.getToken())) {
+                return symbol.getType();
+            }
+        }
+        throw new SemanticException("Cannot find type for " + token.getToken() + " in current scope",
+                token.getFilename(), token.getLineNum());
+    }
 
     public String getTokenFilename() { return token.getFilename(); }
 
@@ -59,7 +68,7 @@ public class IdNode extends ExpressionNode{
         // if defined in sym table return true
         String scope = SymbolTable.getCurrentScope();
         if (!SymbolTable.checkInScope(scope, token.getToken())) {
-            throw SemanticException("Variable " + id.getTokenName() + " is not defined in this scope", this.token.getFilename(), this.token.getLineNum());
+            throw new SemanticException("Variable " + token.getToken() + " is not defined in this scope", this.token.getFilename(), this.token.getLineNum());
         }
         return true;
     }
