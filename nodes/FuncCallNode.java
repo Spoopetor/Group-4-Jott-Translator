@@ -131,13 +131,7 @@ public class FuncCallNode extends ExpressionNode {
             }
             // if param is func call, check return type
             else if (param instanceof FuncCallNode) {
-                String funcCallName = ((FuncCallNode) param).funcName.getTokenName();
-                // throw error for undefined function
-                if (!SymbolTable.scopeMap.containsKey(funcCallName) || !SymbolTable.returnMap.containsKey(funcCallName)) {
-                    throw new SemanticException("Function " + funcCallName + " used as param before being defined",
-                            filename, lineNumber);
-                }
-                paramType = SymbolTable.returnMap.get(funcCallName);
+                paramType = param.getType();
             }
             else {
                 // if param not id/keyword or func call, use node class to get type
@@ -166,4 +160,14 @@ public class FuncCallNode extends ExpressionNode {
         return true;
     }
 
+    @Override
+    public Types getType() {
+        // throw error for undefined function
+        if (!SymbolTable.scopeMap.containsKey(funcName.getTokenName()) ||
+                !SymbolTable.returnMap.containsKey(funcName.getTokenName())) {
+            throw new SemanticException("Function " + funcName.getTokenName() +
+                    " used as param before being defined", filename, lineNumber);
+        }
+        return SymbolTable.returnMap.get(funcName.getTokenName());
+    }
 }
