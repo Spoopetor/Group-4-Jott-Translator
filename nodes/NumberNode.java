@@ -10,19 +10,29 @@ import java.util.ArrayList;
 public class NumberNode extends ExpressionNode{
 
     private Token token;
+    private Types type;
 
-    public NumberNode(Token t){
+    public NumberNode(Token t, Types ts){
         this.token = t;
+        this.type = ts;
     }
 
     static public NumberNode parseNumberNode(ArrayList<Token> tokens){
         if (tokens.get(0).getTokenType() != TokenType.NUMBER) {
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting number, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
-        return new NumberNode(tokens.remove(0));
+        Types t;
+        if (tokens.get(0).getToken().contains(".")){
+            t = Types.DOUBLE;
+        }else{
+            t = Types.INTEGER;
+        }
+        return new NumberNode(tokens.remove(0), t);
     }
 
+    public Types getType(){return type;}
 
     @Override
     public String convertToJott() {
@@ -46,6 +56,9 @@ public class NumberNode extends ExpressionNode{
 
     @Override
     public boolean validateTree() {
+        if (type == Types.DOUBLE || type == Types.INTEGER) {
+            return true;
+        }
         return false;
     }
 

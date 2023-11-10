@@ -3,6 +3,7 @@ package nodes;
 import exceptions.SyntaxException;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,8 @@ public class BinaryExpressionNode extends ExpressionNode{
     public static BinaryExpressionNode parseBinaryExpressionNode(ArrayList<Token> tokens, ExpressionNode l){
         if (tokens.get(0).getTokenType() != TokenType.MATH_OP && tokens.get(0).getTokenType() != TokenType.REL_OP) {
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting operand, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         Token op = tokens.remove(0);
 
@@ -47,7 +49,8 @@ public class BinaryExpressionNode extends ExpressionNode{
 
         if (tokens.get(0).getTokenType() != TokenType.MATH_OP && tokens.get(0).getTokenType() != TokenType.REL_OP) {
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting operand, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         Token op = tokens.remove(0);
 
@@ -55,6 +58,12 @@ public class BinaryExpressionNode extends ExpressionNode{
 
 
         return new BinaryExpressionNode(l, op, r);
+    }
+
+    public Types getType(){
+        if (left.getType() == right.getType())
+            return left.getType();
+        return null;
     }
 
     @Override
@@ -82,6 +91,8 @@ public class BinaryExpressionNode extends ExpressionNode{
 
     @Override
     public boolean validateTree() {
+        if (left.validateTree() && right.validateTree() && left.getType() == right.getType())
+            return true;
         return false;
     }
 }

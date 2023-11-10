@@ -4,6 +4,7 @@ import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
+import provided.Types;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,8 @@ abstract class ExpressionNode extends BodyStmtNode implements JottTree {
 
     static ArrayList<String> bool_keywords = new ArrayList<>(
             Arrays.asList("True", "False"));
+
+    public abstract Types getType();
 
     public static ExpressionNode parseExpressionNode(ArrayList<Token> tokens){
 
@@ -45,6 +48,7 @@ abstract class ExpressionNode extends BodyStmtNode implements JottTree {
             return StringNode.parseStringNode(tokens);
         }
 
-        throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+        return null;
+        //throw new SyntaxException(tokens.get(0).getToken(), tokens.get(0).getFilename(), tokens.get(0).getLineNum());
     }
 }

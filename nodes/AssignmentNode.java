@@ -4,6 +4,7 @@ import exceptions.SyntaxException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
+import provided.SymbolTable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,21 +32,24 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
 
     static public AssignmentNode parseAssignmentNode(ArrayList<Token> tokens){
 
-        Boolean hasType = false;
+        Boolean var_dec = false;
 
         // validate type or id node type
         if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD ){
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting type or ID name, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         TypeNode t = null;
         // case 1 where assignment has var_dec
         if (type_keywords.contains(tokens.get(0).getToken())){
             t = TypeNode.parseTypeNode(tokens);
+            var_dec = true;
             // validate if next is id node type
             if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD ){
                 Token tok = tokens.remove(0);
-                throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+                throw new SyntaxException("Expecting ID name, got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+                //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
             }
         }
         // case 2 when no var_dec / remainder of case 1
@@ -54,7 +58,8 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
         // check if next is '=' (assign token type)
         if (tokens.get(0).getTokenType() != TokenType.ASSIGN){
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting '=', got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
         tokens.remove(0);
 
@@ -64,12 +69,25 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
         // check if next is semicolon
         if (tokens.get(0).getTokenType() != TokenType.SEMICOLON){
             Token tok = tokens.remove(0);
-            throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+            throw new SyntaxException("Expecting ';', got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
+            //throw new SyntaxException(tok.getToken(), tok.getFilename(), tok.getLineNum());
+        }
+
+        String scope = SymbolTable.getCurrentScope();
+        if (var_dec) {
+            if (SymbolTable.checkInScope(scope, id.getTokenName())) {
+                Token tok = tokens.remove(0);
+                throw SemanticException("Variable " + id.getTokenName() + " is already defined in this scope", tok.getFilename(), tok.getLineNum());
+            }
+            SymbolTable.addToScope(scope, id.getTokenName(), t.typeName, "");
+            return new AssignmentNode(t, id, v);
+        }
+
+        if (!SymbolTable.checkInScope(scope, id.getTokenName())) {
+            Token tok = tokens.remove(0);
+            throw SemanticException("Variable " + id.getTokenName() + " is not defined in this scope", tok.getFilename(), tok.getLineNum());
         }
         tokens.remove(0);
-
-        if (t != null)
-            return new AssignmentNode(t, id, v);
         return new AssignmentNode(id, v);
     }
 
@@ -104,6 +122,10 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
 
     @Override
     public boolean validateTree() {
+        if (!this.type.equals(this.value.getType())){
+
+        }
+        //
         return false;
     }
 }
