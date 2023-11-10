@@ -66,9 +66,10 @@ public class FuncDefNode implements JottTree {
 
         if (this.functionBody.getReturnType() != this.functionReturn){
             throw new SemanticException(
-                    "Return does not match return expected type",
+                    "Return does not match expected return type",
                     this.funcName.getTokenFilename(),
-                    this.funcName.getTokenLine());
+                    this.funcName.getTokenLine()
+            );
         }
         else {
             if (!this.funcName.validateTree()) {
@@ -131,7 +132,11 @@ public class FuncDefNode implements JottTree {
                                 funcDef.functionReturn = Types.BOOLEAN;
                                 break;
                             default:
-                                FuncDefNode.throwParseEx(currToken);
+                                throw new SyntaxException(
+                                        "Invalid return type definition",
+                                        currToken.getFilename(),
+                                        currToken.getLineNum()
+                                );
                         }
 
 
@@ -143,47 +148,66 @@ public class FuncDefNode implements JottTree {
                             funcDef.functionBody = BodyNode.parseBodyNode(tokens);
 
                             if (tokens.isEmpty())
-                                FuncDefNode.throwParseEx(last);
+                                throw new SyntaxException(
+                                        "Missing } token after function body",
+                                        last.getFilename(),
+                                        last.getLineNum()
+                                );
 
                             currToken = tokens.remove(0);
 
                             // Next token after parsing body should be '}'
 
                             if (currToken.getTokenType() != TokenType.R_BRACE) {
-                                FuncDefNode.throwParseEx(currToken);
+                                throw new SyntaxException(
+                                        "Missing } token after function body",
+                                        currToken.getFilename(),
+                                        currToken.getLineNum()
+                                );
                             }
 
-                            // SymbolTable.destroyScope(funcDef.funcName.getTokenName());
                             SymbolTable.setCurrentScope(null);
                         }
                         else {
-                            FuncDefNode.throwParseEx(currToken);
+                            throw new SyntaxException(
+                                    "Missing { token after function definition",
+                                    currToken.getFilename(),
+                                    currToken.getLineNum()
+                            );
                         }
                     }
                     else {
-                        FuncDefNode.throwParseEx(currToken);
+                        throw new SyntaxException(
+                                "Missing : token after function params",
+                                currToken.getFilename(),
+                                currToken.getLineNum()
+                        );
                     }
                 }
                 else {
-                    FuncDefNode.throwParseEx(currToken);
+                    throw new SyntaxException(
+                            "Missing ] token after function params",
+                            currToken.getFilename(),
+                            currToken.getLineNum()
+                    );
                 }
             }
             else {
-                FuncDefNode.throwParseEx(currToken);
+                throw new SyntaxException(
+                        "Missing [ token after function name",
+                        currToken.getFilename(),
+                        currToken.getLineNum()
+                );
             }
         }
         else {
-            FuncDefNode.throwParseEx(currToken);
+            throw new SyntaxException(
+                    "Missing def keyword to start function definition",
+                    currToken.getFilename(),
+                    currToken.getLineNum()
+            );
         }
 
         return funcDef;
-    }
-
-    private static void throwParseEx(Token token){
-        throw new SyntaxException(
-                token.getToken(),
-                token.getFilename(),
-                token.getLineNum()
-        );
     }
 }

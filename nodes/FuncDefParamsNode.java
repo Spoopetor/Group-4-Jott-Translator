@@ -77,7 +77,7 @@ public class FuncDefParamsNode implements JottTree {
 
             } else {
                 throw new SyntaxException(
-                        currToken.getToken(),
+                        "Missing : after parameter id",
                         currToken.getFilename(),
                         currToken.getLineNum()
                 );
