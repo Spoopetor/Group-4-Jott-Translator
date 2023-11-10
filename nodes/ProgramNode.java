@@ -48,7 +48,7 @@ public class ProgramNode implements JottTree {
         // TODO this could be moved elsewhere if needed
         // Automatically add built-in functions to scope map
         // Note: print accepts more than just string args; FuncCallNode will ensure that arg is simply non-Void
-        SymbolTable.scopeMap.put("string", new ArrayList<>(Arrays.asList(
+        SymbolTable.scopeMap.put("print", new ArrayList<>(Arrays.asList(
                 new Symbol("nonVoid1", Types.STRING, null, true))));
         SymbolTable.scopeMap.put("concat", new ArrayList<>(Arrays.asList(
                 new Symbol("string1", Types.STRING, null, true),
@@ -57,7 +57,7 @@ public class ProgramNode implements JottTree {
                 new Symbol("string1", Types.STRING, null, true))));
         // Automatically add built-in functions to return map
         // FuncDefNode handles this for user-defined functions
-        SymbolTable.returnMap.put("string", Types.VOID);
+        SymbolTable.returnMap.put("print", Types.VOID);
         SymbolTable.returnMap.put("concat", Types.STRING);
         SymbolTable.returnMap.put("length", Types.INTEGER);
 

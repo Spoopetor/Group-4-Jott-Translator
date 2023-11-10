@@ -121,7 +121,7 @@ public class FuncCallNode extends ExpressionNode {
                     throw new SemanticException("Param " + paramName + " not defined in scope " + SymbolTable.getCurrentScope(),
                             filename, lineNumber);
                 }
-                // if param is id/keyword, use symbol table to get type
+                // use symbol table to get type
                 for (Symbol symbol : SymbolTable.scopeMap.get(SymbolTable.getCurrentScope())) {
                     if (symbol.getName().equals(paramName)) {
                         paramType = symbol.getType();
