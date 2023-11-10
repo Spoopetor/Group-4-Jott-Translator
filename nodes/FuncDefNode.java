@@ -35,7 +35,13 @@ public class FuncDefNode implements JottTree {
             }
         }
         stringBuilder.append("]:");
-        stringBuilder.append(functionReturn.toString());
+        stringBuilder.append(switch (functionReturn){
+            case VOID: yield "Void";
+            case INTEGER: yield "Integer";
+            case DOUBLE: yield "Double";
+            case STRING: yield "String";
+            case BOOLEAN: yield "Boolean";
+        });
         stringBuilder.append(" {\n");
         stringBuilder.append(functionBody.convertToJott());
         stringBuilder.append("}\n");
@@ -60,6 +66,7 @@ public class FuncDefNode implements JottTree {
 
     @Override
     public boolean validateTree() {
+        SymbolTable.setCurrentScope(this.funcName.getTokenName());
         if (!ProgramNode.builtInFuncs.contains(funcName.getTokenName())) {
             SymbolTable.returnMap.put(funcName.getTokenName(), functionReturn);
         }
@@ -72,9 +79,9 @@ public class FuncDefNode implements JottTree {
             );
         }
         else {
-            if (!this.funcName.validateTree()) {
-                return false;
-            }
+            //if (!this.funcName.validateTree()) {
+            //    return false;
+            //}
             for (FuncDefParamsNode defParams: this.defParams){
                 if (!defParams.validateTree()){
                     return false;

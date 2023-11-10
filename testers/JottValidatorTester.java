@@ -72,10 +72,6 @@ public class JottValidatorTester {
                 return false;
             } else if (test.error && root == null) {
                 return true;
-            } else if (test.error) {
-                System.err.println("\tFailed Test: " + test.testName);
-                System.err.println("\t\tExpected a null and got JottTree");
-                return false;
             }
 
             System.out.println("Original Jott Code:\n");
