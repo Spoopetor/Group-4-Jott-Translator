@@ -19,6 +19,10 @@ public class WhileNode extends BodyStmtNode implements JottTree {
         this.fileInfo = fileInfo;
     }
 
+    public BodyNode getBody(){
+        return bodyNode;
+    }
+
     @Override
     public String convertToJott() {
         StringBuilder str = new StringBuilder();

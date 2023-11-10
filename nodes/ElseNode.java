@@ -19,6 +19,10 @@ public class ElseNode implements JottTree {
         this.fileInfo = fileInfo;
     }
 
+    public Types getReturnType(){
+        return this.bodyNode.getReturnType();
+    }
+
     @Override
     public String convertToJott() {
         if (this.bodyNode == null) {

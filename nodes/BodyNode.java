@@ -1,5 +1,6 @@
 package nodes;
 
+import exceptions.SemanticException;
 import provided.JottTree;
 import provided.Token;
 import provided.TokenType;
@@ -12,9 +13,14 @@ public class BodyNode implements JottTree {
     private ArrayList<BodyStmtNode> bodyStatements;
     private ReturnStmtNode returnNode;
 
-    private BodyNode(ArrayList<BodyStmtNode> bodies, ReturnStmtNode r){
+    private String filename;
+    private int linenum;
+
+    private BodyNode(ArrayList<BodyStmtNode> bodies, ReturnStmtNode r, String f, int l){
         this.bodyStatements = bodies;
         this.returnNode = r;
+        this.filename = f;
+        this.linenum = l;
     }
     @Override
     public String convertToJott() {
@@ -44,8 +50,49 @@ public class BodyNode implements JottTree {
         return null;
     }
 
+    public boolean mustReturn(){
+
+        for(BodyStmtNode b : bodyStatements){
+            if(b instanceof IfNode){
+                IfNode i = (IfNode) b;
+                if(i.allReturn()){
+                   return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public Types getReturnType(){
-        return returnNode.getType();
+
+        Types whileReturn = Types.VOID;
+        Types ifReturn = Types.VOID;
+
+        for(BodyStmtNode b : bodyStatements){
+
+            if(b instanceof WhileNode){
+                WhileNode w = (WhileNode) b;
+                if(w.getBody().getReturnType() != Types.VOID){
+                    if(returnNode.getType() != w.getBody().getReturnType()){
+                        throw new SemanticException("Not all returns in body have same type", filename, linenum);
+                    }else{
+                        whileReturn = w.getBody().getReturnType();
+                    }
+                }
+            } else if(b instanceof IfNode){
+                IfNode i = (IfNode) b;
+                ifReturn = i.getReturnType();
+            }
+        }
+        if (returnNode.getType() != Types.VOID) {
+            if ((whileReturn == Types.VOID || (whileReturn == returnNode.getType())) && (ifReturn == Types.VOID || ifReturn == returnNode.getType())) {
+                return returnNode.getType();
+            }
+        }
+        else {
+            return ifReturn;
+        }
+        throw new SemanticException("Not all returns in body have same type", filename, linenum);
     }
 
     @Override
@@ -55,9 +102,11 @@ public class BodyNode implements JottTree {
             if(!b.validateTree()){
                 return false;
             }
+
         }
 
         return returnNode.validateTree();
+
     }
     public static BodyNode parseBodyNode(ArrayList<Token> tokens){
         ArrayList<BodyStmtNode> bodies = new ArrayList<>();
@@ -70,7 +119,7 @@ public class BodyNode implements JottTree {
         ReturnStmtNode re;
         if (!tokens.isEmpty()) {
             re = ReturnStmtNode.parseReturnStmtNode(tokens);
-            return new BodyNode(bodies, re);
+            return new BodyNode(bodies, re, tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         }
         return null;
     }

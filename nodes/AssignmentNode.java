@@ -81,6 +81,7 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
                 throw new SemanticException("Variable " + id.getTokenName() + " is already defined in this scope", tok.getFilename(), tok.getLineNum());
             }
             SymbolTable.addToScope(scope, id.getTokenName(), t.getTypeName(), "");
+            tokens.remove(0);
             return new AssignmentNode(t, id, v);
         }
 
@@ -124,7 +125,7 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
     @Override
     public boolean validateTree() {
         if (!this.type.getTypeName().equals(this.value.getType())){
-
+            return true;
         }
         //
         return false;

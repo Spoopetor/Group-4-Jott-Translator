@@ -29,6 +29,32 @@ public class IfNode extends BodyStmtNode implements JottTree {
         this.linenum = l;
     }
 
+    public Types getReturnType(){
+        for(ElseifNode el : elifLst){
+            if((el.getReturnType() != Types.VOID) && (el.getReturnType() != body.getReturnType())){
+                throw new SemanticException("Not all ElseIf in If statement return same type OR VOID", filename, linenum);
+            }
+        }
+        if((elseCase.getReturnType() != Types.VOID) && (elseCase.getReturnType() != body.getReturnType())){
+            throw new SemanticException("Else in If statement does not return same type OR VOID", filename, linenum);
+        }
+        return body.getReturnType();
+    }
+
+    public boolean allReturn(){
+
+        for (ElseifNode el : elifLst){
+            if (el.getReturnType() == Types.VOID){
+                return false;
+            }
+        }
+        if(elseCase.getReturnType() == Types.VOID){
+            return false;
+        }
+
+        return body.getReturnType() != Types.VOID;
+    }
+
     @Override
     public String convertToJott() {
         StringBuilder out = new StringBuilder();

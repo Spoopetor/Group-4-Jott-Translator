@@ -20,6 +20,10 @@ public class ElseifNode implements JottTree {
         this.fileInfo = fileInfo;
     }
 
+    public Types getReturnType(){
+        return this.bodyNode.getReturnType();
+    }
+
     /**
      * Returns true if this elseif node has an
      * if statement as its parent
