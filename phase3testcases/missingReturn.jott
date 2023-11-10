@@ -2,7 +2,7 @@
 #and missing main
 
 def foo[x:String]:String{
-    print[x];
+    ::print[x];
 }
 
 def main[]:Void{}
