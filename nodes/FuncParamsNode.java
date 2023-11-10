@@ -54,6 +54,13 @@ public class FuncParamsNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        for (ExpressionNode param : paramNames) {
+            if (!param.validateTree()) { return false; }
+        }
+        return true;
     }
+
+    public int getParamsLength() {return this.paramNames.size();}
+
+    public ArrayList<ExpressionNode> getParamNames() {return this.paramNames;}
 }
