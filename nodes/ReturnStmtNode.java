@@ -46,10 +46,16 @@ public class ReturnStmtNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return expr.validateTree();
+        if(returns){
+            return expr.validateTree();
+        }
+        return true;
     }
 
     public Types getType() {
+        if(!returns){
+            return Types.VOID;
+        }
         return expr.getType();
     }
 
