@@ -4,3 +4,4 @@ To build project, compile all java files within the `/provided`, `/exceptions`, 
 
 Run using `java Jott <input>.jott <output>.jott Jott`
 
+make sure input files are in working directory
