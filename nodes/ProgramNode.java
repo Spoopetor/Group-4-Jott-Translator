@@ -52,6 +52,17 @@ public class ProgramNode implements JottTree {
                         funcDefs.get(0).getFuncName().getTokenFilename(),
                         1);
             }
+            ArrayList<String> duplicateFuncNameCheck = new ArrayList<>();
+            for (FuncDefNode defNode: this.funcDefs) {
+                if (duplicateFuncNameCheck.contains(defNode.getFuncName().getTokenName())) {
+                    throw new SemanticException(
+                            "Duplicate function declaration, cannot declare functions with the same name",
+                            defNode.getFuncName().getTokenFilename(),
+                            defNode.getFuncName().getTokenLine()
+                    );
+                }
+                duplicateFuncNameCheck.add(defNode.getFuncName().getTokenName());
+            }
             for (FuncDefNode defNode : this.funcDefs) {
                 if (!defNode.validateTree()) {
                     return false;
