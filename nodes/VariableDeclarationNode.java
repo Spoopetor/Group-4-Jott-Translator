@@ -33,6 +33,8 @@ public class VariableDeclarationNode extends BodyStmtNode implements JottTree {
             Token tok = tokens.remove(0);
             throw new SyntaxException("Expecting ';', got " + tok.getToken(), tok.getFilename(), tok.getLineNum());
         }
+        // remove semi-colon
+        tokens.remove(0);
 
         String scope = SymbolTable.getCurrentScope();
 
@@ -40,7 +42,7 @@ public class VariableDeclarationNode extends BodyStmtNode implements JottTree {
             Token tok = tokens.remove(0);
             throw new SemanticException("Variable " + i.getTokenName() + " is already defined in this scope", tok.getFilename(), tok.getLineNum());
         }
-        SymbolTable.addToScope(scope, i.getTokenName(), t.getTypeName(), "");
+        SymbolTable.addToScope(scope, i.getTokenName(), t.getTypeName(), null);
         //pop semicolon
 //        tokens.remove(0);
 
@@ -50,6 +52,7 @@ public class VariableDeclarationNode extends BodyStmtNode implements JottTree {
     @Override
     public String convertToJott() {
         String output = type.convertToJott();
+        output += " ";
         output += id.convertToJott();
         output += ';';
         return output;
