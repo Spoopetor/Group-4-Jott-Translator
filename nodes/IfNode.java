@@ -99,6 +99,10 @@ public class IfNode extends BodyStmtNode implements JottTree {
             return false;
         }
 
+        if (!expr.validateTree()) {
+            return false;
+        }
+
         for(ElseifNode e : elifLst) {
             e.setHasIfParent(true);
             if (!e.validateTree()) {

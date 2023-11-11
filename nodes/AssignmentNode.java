@@ -98,7 +98,7 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
                 Token tok = tokens.remove(0);
                 throw new SemanticException("Variable " + id.getTokenName() + " is already defined in this scope", tok.getFilename(), tok.getLineNum());
             }
-            SymbolTable.addToScope(scope, id.getTokenName(), t.getTypeName(), "");
+            SymbolTable.addToScope(scope, id.getTokenName(), t.getTypeName(), v == null ? null: v.toString());
             tokens.remove(0);
             return new AssignmentNode(t, id, v, false);
         }
