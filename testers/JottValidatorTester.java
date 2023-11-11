@@ -32,6 +32,7 @@ public class JottValidatorTester {
 
     private void createTestCases(){
         this.testCases = new ArrayList<>();
+        testCases.add(new TestCase("func already defined (error)", "funcAlreadyDefined.jott", true));
         testCases.add(new TestCase("func call with invalid param (error)", "funcCallParamInvalid.jott", true));
         testCases.add(new TestCase("func called but not defined (error)", "funcNotDefined.jott", true));
         testCases.add(new TestCase("func returns mismatched type in expr (error)", "funcReturnInExpr.jott", true));

@@ -1,0 +1,13 @@
+def foo[y:Double]:Integer{
+    ::print[y];
+	return 3;
+}
+
+def foo[y:Double]:Double{
+    ::print[y];
+	return 3.0;
+}
+
+def main[]:Void{
+    ::print["Hello World"];
+}
