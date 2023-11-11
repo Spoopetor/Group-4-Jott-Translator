@@ -45,22 +45,6 @@ public class ProgramNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        // TODO this could be moved elsewhere if needed
-        // Automatically add built-in functions to scope map
-        // Note: print accepts more than just string args; FuncCallNode will ensure that arg is simply non-Void
-        SymbolTable.scopeMap.put("print", new ArrayList<>(Arrays.asList(
-                new Symbol("nonVoid1", Types.STRING, null, true))));
-        SymbolTable.scopeMap.put("concat", new ArrayList<>(Arrays.asList(
-                new Symbol("string1", Types.STRING, null, true),
-                new Symbol("string2", Types.STRING, null, true))));
-        SymbolTable.scopeMap.put("length", new ArrayList<>(Arrays.asList(
-                new Symbol("string1", Types.STRING, null, true))));
-        // Automatically add built-in functions to return map
-        // FuncDefNode handles this for user-defined functions
-        SymbolTable.returnMap.put("print", Types.VOID);
-        SymbolTable.returnMap.put("concat", Types.STRING);
-        SymbolTable.returnMap.put("length", Types.INTEGER);
-
         try {
             if (!SymbolTable.checkForMain()) {
                 throw new SemanticException(
@@ -82,6 +66,21 @@ public class ProgramNode implements JottTree {
 
     public static ProgramNode parseProgramNode(ArrayList<Token> tokens){
         try {
+            // Automatically add built-in functions to scope map
+            // Note: print accepts more than just string args; FuncCallNode will ensure that arg is simply non-Void
+            SymbolTable.scopeMap.put("print", new ArrayList<>(Arrays.asList(
+                    new Symbol("nonVoid1", Types.STRING, null, true))));
+            SymbolTable.scopeMap.put("concat", new ArrayList<>(Arrays.asList(
+                    new Symbol("string1", Types.STRING, null, true),
+                    new Symbol("string2", Types.STRING, null, true))));
+            SymbolTable.scopeMap.put("length", new ArrayList<>(Arrays.asList(
+                    new Symbol("string1", Types.STRING, null, true))));
+            // Automatically add built-in functions to return map
+            // FuncDefNode handles this for user-defined functions
+            SymbolTable.returnMap.put("print", Types.VOID);
+            SymbolTable.returnMap.put("concat", Types.STRING);
+            SymbolTable.returnMap.put("length", Types.INTEGER);
+
             ArrayList<FuncDefNode> funcDefNodes = new ArrayList<>();
             while (!tokens.isEmpty()) {
                 funcDefNodes.add(FuncDefNode.parseFuncDefNode(tokens));
