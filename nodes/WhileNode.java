@@ -53,7 +53,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
     public boolean validateTree() {
 
         // if exprNode is not boolean condition, error
-        if (!(exprNode instanceof BoolNode)) {
+        if (!(exprNode.getType() == Types.BOOLEAN)) {
             throw new SemanticException("'while' without a condition", fileInfo.getFilename(), fileInfo.getLineNum());
         }
 

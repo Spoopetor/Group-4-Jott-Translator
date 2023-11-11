@@ -105,6 +105,15 @@ public class SymbolTable {
         return false;
     }
 
+    public static Symbol getFromCurrentScope(String id){
+        for (Symbol sym: scopeMap.get(currentScope)){
+            if (sym.getName().equals(id)){
+                return sym;
+            }
+        }
+        return null;
+    }
+
     /**
      * Check for main func
      * @return true if theres a main, false otherwise

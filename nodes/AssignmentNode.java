@@ -2,10 +2,7 @@ package nodes;
 
 import exceptions.SemanticException;
 import exceptions.SyntaxException;
-import provided.JottTree;
-import provided.Token;
-import provided.TokenType;
-import provided.SymbolTable;
+import provided.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,10 +17,13 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
     private IdNode id;
     private ExpressionNode value;
 
-    public AssignmentNode(TypeNode type, IdNode id, ExpressionNode value){
+    private boolean reassignment;
+
+    public AssignmentNode(TypeNode type, IdNode id, ExpressionNode value, boolean r){
         this.type = type;
         this.id = id;
         this.value = value;
+        this.reassignment = r;
     }
 
     public AssignmentNode(IdNode id, ExpressionNode value){
@@ -82,7 +82,7 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
             }
             SymbolTable.addToScope(scope, id.getTokenName(), t.getTypeName(), "");
             tokens.remove(0);
-            return new AssignmentNode(t, id, v);
+            return new AssignmentNode(t, id, v, false);
         }
 
         if (!SymbolTable.checkInScope(scope, id.getTokenName())) {
@@ -90,7 +90,15 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
             throw new SemanticException("Variable " + id.getTokenName() + " is not defined in this scope", tok.getFilename(), tok.getLineNum());
         }
         tokens.remove(0);
-        return new AssignmentNode(id, v);
+        Symbol sym = SymbolTable.getFromCurrentScope(id.getTokenName());
+        if (sym == null){
+            throw new SemanticException(
+                    "Variable" + id + "assigned before declaration",
+                    id.getTokenFilename(),
+                    id.getTokenLine()
+            );
+        }
+        return new AssignmentNode(new TypeNode(sym.getType()), id, v, true);
     }
 
 
@@ -98,7 +106,9 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
     public String convertToJott() {
         String output = "";
         if (type != null)
-            output += type.convertToJott();
+            if (!reassignment){
+                output += type.convertToJott();
+            }
         output += " ";
         output += id.convertToJott();
         output += "=";

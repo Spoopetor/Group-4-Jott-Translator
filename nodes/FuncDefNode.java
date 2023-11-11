@@ -79,9 +79,15 @@ public class FuncDefNode implements JottTree {
             );
         }
         else {
-            //if (!this.funcName.validateTree()) {
-            //    return false;
-            //}
+            if (this.funcName.getTokenName().equals("main")){
+                if (this.functionReturn != Types.VOID) {
+                    throw new SemanticException(
+                            "Main should return Void",
+                            this.funcName.getTokenFilename(),
+                            this.funcName.getTokenLine()
+                    );
+                }
+            }
             for (FuncDefParamsNode defParams: this.defParams){
                 if (!defParams.validateTree()){
                     return false;
