@@ -49,6 +49,7 @@ public class JottValidatorTester {
         testCases.add(new TestCase("no return outside of while loop (error)", "noReturnWhile.jott", true));
         testCases.add(new TestCase("provided writeup example1", "providedExample1.jott", false));
         testCases.add(new TestCase("id returned in void func (error)", "returnId.jott", true));
+        testCases.add(new TestCase("uninitialized var being used in expr (error)", "uninitializedVar.jott", true));
         testCases.add(new TestCase("valid loop", "validLoop.jott", false));
         testCases.add(new TestCase("func with return called in void func (error)", "voidReturn.jott", true));
         testCases.add(new TestCase("while keyword used as id (error)", "whileKeyword.jott", true));
