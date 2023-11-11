@@ -1,0 +1,10 @@
+# author: Triston Lincoln
+# should fail phase 3 due to same param being used twice
+
+def add[x:Integer, x:Integer]:Integer{
+    return x + x;
+}
+
+def main[]:Void{
+    ::add[5,3];
+}

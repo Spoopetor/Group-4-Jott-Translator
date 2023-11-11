@@ -88,6 +88,17 @@ public class FuncDefNode implements JottTree {
                     );
                 }
             }
+            ArrayList<String> paramNames = new ArrayList<>();
+            for (FuncDefParamsNode defParams: this.defParams){
+                if (paramNames.contains(defParams.getDefParamName().getTokenName())){
+                    throw new SemanticException(
+                            "Parameters must have unique names",
+                            this.funcName.getTokenFilename(),
+                            this.funcName.getTokenLine()
+                    );
+                }
+                paramNames.add(defParams.getDefParamName().getTokenName());
+            }
             for (FuncDefParamsNode defParams: this.defParams){
                 if (!defParams.validateTree()){
                     return false;

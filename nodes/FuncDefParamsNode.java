@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 public class FuncDefParamsNode implements JottTree {
 
+    public IdNode getDefParamName() {
+        return defParamName;
+    }
+
     private IdNode defParamName;
 
     private TypeNode defParamType;
