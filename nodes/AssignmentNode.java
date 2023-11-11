@@ -13,6 +13,24 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
     static ArrayList<String> type_keywords = new ArrayList<>(
             Arrays.asList("Double", "Integer", "String", "Boolean"));
 
+    static final ArrayList<String> all_keywords = new ArrayList<>(
+            Arrays.asList(
+                    "Void",
+                    "Double",
+                    "Integer",
+                    "String",
+                    "Boolean",
+                    "while",
+                    "if",
+                    "elseif",
+                    "else",
+                    "return",
+                    "print",
+                    "concat",
+                    "length"
+            )
+    );
+
     private TypeNode type = null;
     private IdNode id;
     private ExpressionNode value;
@@ -134,11 +152,9 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        if (this.type.getTypeName().equals(this.value.getType())){
-            if (this.id.validateTree() && this.value.validateTree()) {
-                return true;
-            }
-        }
-        return false;
+        return (this.type.getTypeName().equals(this.value.getType()))
+                && (this.id.validateTree())
+                && (this.value.validateTree())
+                && !(all_keywords.contains(this.id.getTokenName()));
     }
 }

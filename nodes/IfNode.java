@@ -35,8 +35,10 @@ public class IfNode extends BodyStmtNode implements JottTree {
                 throw new SemanticException("Not all ElseIf in If statement return same type OR VOID", filename, linenum);
             }
         }
-        if((elseCase.getReturnType() != Types.VOID) && (elseCase.getReturnType() != body.getReturnType())){
-            throw new SemanticException("Else in If statement does not return same type OR VOID", filename, linenum);
+        if (elseCase != null) {
+            if ((elseCase.getReturnType() != Types.VOID) && (elseCase.getReturnType() != body.getReturnType())) {
+                throw new SemanticException("Else in If statement does not return same type OR VOID", filename, linenum);
+            }
         }
         return body.getReturnType();
     }
@@ -48,7 +50,7 @@ public class IfNode extends BodyStmtNode implements JottTree {
                 return false;
             }
         }
-        if(elseCase.getReturnType() == Types.VOID){
+        if(elseCase != null && elseCase.getReturnType() == Types.VOID){
             return false;
         }
 
@@ -66,7 +68,9 @@ public class IfNode extends BodyStmtNode implements JottTree {
         for(ElseifNode i: this.elifLst) {
             out.append(i.convertToJott());
         }
-        out.append(this.elseCase.convertToJott());
+        if (this.elseCase != null) {
+            out.append(this.elseCase.convertToJott());
+        }
         return out.toString();
     }
 
@@ -100,6 +104,9 @@ public class IfNode extends BodyStmtNode implements JottTree {
             if (!e.validateTree()) {
                 return false;
             }
+        }
+        if (elseCase == null) {
+            return true;
         }
         elseCase.setHasIfParent(true);
         return elseCase.validateTree();
