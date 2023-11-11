@@ -152,9 +152,13 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return (this.type.getTypeName().equals(this.value.getType()))
+        if (!(this.type.getTypeName().equals(this.value.getType()))
                 && (this.id.validateTree())
                 && (this.value.validateTree())
-                && !(all_keywords.contains(this.id.getTokenName()));
+                && !(all_keywords.contains(this.id.getTokenName()))) {
+            throw new SemanticException("Id type does not match value type in assignment",
+                    id.getTokenFilename(), id.getTokenLine());
+        };
+        return true;
     }
 }
