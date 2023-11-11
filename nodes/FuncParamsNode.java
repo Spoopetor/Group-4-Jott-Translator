@@ -19,6 +19,9 @@ public class FuncParamsNode implements JottTree {
         ArrayList<ExpressionNode> pNames = new ArrayList<ExpressionNode>();
         while (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
             pNames.add(ExpressionNode.parseExpressionNode(tokens));
+            if (tokens.get(0).getTokenType() == TokenType.COMMA){
+                tokens.remove(0);
+            }
         }
         return new FuncParamsNode(pNames);
     }

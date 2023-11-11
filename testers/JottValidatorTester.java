@@ -51,6 +51,7 @@ public class JottValidatorTester {
         testCases.add(new TestCase("valid loop", "validLoop.jott", false));
         testCases.add(new TestCase("func with return called in void func (error)", "voidReturn.jott", true));
         testCases.add(new TestCase("while keyword used as id (error)", "whileKeyword.jott", true));
+        testCases.add(new TestCase("duplicate parameter names (error)", "dupParams.jott", true));
     }
 
     private boolean validatorTest(TestCase test, String originalJottCode) {

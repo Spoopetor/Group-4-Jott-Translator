@@ -6,4 +6,4 @@ def foo[]:Void{
 	::print[while];
 }
 
-def main[]:void{}
+def main[]:Void{}
