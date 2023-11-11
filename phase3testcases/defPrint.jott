@@ -1,0 +1,12 @@
+# @author: Triston Lincoln
+# should fail phase 3 for re-defining built in func
+
+def print[x: String]:Void{
+    String y = "hello";
+    ::concat[y, x];
+}
+
+def main[]:Void{
+    String z = "world";
+    ::print[z];
+}

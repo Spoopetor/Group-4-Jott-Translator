@@ -70,6 +70,13 @@ public class FuncDefNode implements JottTree {
         if (!ProgramNode.builtInFuncs.contains(funcName.getTokenName())) {
             SymbolTable.returnMap.put(funcName.getTokenName(), functionReturn);
         }
+        else {
+            throw new SemanticException(
+                    "Cannot redefine built-in function \"" + this.funcName.getTokenName() + "\".",
+                    this.funcName.getTokenFilename(),
+                    this.funcName.getTokenLine()
+            );
+        }
 
         if (this.functionBody.getReturnType() != this.functionReturn){
             throw new SemanticException(
