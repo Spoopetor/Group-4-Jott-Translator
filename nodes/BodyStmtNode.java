@@ -54,7 +54,8 @@ public abstract class BodyStmtNode implements JottTree {
                 if (tokens.get(2).getTokenType() == TokenType.SEMICOLON) {
                     return VariableDeclarationNode.parseVariableDeclarationNode(tokens);
                 }
-            } else if (bodyType == TokenType.ID_KEYWORD && (tokens.get(1).getTokenType() == TokenType.ASSIGN || tokens.get(2).getTokenType() == TokenType.ASSIGN)) {
+            }
+            if (bodyType == TokenType.ID_KEYWORD && (tokens.get(1).getTokenType() == TokenType.ASSIGN || tokens.get(2).getTokenType() == TokenType.ASSIGN)) {
                 return AssignmentNode.parseAssignmentNode(tokens);
             }
         }
