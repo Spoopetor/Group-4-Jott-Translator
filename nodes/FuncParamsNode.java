@@ -42,17 +42,45 @@ public class FuncParamsNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        if (paramNames.isEmpty())
+            return "";
+
+        StringBuilder output = new StringBuilder();
+        output.append(paramNames.get(0).convertToJava(className));
+        for (int i = 1; i < paramNames.size(); i++) {
+            output.append(", ");
+            output.append(paramNames.get(i).convertToJava(className));
+        }
+        return output.toString();
     }
 
     @Override
     public String convertToC() {
-        return null;
+
+        if (paramNames.isEmpty())
+            return "";
+
+        StringBuilder output = new StringBuilder();
+        output.append(paramNames.get(0).convertToC());
+        for (int i = 1; i < paramNames.size(); i++) {
+            output.append(", ");
+            output.append(paramNames.get(i).convertToC());
+        }
+        return output.toString();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        if (paramNames.isEmpty())
+            return "";
+
+        StringBuilder output = new StringBuilder();
+        output.append(paramNames.get(0).convertToPython());
+        for (int i = 1; i < paramNames.size(); i++) {
+            output.append(", ");
+            output.append(paramNames.get(i).convertToPython());
+        }
+        return output.toString();
     }
 
     @Override
