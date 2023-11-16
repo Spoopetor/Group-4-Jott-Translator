@@ -79,7 +79,20 @@ public class FuncCallNode extends ExpressionNode {
 
     @Override
     public String convertToPython() {
-        return null;
+        String funcNameStr = funcName.getTokenName();
+        if (funcNameStr.equals("print")) {
+            return "print(" + params.convertToPython() + ")";
+        }
+        else if (funcNameStr.equals("concat")) {
+            return params.getParamNames().get(0).convertToPython() + " + " +
+                    params.getParamNames().get(1).convertToPython();
+        }
+        else if (funcNameStr.equals("length")) {
+            return "len(" + params.convertToPython() + ")";
+        }
+        else {
+            return funcNameStr + "(" + params.convertToPython() + ")";
+        }
     }
 
     @Override
