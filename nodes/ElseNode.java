@@ -56,17 +56,40 @@ public class ElseNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        if (this.bodyNode == null) {
+            return "";
+        } else {
+            StringBuilder str = new StringBuilder();
+            str.append("else {");
+            str.append(this.bodyNode.convertToJava(className));
+            str.append("}");
+            return str.toString();
+        }
     }
 
     @Override
     public String convertToC() {
-        return null;
+        if (this.bodyNode == null) {
+            return "";
+        } else {
+            StringBuilder str = new StringBuilder();
+            str.append("else {");
+            str.append(this.bodyNode.convertToC());
+            str.append("}");
+            return str.toString();
+        }
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        if (this.bodyNode == null) {
+            return "";
+        } else {
+            StringBuilder str = new StringBuilder();
+            str.append("else:");
+            str.append(this.bodyNode.convertToC());
+            return str.toString();
+        }
     }
 
     @Override

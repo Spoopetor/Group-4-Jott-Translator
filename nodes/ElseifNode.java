@@ -47,7 +47,7 @@ public class ElseifNode implements JottTree {
         StringBuilder str = new StringBuilder();
         str.append("elseif[");
         str.append(this.exprNode.convertToJott());
-        str.append("]{");
+        str.append("] {");
         str.append(this.bodyNode.convertToJott());
         str.append("}");
         return str.toString();
@@ -55,17 +55,34 @@ public class ElseifNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        StringBuilder str = new StringBuilder();
+        str.append("else if (");
+        str.append(this.exprNode.convertToJava(className));
+        str.append(") {");
+        str.append(this.bodyNode.convertToJava(className));
+        str.append("}");
+        return str.toString();
     }
 
     @Override
     public String convertToC() {
-        return null;
+        StringBuilder str = new StringBuilder();
+        str.append("else if (");
+        str.append(this.exprNode.convertToC());
+        str.append(") {");
+        str.append(this.bodyNode.convertToC());
+        str.append("}");
+        return str.toString();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        StringBuilder str = new StringBuilder();
+        str.append("elif ");
+        str.append(this.exprNode.convertToPython());
+        str.append(": ");
+        str.append(this.bodyNode.convertToPython());
+        return str.toString();
     }
 
     @Override
