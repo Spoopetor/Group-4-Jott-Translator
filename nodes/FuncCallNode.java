@@ -69,7 +69,20 @@ public class FuncCallNode extends ExpressionNode {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        String funcNameStr = funcName.getTokenName();
+        if (funcNameStr.equals("print")) {
+            return "System.out.println(" + params.convertToJava(className) + ")";
+        }
+        else if (funcNameStr.equals("concat")) {
+            return params.getParamNames().get(0).convertToJava(className) + " + " +
+                    params.getParamNames().get(1).convertToJava(className);
+        }
+        else if (funcNameStr.equals("length")) {
+            return params.getParamNames().get(0).convertToJava(className) + ".length()";
+        }
+        else {
+            return funcNameStr + "(" + params.convertToJava(className) + ")";
+        }
     }
 
     @Override
