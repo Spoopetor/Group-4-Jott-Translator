@@ -9,9 +9,7 @@ import java.util.ArrayList;
 public class ElseNode implements JottTree {
 
     private BodyNode bodyNode;
-
     private Boolean hasIfParent;
-
     private Token fileInfo;
 
     public ElseNode (BodyNode bodyNode, Token fileInfo) {
@@ -86,7 +84,7 @@ public class ElseNode implements JottTree {
             return "";
         } else {
             StringBuilder str = new StringBuilder();
-            str.append("else:");
+            str.append("\nelse:");
             str.append(this.bodyNode.convertToC());
             return str.toString();
         }

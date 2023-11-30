@@ -10,7 +10,6 @@ public class WhileNode extends BodyStmtNode implements JottTree {
 
     private ExpressionNode exprNode;
     private BodyNode bodyNode;
-
     private Token fileInfo;
 
     public WhileNode(ExpressionNode exprNode, BodyNode bodyNode, Token fileInfo) {
@@ -59,7 +58,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
     @Override
     public String convertToPython() {
         StringBuilder str = new StringBuilder();
-        str.append("while ");
+        str.append("\nwhile ");
         str.append(this.exprNode.convertToPython());
         str.append(": ");
         str.append(this.bodyNode.convertToPython());

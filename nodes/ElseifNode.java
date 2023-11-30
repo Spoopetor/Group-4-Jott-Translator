@@ -11,7 +11,6 @@ public class ElseifNode implements JottTree {
     private ExpressionNode exprNode;
     private BodyNode bodyNode;
     private Boolean hasIfParent;
-
     private Token fileInfo;
 
     public ElseifNode(ExpressionNode exprNode, BodyNode bodyNode, Token fileInfo) {
@@ -78,7 +77,7 @@ public class ElseifNode implements JottTree {
     @Override
     public String convertToPython() {
         StringBuilder str = new StringBuilder();
-        str.append("elif ");
+        str.append("\nelif ");
         str.append(this.exprNode.convertToPython());
         str.append(": ");
         str.append(this.bodyNode.convertToPython());
