@@ -84,10 +84,19 @@ public class ElseNode implements JottTree {
             return "";
         } else {
             StringBuilder str = new StringBuilder();
-            str.append("\nelse:");
+
+            // append \n (num tabs) else
+            str.append("\n");
+            for (int i = 0; i < ProgramNode.depth; i++) {
+                str.append("\t");
+            }
+            str.append("else:");
+
+            // increase depth, convert bodyNode, decrease depth
             ProgramNode.depth += 1;
-            str.append(this.bodyNode.convertToC());
+            str.append(this.bodyNode.convertToPython());
             ProgramNode.depth -= 1;
+
             return str.toString();
         }
     }

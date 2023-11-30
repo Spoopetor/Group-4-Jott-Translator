@@ -77,12 +77,23 @@ public class ElseifNode implements JottTree {
     @Override
     public String convertToPython() {
         StringBuilder str = new StringBuilder();
-        str.append("\nelif ");
+
+        // append \n (num tabs) elif
+        str.append("\n");
+        for (int i = 0; i < ProgramNode.depth; i++) {
+            str.append("\t");
+        }
+        str.append("elif ");
+
+        // convert elif exprNode
         str.append(this.exprNode.convertToPython());
         str.append(": ");
+
+        // increase depth, convert bodyNode, decrease depth
         ProgramNode.depth += 1;
         str.append(this.bodyNode.convertToPython());
         ProgramNode.depth -= 1;
+
         return str.toString();
     }
 
