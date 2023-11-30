@@ -51,7 +51,32 @@ public class FuncDefNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("public static ");
+        stringBuilder.append(switch (functionReturn){
+            case VOID: yield "void ";
+            case INTEGER: yield "int ";
+            case DOUBLE: yield "double ";
+            case STRING: yield "String ";
+            case BOOLEAN: yield "bool ";
+        });
+        stringBuilder.append(funcName);
+        stringBuilder.append("(");
+        if (!funcName.getTokenName().equals("main")) {
+            for (int i = 0; i < this.defParams.size(); i++) {
+                stringBuilder.append(this.defParams.get(i).convertToJava(className));
+                if (i + 1 < this.defParams.size()) {
+                    stringBuilder.append(", ");
+                }
+            }
+        }
+        else {
+            stringBuilder.append("String[] args");
+        }
+        stringBuilder.append(") {");
+        stringBuilder.append(functionBody.convertToJava(className));
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 
     @Override
