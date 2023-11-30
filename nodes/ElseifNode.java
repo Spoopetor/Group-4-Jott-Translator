@@ -80,7 +80,9 @@ public class ElseifNode implements JottTree {
         str.append("\nelif ");
         str.append(this.exprNode.convertToPython());
         str.append(": ");
+        ProgramNode.depth += 1;
         str.append(this.bodyNode.convertToPython());
+        ProgramNode.depth -= 1;
         return str.toString();
     }
 

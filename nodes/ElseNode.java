@@ -85,7 +85,9 @@ public class ElseNode implements JottTree {
         } else {
             StringBuilder str = new StringBuilder();
             str.append("\nelse:");
+            ProgramNode.depth += 1;
             str.append(this.bodyNode.convertToC());
+            ProgramNode.depth -= 1;
             return str.toString();
         }
     }
