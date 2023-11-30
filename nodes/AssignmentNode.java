@@ -142,7 +142,18 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
 
     @Override
     public String convertToC() {
-        return null;
+        if (value instanceof FuncCallNode && ((FuncCallNode) value).getFuncName().getTokenName().equals("concat")) {
+            ExpressionNode concatParam1 = ((FuncCallNode) value).getParams().getParamNames().get(0);
+            ExpressionNode concatParam2 = ((FuncCallNode) value).getParams().getParamNames().get(1);
+            String output = "";
+            output += "char* " + id.convertToC() + " = malloc(strlen(" + concatParam1.convertToC() + ") + " + "strlen(" + concatParam2.convertToC() + ") + 1);\n";
+            output += "strcat(" + id.convertToC() + ", " + concatParam1.convertToC() + ");\n";
+            output += "strcat(" + id.convertToC() + ", " + concatParam2.convertToC() + ")";
+            return output;
+        }
+        else {
+            return null;    // TODO rest of mya's code goes here
+        }
     }
 
     @Override

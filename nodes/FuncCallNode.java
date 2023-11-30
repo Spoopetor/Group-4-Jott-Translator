@@ -87,25 +87,54 @@ public class FuncCallNode extends ExpressionNode {
 
     @Override
     public String convertToC() {
-        return null;
+        String funcNameStr = funcName.getTokenName();
+        if (funcNameStr.equals("print")) {
+            ExpressionNode printParam = params.getParamNames().get(0);
+            if (printParam.getType().equals(Types.INTEGER) || printParam.getType().equals(Types.BOOLEAN)) {
+                return "printf(%d, " +  printParam.convertToC() + ")";
+            }
+            else if (printParam.getType().equals(Types.DOUBLE)) {
+                return "printf(%lf, " +  printParam.convertToC() + ")";
+            }
+            else {
+                return "printf(%s, " +  printParam.convertToC() + ")";
+            }
+        }
+        // assignment with concat in C handled in AssignmentNode
+        else if (funcNameStr.equals("concat")) {
+            return "";
+        }
+        else if (funcNameStr.equals("length")) {
+            return "strlen(" + params.getParamNames().get(0).convertToC() + ")";
+        }
+        else {
+            return funcNameStr + "(" + params.convertToC() + ")";
+        }
     }
 
     @Override
     public String convertToPython() {
+        String output = "";
+        for (int i = 0; i < ProgramNode.depth; i++) {
+            output += '\t';
+        }
+
         String funcNameStr = funcName.getTokenName();
         if (funcNameStr.equals("print")) {
-            return "print(" + params.convertToPython() + ")";
+            output += "print(" + params.convertToPython() + ")";
         }
         else if (funcNameStr.equals("concat")) {
-            return params.getParamNames().get(0).convertToPython() + " + " +
+            output += params.getParamNames().get(0).convertToPython() + " + " +
                     params.getParamNames().get(1).convertToPython();
         }
         else if (funcNameStr.equals("length")) {
-            return "len(" + params.convertToPython() + ")";
+            output += "len(" + params.convertToPython() + ")";
         }
         else {
-            return funcNameStr + "(" + params.convertToPython() + ")";
+            output += funcNameStr + "(" + params.convertToPython() + ")";
         }
+
+        return output;
     }
 
     @Override
@@ -195,5 +224,13 @@ public class FuncCallNode extends ExpressionNode {
                     " used as param before being defined", filename, lineNumber);
         }
         return SymbolTable.returnMap.get(funcName.getTokenName());
+    }
+
+    public IdNode getFuncName() {
+        return funcName;
+    }
+
+    public FuncParamsNode getParams() {
+        return params;
     }
 }
