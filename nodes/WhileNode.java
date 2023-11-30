@@ -61,7 +61,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
         StringBuilder str = new StringBuilder();
         str.append("while ");
         str.append(this.exprNode.convertToPython());
-        str.append(" :");
+        str.append(": ");
         str.append(this.bodyNode.convertToPython());
         return str.toString();
     }
