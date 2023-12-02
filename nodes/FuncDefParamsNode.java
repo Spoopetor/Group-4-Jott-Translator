@@ -30,7 +30,7 @@ public class FuncDefParamsNode implements JottTree {
 
     @Override
     public String convertToC() {
-        return null;
+        return this.defParamType.convertToC() + " " + this.defParamName.convertToC();
     }
 
     @Override
