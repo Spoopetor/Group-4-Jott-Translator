@@ -118,7 +118,23 @@ public class FuncDefNode implements JottTree {
 
     @Override
     public String convertToPython() {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("def ");
+        stringBuilder.append(funcName);
+        stringBuilder.append("(");
+
+        for (int i = 0; i < this.defParams.size(); i++) {
+            stringBuilder.append(this.defParams.get(i).convertToPython());
+            if (i + 1 < this.defParams.size()) {
+                stringBuilder.append(", ");
+            }
+        }
+
+        stringBuilder.append("):\n");
+        ProgramNode.depth += 1;
+        stringBuilder.append(functionBody.convertToPython());
+        ProgramNode.depth -= 1;
+        return stringBuilder.toString();
     }
 
     @Override

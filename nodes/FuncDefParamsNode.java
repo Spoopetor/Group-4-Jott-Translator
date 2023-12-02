@@ -35,7 +35,7 @@ public class FuncDefParamsNode implements JottTree {
 
     @Override
     public String convertToPython() {
-        return null;
+        return this.defParamName.convertToPython();
     }
 
     @Override

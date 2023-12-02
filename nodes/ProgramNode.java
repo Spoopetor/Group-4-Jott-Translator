@@ -53,7 +53,13 @@ public class ProgramNode implements JottTree {
 
     @Override
     public String convertToPython() {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        ProgramNode.depth = 0;
+        for (FuncDefNode funcDef: funcDefs){
+            stringBuilder.append(funcDef.convertToC());
+        }
+        stringBuilder.append("main()");
+        return stringBuilder.toString();
     }
 
     @Override
