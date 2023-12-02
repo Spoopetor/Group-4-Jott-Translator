@@ -9,9 +9,7 @@ import java.util.ArrayList;
 public class ElseNode implements JottTree {
 
     private BodyNode bodyNode;
-
     private Boolean hasIfParent;
-
     private Token fileInfo;
 
     public ElseNode (BodyNode bodyNode, Token fileInfo) {
@@ -56,17 +54,51 @@ public class ElseNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        if (this.bodyNode == null) {
+            return "";
+        } else {
+            StringBuilder str = new StringBuilder();
+            str.append("else {");
+            str.append(this.bodyNode.convertToJava(className));
+            str.append("}");
+            return str.toString();
+        }
     }
 
     @Override
     public String convertToC() {
-        return null;
+        if (this.bodyNode == null) {
+            return "";
+        } else {
+            StringBuilder str = new StringBuilder();
+            str.append("else {");
+            str.append(this.bodyNode.convertToC());
+            str.append("}");
+            return str.toString();
+        }
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        if (this.bodyNode == null) {
+            return "";
+        } else {
+            StringBuilder str = new StringBuilder();
+
+            // append \n (num tabs) else
+            str.append("\n");
+            for (int i = 0; i < ProgramNode.depth; i++) {
+                str.append("\t");
+            }
+            str.append("else:");
+
+            // increase depth, convert bodyNode, decrease depth
+            ProgramNode.depth += 1;
+            str.append(this.bodyNode.convertToPython());
+            ProgramNode.depth -= 1;
+
+            return str.toString();
+        }
     }
 
     @Override

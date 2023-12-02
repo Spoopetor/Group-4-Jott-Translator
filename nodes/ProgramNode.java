@@ -19,6 +19,8 @@ public class ProgramNode implements JottTree {
         this.funcDefs.addAll(childList);
     }
 
+    public static int depth;
+
     @Override
     public String convertToJott() {
         StringBuilder stringBuilder = new StringBuilder();

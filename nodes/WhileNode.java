@@ -10,7 +10,6 @@ public class WhileNode extends BodyStmtNode implements JottTree {
 
     private ExpressionNode exprNode;
     private BodyNode bodyNode;
-
     private Token fileInfo;
 
     public WhileNode(ExpressionNode exprNode, BodyNode bodyNode, Token fileInfo) {
@@ -28,7 +27,7 @@ public class WhileNode extends BodyStmtNode implements JottTree {
         StringBuilder str = new StringBuilder();
         str.append("while[");
         str.append(this.exprNode.convertToJott());
-        str.append("]{");
+        str.append("] {");
         str.append(this.bodyNode.convertToJott());
         str.append("}");
         return str.toString();
@@ -36,17 +35,47 @@ public class WhileNode extends BodyStmtNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        StringBuilder str = new StringBuilder();
+        str.append("while(");
+        str.append(this.exprNode.convertToJava(className));
+        str.append(") {");
+        str.append(this.bodyNode.convertToJava(className));
+        str.append("}");
+        return str.toString();
     }
 
     @Override
     public String convertToC() {
-        return null;
+        StringBuilder str = new StringBuilder();
+        str.append("while(");
+        str.append(this.exprNode.convertToC());
+        str.append(") {");
+        str.append(this.bodyNode.convertToC());
+        str.append("}");
+        return str.toString();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        StringBuilder str = new StringBuilder();
+
+        // append \n (num tabs) while
+        str.append("\n");
+        for (int i = 0; i < ProgramNode.depth; i++) {
+            str.append("\t");
+        }
+        str.append("while ");
+
+        // convert while exprNode
+        str.append(this.exprNode.convertToPython());
+        str.append(": ");
+
+        // increase depth, convert bodyNode, decrease depth
+        ProgramNode.depth += 1;
+        str.append(this.bodyNode.convertToPython());
+        ProgramNode.depth -= 1;
+
+        return str.toString();
     }
 
     @Override
