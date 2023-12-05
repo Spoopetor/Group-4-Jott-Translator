@@ -113,8 +113,8 @@ public class IfNode extends BodyStmtNode implements JottTree {
         StringBuilder out = new StringBuilder();
         out.append("\t".repeat(ProgramNode.depth));
         out.append("if (");
-        out.append(this.expr.convertToPython());
-        out.append(")\n");
+        out.append(this.expr.convertToPython().trim());
+        out.append("):\n");
         ProgramNode.depth++;
         out.append(this.body.convertToPython());
         ProgramNode.depth--;
