@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ReturnStmtNode implements JottTree {
 
-    private boolean returns;
+    public boolean returns;
     private ExpressionNode expr;
 
     private ReturnStmtNode(ExpressionNode e, Boolean r){

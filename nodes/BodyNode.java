@@ -70,8 +70,10 @@ public class BodyNode implements JottTree {
             }
             out.append(b.convertToPython());
         }
-        out.append("\t".repeat(ProgramNode.depth));
-        out.append(returnNode.convertToPython());
+        if(this.returnNode.returns){
+            out.append("\t".repeat(ProgramNode.depth));
+            out.append(returnNode.convertToPython());
+        }
         return out.toString();
     }
 
