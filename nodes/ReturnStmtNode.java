@@ -57,6 +57,7 @@ public class ReturnStmtNode implements JottTree {
         if(this.returns){
             out.append("return ");
             out.append(this.expr.convertToPython());
+            out.append("\n");
         }
         return out.toString();
     }

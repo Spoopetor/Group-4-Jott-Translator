@@ -85,8 +85,7 @@ public class ElseNode implements JottTree {
         } else {
             StringBuilder str = new StringBuilder();
 
-            // append \n (num tabs) else
-            str.append("\n");
+            // append (num tabs) else
             for (int i = 0; i < ProgramNode.depth; i++) {
                 str.append("\t");
             }

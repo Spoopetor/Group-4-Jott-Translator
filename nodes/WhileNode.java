@@ -69,11 +69,14 @@ public class WhileNode extends BodyStmtNode implements JottTree {
         // convert while exprNode
         str.append(this.exprNode.convertToPython());
         str.append(": ");
+        str.append("\n");
 
         // increase depth, convert bodyNode, decrease depth
         ProgramNode.depth += 1;
         str.append(this.bodyNode.convertToPython());
         ProgramNode.depth -= 1;
+
+        str.append("\n");
 
         return str.toString();
     }

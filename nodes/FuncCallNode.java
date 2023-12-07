@@ -91,13 +91,13 @@ public class FuncCallNode extends ExpressionNode {
         if (funcNameStr.equals("print")) {
             ExpressionNode printParam = params.getParamNames().get(0);
             if (printParam.getType().equals(Types.INTEGER) || printParam.getType().equals(Types.BOOLEAN)) {
-                return "printf(%d, " +  printParam.convertToC() + ")";
+                return "printf(\"%d\\n\", " +  printParam.convertToC() + ")";
             }
             else if (printParam.getType().equals(Types.DOUBLE)) {
-                return "printf(%lf, " +  printParam.convertToC() + ")";
+                return "printf(\"%lf\\n\", " +  printParam.convertToC() + ")";
             }
             else {
-                return "printf(%s, " +  printParam.convertToC() + ")";
+                return "printf(\"%s\\n\", " +  printParam.convertToC() + ")";
             }
         }
         // assignment with concat in C handled in AssignmentNode

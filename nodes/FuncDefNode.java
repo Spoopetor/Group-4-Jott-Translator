@@ -87,7 +87,7 @@ public class FuncDefNode implements JottTree {
                 case VOID: yield "void ";
                 case INTEGER: yield "int ";
                 case DOUBLE: yield "double ";
-                case STRING: yield "String ";
+                case STRING: yield "char* ";
                 case BOOLEAN: yield "bool ";
             });
         }
