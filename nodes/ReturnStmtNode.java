@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ReturnStmtNode implements JottTree {
 
-    private boolean returns;
+    public boolean returns;
     private ExpressionNode expr;
 
     private ReturnStmtNode(ExpressionNode e, Boolean r){
@@ -31,17 +31,34 @@ public class ReturnStmtNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        StringBuilder out = new StringBuilder();
+        if(this.returns){
+            out.append("return ");
+            out.append(this.expr.convertToJava(className));
+            out.append(";");
+        }
+        return out.toString();
     }
 
     @Override
     public String convertToC() {
-        return null;
+        StringBuilder out = new StringBuilder();
+        if(this.returns){
+            out.append("return ");
+            out.append(this.expr.convertToC());
+            out.append(";");
+        }
+        return out.toString();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        StringBuilder out = new StringBuilder();
+        if(this.returns){
+            out.append("return ");
+            out.append(this.expr.convertToPython());
+        }
+        return out.toString();
     }
 
     @Override

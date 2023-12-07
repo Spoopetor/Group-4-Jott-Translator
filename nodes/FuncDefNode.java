@@ -51,17 +51,90 @@ public class FuncDefNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("public static ");
+        stringBuilder.append(switch (functionReturn){
+            case VOID: yield "void ";
+            case INTEGER: yield "int ";
+            case DOUBLE: yield "double ";
+            case STRING: yield "String ";
+            case BOOLEAN: yield "bool ";
+        });
+        stringBuilder.append(funcName.convertToJava(className));
+        stringBuilder.append("(");
+        if (!funcName.getTokenName().equals("main")) {
+            for (int i = 0; i < this.defParams.size(); i++) {
+                stringBuilder.append(this.defParams.get(i).convertToJava(className));
+                if (i + 1 < this.defParams.size()) {
+                    stringBuilder.append(", ");
+                }
+            }
+        }
+        else {
+            stringBuilder.append("String[] args");
+        }
+        stringBuilder.append(") {");
+        stringBuilder.append(functionBody.convertToJava(className));
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 
     @Override
     public String convertToC() {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        if(!funcName.getTokenName().equals("main")){
+            stringBuilder.append(switch (functionReturn){
+                case VOID: yield "void ";
+                case INTEGER: yield "int ";
+                case DOUBLE: yield "double ";
+                case STRING: yield "String ";
+                case BOOLEAN: yield "bool ";
+            });
+        }
+        else {
+            stringBuilder.append("int ");
+        }
+
+        stringBuilder.append(funcName.convertToC());
+        stringBuilder.append("(");
+
+        if (this.defParams.size() > 0) {
+            for (int i = 0; i < this.defParams.size(); i++) {
+                stringBuilder.append(this.defParams.get(i).convertToC());
+                if (i + 1 < this.defParams.size()) {
+                    stringBuilder.append(", ");
+                }
+            }
+        }
+        else {
+            stringBuilder.append("void");
+        }
+        stringBuilder.append("){");
+        stringBuilder.append(functionBody.convertToC());
+        stringBuilder.append("}");
+
+        return stringBuilder.toString();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("def ");
+        stringBuilder.append(funcName.convertToPython());
+        stringBuilder.append("(");
+
+        for (int i = 0; i < this.defParams.size(); i++) {
+            stringBuilder.append(this.defParams.get(i).convertToPython());
+            if (i + 1 < this.defParams.size()) {
+                stringBuilder.append(", ");
+            }
+        }
+
+        stringBuilder.append("):\n");
+        ProgramNode.depth += 1;
+        stringBuilder.append(functionBody.convertToPython());
+        ProgramNode.depth -= 1;
+        return stringBuilder.toString();
     }
 
     @Override

@@ -76,17 +76,56 @@ public class IfNode extends BodyStmtNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        StringBuilder out = new StringBuilder();
+        out.append("if(");
+        out.append(this.expr.convertToJava(className));
+        out.append("){\n");
+        out.append(this.body.convertToJava(className));
+        out.append("}");
+        for(ElseifNode i: this.elifLst) {
+            out.append(i.convertToJava(className));
+        }
+        if (this.elseCase != null) {
+            out.append(this.elseCase.convertToJava(className));
+        }
+        return out.toString();
     }
 
     @Override
     public String convertToC() {
-        return null;
+        StringBuilder out = new StringBuilder();
+        out.append("if (");
+        out.append(this.expr.convertToC());
+        out.append("){\n");
+        out.append(this.body.convertToC());
+        out.append("}");
+        for(ElseifNode i: this.elifLst) {
+            out.append(i.convertToC());
+        }
+        if (this.elseCase != null) {
+            out.append(this.elseCase.convertToC());
+        }
+        return out.toString();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        StringBuilder out = new StringBuilder();
+        out.append("\t".repeat(ProgramNode.depth));
+        out.append("if (");
+        out.append(this.expr.convertToPython().trim());
+        out.append("):\n");
+        ProgramNode.depth++;
+        out.append(this.body.convertToPython());
+        ProgramNode.depth--;
+
+        for(ElseifNode i: this.elifLst) {
+            out.append(i.convertToPython());
+        }
+        if (this.elseCase != null) {
+            out.append(this.elseCase.convertToPython());
+        }
+        return out.toString();
     }
 
     @Override

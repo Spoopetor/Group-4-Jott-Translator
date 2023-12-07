@@ -74,24 +74,41 @@ public class BinaryExpressionNode extends ExpressionNode{
     @Override
     public String convertToJott() {
         String output = left.convertToJott();
+        output += " ";
         output += op.getToken();
+        output += " ";
         output += right.convertToJott();
         return output;
     }
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        String output = left.convertToJava(className);
+        output += " ";
+        output += op.getToken();
+        output += " ";
+        output += right.convertToJava(className);
+        return output;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        String output = left.convertToC();
+        output += " ";
+        output += op.getToken();
+        output += " ";
+        output += right.convertToC();
+        return output;
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        String output = left.convertToPython();
+        output += " ";
+        output += op.getToken();
+        output += " ";
+        output += right.convertToPython();
+        return output;
     }
 
     @Override

@@ -58,17 +58,26 @@ public class  TypeNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        if (typeName.equals(Types.DOUBLE)) return "double";
+        else if (typeName.equals(Types.INTEGER)) return "int";
+        else if (typeName.equals(Types.STRING)) return "String";
+        else return "boolean";
     }
 
     @Override
     public String convertToC() {
-        return null;
+        if (typeName.equals(Types.DOUBLE)) return "double";
+        else if (typeName.equals(Types.INTEGER)) return "int";
+        else if (typeName.equals(Types.STRING)) return "char*";
+        else return "bool";
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        if (typeName.equals(Types.DOUBLE)) return "float";
+        else if (typeName.equals(Types.INTEGER)) return "int";
+        else if (typeName.equals(Types.STRING)) return "str";
+        else return "bool";
     }
 
     @Override

@@ -19,6 +19,8 @@ public class ProgramNode implements JottTree {
         this.funcDefs.addAll(childList);
     }
 
+    public static int depth;
+
     @Override
     public String convertToJott() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -30,17 +32,36 @@ public class ProgramNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("public class ");
+        stringBuilder.append(className);
+        stringBuilder.append(" {");
+        for (FuncDefNode funcDef: funcDefs){
+            stringBuilder.append(funcDef.convertToJava(className));
+        }
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 
     @Override
     public String convertToC() {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n\n");
+        for (FuncDefNode funcDef: funcDefs){
+            stringBuilder.append(funcDef.convertToC());
+        }
+        return stringBuilder.toString();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        StringBuilder stringBuilder = new StringBuilder();
+        ProgramNode.depth = 0;
+        for (FuncDefNode funcDef: funcDefs){
+            stringBuilder.append(funcDef.convertToPython());
+        }
+        stringBuilder.append("main()");
+        return stringBuilder.toString();
     }
 
     @Override

@@ -137,17 +137,53 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        String output = "";
+        if (type != null)
+            if (!reassignment){
+                output += type.convertToJava(className);
+            }
+        output += " ";
+        output += id.convertToJava(className);
+        output += " = ";
+        output += value.convertToJava(className);
+        output += ";";
+        return output;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        if (value instanceof FuncCallNode && ((FuncCallNode) value).getFuncName().getTokenName().equals("concat")) {
+            ExpressionNode concatParam1 = ((FuncCallNode) value).getParams().getParamNames().get(0);
+            ExpressionNode concatParam2 = ((FuncCallNode) value).getParams().getParamNames().get(1);
+            String output = "";
+            output += "char* " + id.convertToC() + " = malloc(strlen(" + concatParam1.convertToC() + ") + " + "strlen(" + concatParam2.convertToC() + ") + 1);\n";
+            output += "strcat(" + id.convertToC() + ", " + concatParam1.convertToC() + ");\n";
+            output += "strcat(" + id.convertToC() + ", " + concatParam2.convertToC() + ")";
+            return output;
+        }
+        else {
+            String output = "";
+            if (type != null)
+                if (!reassignment){
+                    output += type.convertToC();
+                }
+            output += " ";
+            output += id.convertToC();
+            output += "=";
+            output += value.convertToC();
+            output += ";";
+            return output;
+        }
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        String output = "";
+
+        output += id.convertToPython();
+        output += "=";
+        output += value.convertToPython();
+        return output;
     }
 
     @Override

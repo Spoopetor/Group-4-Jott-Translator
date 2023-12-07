@@ -28,7 +28,7 @@ public class BodyNode implements JottTree {
         for(BodyStmtNode b : bodyStatements){
             out.append(b.convertToJott());
             if(b instanceof FuncCallNode){
-                out.append(";");
+                out.append(";\n");
             }
         }
         out.append(returnNode.convertToJott());
@@ -37,17 +37,44 @@ public class BodyNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        StringBuilder out = new StringBuilder();
+        for(BodyStmtNode b : bodyStatements){
+            out.append(b.convertToJava(className));
+            if(b instanceof FuncCallNode){
+                out.append(";\n");
+            }
+        }
+        out.append(returnNode.convertToJava(className));
+        return out.toString();
     }
 
     @Override
     public String convertToC() {
-        return null;
+        StringBuilder out = new StringBuilder();
+        for(BodyStmtNode b : bodyStatements){
+            out.append(b.convertToC());
+            if(b instanceof FuncCallNode){
+                out.append(";\n");
+            }
+        }
+        out.append(returnNode.convertToC());
+        return out.toString();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        StringBuilder out = new StringBuilder();
+        for(BodyStmtNode b : bodyStatements){
+            if(b instanceof FuncCallNode){
+                out.append("\n");
+            }
+            out.append(b.convertToPython());
+        }
+        if(this.returnNode.returns){
+            out.append("\t".repeat(ProgramNode.depth));
+            out.append(returnNode.convertToPython());
+        }
+        return out.toString();
     }
 
     public boolean mustReturn(){

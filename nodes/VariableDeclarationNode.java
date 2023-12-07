@@ -60,17 +60,25 @@ public class VariableDeclarationNode extends BodyStmtNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        String output = type.convertToJava(className);
+        output += " ";
+        output += id.convertToJava(className);
+        output += ';';
+        return output;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        String output = type.convertToC();
+        output += " ";
+        output += id.convertToC();
+        output += ';';
+        return output;
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        return "";
     }
 
     @Override
