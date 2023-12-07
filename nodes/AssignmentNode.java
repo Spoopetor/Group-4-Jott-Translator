@@ -180,9 +180,16 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
     public String convertToPython() {
         String output = "";
 
+        for (int i = 0; i < ProgramNode.depth; i++) {
+            output += '\t';
+        }
+
         output += id.convertToPython();
         output += "=";
         output += value.convertToPython();
+
+        output += "\n";
+
         return output;
     }
 

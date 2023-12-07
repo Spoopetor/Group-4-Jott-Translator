@@ -118,6 +118,7 @@ public class IfNode extends BodyStmtNode implements JottTree {
         ProgramNode.depth++;
         out.append(this.body.convertToPython());
         ProgramNode.depth--;
+        out.append("\n");
 
         for(ElseifNode i: this.elifLst) {
             out.append(i.convertToPython());
