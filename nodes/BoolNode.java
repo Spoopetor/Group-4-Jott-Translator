@@ -6,11 +6,13 @@ import provided.TokenType;
 import provided.Types;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BoolNode extends ExpressionNode{
 
     private Token token;
     private Types type;
+
 
     public BoolNode(Token t, Types ts){
         this.token = t;
@@ -35,17 +37,25 @@ public class BoolNode extends ExpressionNode{
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        String output;
+        if (this.token.getToken() == "True")
+            output = "true";
+        output = "false";
+        return output;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        String output;
+        if (this.token.getToken() == "True")
+            output = "true";
+        output = "false";
+        return output;
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        return this.token.getToken();
     }
 
     @Override

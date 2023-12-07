@@ -137,7 +137,17 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        String output = "";
+        if (type != null)
+            if (!reassignment){
+                output += type.convertToJava(className);
+            }
+        output += " ";
+        output += id.convertToJava(className);
+        output += " = ";
+        output += value.convertToJava(className);
+        output += ";";
+        return output;
     }
 
     @Override
@@ -152,13 +162,28 @@ public class AssignmentNode extends BodyStmtNode implements JottTree {
             return output;
         }
         else {
-            return null;    // TODO rest of mya's code goes here
+            String output = "";
+            if (type != null)
+                if (!reassignment){
+                    output += type.convertToC();
+                }
+            output += " ";
+            output += id.convertToC();
+            output += "=";
+            output += value.convertToC();
+            output += ";";
+            return output;
         }
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        String output = "";
+
+        output += id.convertToPython();
+        output += "=";
+        output += value.convertToPython();
+        return output;
     }
 
     @Override
