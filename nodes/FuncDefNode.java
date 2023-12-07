@@ -60,7 +60,7 @@ public class FuncDefNode implements JottTree {
             case STRING: yield "String ";
             case BOOLEAN: yield "bool ";
         });
-        stringBuilder.append(funcName);
+        stringBuilder.append(funcName.convertToJava(className));
         stringBuilder.append("(");
         if (!funcName.getTokenName().equals("main")) {
             for (int i = 0; i < this.defParams.size(); i++) {
@@ -95,7 +95,7 @@ public class FuncDefNode implements JottTree {
             stringBuilder.append("int ");
         }
 
-        stringBuilder.append(funcName);
+        stringBuilder.append(funcName.convertToC());
         stringBuilder.append("(");
 
         if (this.defParams.size() > 0) {
@@ -120,7 +120,7 @@ public class FuncDefNode implements JottTree {
     public String convertToPython() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("def ");
-        stringBuilder.append(funcName);
+        stringBuilder.append(funcName.convertToPython());
         stringBuilder.append("(");
 
         for (int i = 0; i < this.defParams.size(); i++) {
