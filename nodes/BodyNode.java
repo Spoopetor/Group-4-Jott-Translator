@@ -28,7 +28,7 @@ public class BodyNode implements JottTree {
         for(BodyStmtNode b : bodyStatements){
             out.append(b.convertToJott());
             if(b instanceof FuncCallNode){
-                out.append(";");
+                out.append(";\n");
             }
         }
         out.append(returnNode.convertToJott());
@@ -41,7 +41,7 @@ public class BodyNode implements JottTree {
         for(BodyStmtNode b : bodyStatements){
             out.append(b.convertToJava(className));
             if(b instanceof FuncCallNode){
-                out.append(";");
+                out.append(";\n");
             }
         }
         out.append(returnNode.convertToJava(className));
@@ -54,7 +54,7 @@ public class BodyNode implements JottTree {
         for(BodyStmtNode b : bodyStatements){
             out.append(b.convertToC());
             if(b instanceof FuncCallNode){
-                out.append(";");
+                out.append(";\n");
             }
         }
         out.append(returnNode.convertToC());
@@ -65,6 +65,9 @@ public class BodyNode implements JottTree {
     public String convertToPython() {
         StringBuilder out = new StringBuilder();
         for(BodyStmtNode b : bodyStatements){
+            if(b instanceof FuncCallNode){
+                out.append("\n");
+            }
             out.append(b.convertToPython());
         }
         out.append("\t".repeat(ProgramNode.depth));
