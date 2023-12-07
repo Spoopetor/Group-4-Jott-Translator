@@ -65,10 +65,11 @@ public class BodyNode implements JottTree {
     public String convertToPython() {
         StringBuilder out = new StringBuilder();
         for(BodyStmtNode b : bodyStatements){
+
+            out.append(b.convertToPython());
             if(b instanceof FuncCallNode){
                 out.append("\n");
             }
-            out.append(b.convertToPython());
         }
         if(this.returnNode.returns){
             out.append("\t".repeat(ProgramNode.depth));
