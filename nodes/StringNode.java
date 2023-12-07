@@ -36,17 +36,17 @@ public class StringNode extends ExpressionNode {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        return this.token.getToken();
     }
 
     @Override
     public String convertToC() {
-        return null;
+        return this.token.getToken();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        return this.token.getToken();
     }
 
     @Override
