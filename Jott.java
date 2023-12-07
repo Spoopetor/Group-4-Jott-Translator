@@ -33,13 +33,31 @@ public class Jott {
                     }
                 }
                 else if (args[2].equals("Java")) {
-                    System.out.println("Java conversion to be implemented in Phase 4");
+                    if (args[1].endsWith(".java")) {
+                        writer.write(programTree.convertToJava("Jott"));
+                    }
+                    else {
+                        System.err.println("Output file must end in .java to convert to Java");
+                        System.exit(1);
+                    }
                 }
                 else if (args[2].equals("C")) {
-                    System.out.println("C conversion to be implemented in Phase 4");
+                    if (args[1].endsWith(".c")) {
+                        writer.write(programTree.convertToC());
+                    }
+                    else {
+                        System.err.println("Output file must end in .c to convert to C");
+                        System.exit(1);
+                    }
                 }
                 else if (args[2].equals("Python")) {
-                    System.out.println("Python conversion to be implemented in Phase 4");
+                    if (args[1].endsWith(".py")) {
+                        writer.write(programTree.convertToPython());
+                    }
+                    else {
+                        System.err.println("Output file must end in .py to convert to Python");
+                        System.exit(1);
+                    }
                 }
                 else {
                     System.err.println("Language of output file must be Jott, Java, C, or Python");
