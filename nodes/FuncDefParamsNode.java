@@ -25,17 +25,17 @@ public class FuncDefParamsNode implements JottTree {
 
     @Override
     public String convertToJava(String className) {
-        return null;
+        return this.defParamType.convertToJava(className) + " " + this.defParamName.convertToJava(className);
     }
 
     @Override
     public String convertToC() {
-        return null;
+        return this.defParamType.convertToC() + " " + this.defParamName.convertToC();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        return this.defParamName.convertToPython();
     }
 
     @Override
