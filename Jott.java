@@ -34,7 +34,9 @@ public class Jott {
                 }
                 else if (args[2].equals("Java")) {
                     if (args[1].endsWith(".java")) {
-                        writer.write(programTree.convertToJava("Jott"));
+                        String[] outputDir = args[1].split("/");
+                        String outputFile = outputDir[outputDir.length-1];
+                        writer.write(programTree.convertToJava(outputFile.substring(0, outputFile.length() - 5)));
                     }
                     else {
                         System.err.println("Output file must end in .java to convert to Java");
